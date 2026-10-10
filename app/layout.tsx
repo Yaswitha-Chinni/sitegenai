@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Outfit } from "next/font/google";
 import "./globals.css";
-import StorageStatusBanner from "@/components/ui/StorageStatusBanner";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -26,6 +25,8 @@ export const metadata: Metadata = {
   },
 };
 
+import GlobalCursor from "@/components/ui/GlobalCursor";
+
 export default function RootLayout({
   children,
 }: {
@@ -34,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${jakarta.variable} ${outfit.variable}`}>
       <body className="d-flex flex-column min-vh-100">
-        <StorageStatusBanner />
+        <GlobalCursor />
         {children}
       </body>
     </html>

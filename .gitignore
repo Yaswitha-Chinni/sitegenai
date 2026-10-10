@@ -45,5 +45,7 @@ next-env.d.ts
 !/public/uploads/.gitkeep
 *.zip
 w2 (1)
+scratch/
+.projects_cache/
 
 

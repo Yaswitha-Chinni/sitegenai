@@ -32,6 +32,7 @@ async function runTests() {
       "/admin",
       "/login",
       "/signup",
+      "/signout",
       "/editor/proj-w1-cocopour"
     ];
     for (const r of routes) {
@@ -54,6 +55,35 @@ async function runTests() {
     assert(html.includes("Loved by"), "Testimonials section missing");
     assert(html.includes("Choose the Plan That"), "Pricing section missing");
     assert(html.includes("Your Next Great Website Starts Here"), "Final CTA missing");
+    // Hero Video assertions
+    assert(html.includes("/hero-video.mp4"), "Hero background video source missing");
+    assert(html.includes("sb-hero-video"), "Hero video element class missing");
+    assert(html.includes("/hero-poster.jpg"), "Hero video fallback poster missing");
+    // W1 and W2 Our Works previews
+    assert(html.includes("/templates/w1/index.html"), "W1 preview iframe route missing");
+    assert(html.includes("/templates/w2/index.html"), "W2 preview iframe route missing");
+    assert(html.includes("btn-view-website-w1"), "W1 View Website action button missing");
+    assert(html.includes("btn-view-website-w2"), "W2 View Website action button missing");
+  });
+
+  // 2b. Hero Video & Live Portfolio Static Assets Check
+  await test("Static Video & W1/W2 Preview Assets Availability", async () => {
+    const assetUrls = [
+      "/hero-video.mp4",
+      "/hero-poster.jpg",
+      "/templates/w1/index.html",
+      "/templates/w2/index.html",
+      "/templates/w2/css/variables.css",
+      "/templates/w2/vendor/gsap.min.js"
+    ];
+    for (const url of assetUrls) {
+      const res = await fetch(`${BASE_URL}${url}`);
+      assert.strictEqual(res.status, 200, `Expected 200 for ${url}, got ${res.status}`);
+      const len = res.headers.get("content-length");
+      if (len) {
+        assert(parseInt(len, 10) > 0, `Expected non-empty content for ${url}`);
+      }
+    }
   });
 
   // 3. AI Planning Endpoint & 8+ Sections Enforcement
@@ -166,6 +196,52 @@ async function runTests() {
     assert.strictEqual(data.success, true);
     // Port 3000 is occupied by our running dev server, so available should be false
     assert.strictEqual(data.available, false, "Port 3000 correctly detected as active socket");
+  });
+
+  // 8. Stock Photo Search API & Attribution Check
+  await test("Stock Photo Search API with Orientation & Attribution", async () => {
+    const res = await fetch(`${BASE_URL}/api/images/search?query=coffee&orientation=landscape&perPage=4`);
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert(Array.isArray(data.images) && data.images.length > 0, "Expected non-empty image list");
+    const first = data.images[0];
+    assert(first.url && first.url.startsWith("http"), "Image URL missing or invalid");
+    assert(first.photographer, "Photographer attribution missing");
+    assert(first.source, "Image source missing");
+  });
+
+  // 9. Prompt-based Automatic Image Discovery Across Sections
+  await test("Prompt-based Automatic Image Discovery Engine", async () => {
+    const res = await fetch(`${BASE_URL}/api/images/discover`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        prompt: "Artisanal bakery and organic cafe offering sourdough loaves and specialty espresso",
+        sections: [
+          { id: "sec-hero", type: "hero", name: "Hero Spotlight" },
+          { id: "sec-story", type: "story", name: "Our Craft & Heritage" },
+          { id: "sec-product", type: "product", name: "Fresh Bakes & Espresso" },
+          { id: "sec-gallery", type: "gallery", name: "Visual Moments" }
+        ]
+      })
+    });
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert(data.assignments && data.assignments.length > 0, "Assignments missing");
+    
+    // Check that distinct images were assigned where possible
+    const assignedUrls = data.assignments.map(a => a.image.url);
+    const uniqueUrls = new Set(assignedUrls);
+    assert(uniqueUrls.size >= 2, `Expected distinct images across sections, got ${uniqueUrls.size} unique URLs out of ${assignedUrls.length}`);
+    
+    // Verify each assignment contains full attribution metadata
+    for (const a of data.assignments) {
+      assert(a.image.photographer, `Photographer attribution missing for section ${a.sectionId}`);
+      assert(a.image.source, `Source attribution missing for section ${a.sectionId}`);
+      assert(a.sectionId, "SectionId missing on assignment");
+    }
   });
 
   console.log("\n=================================================");

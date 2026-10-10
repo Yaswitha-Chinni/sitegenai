@@ -6,12 +6,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ViewportSwitcher, { ViewportMode } from "@/components/ui/ViewportSwitcher";
-import { TEMPLATES_REGISTRY, TEMPLATE_CATEGORIES } from "@/lib/templates/registry";
+import { TEMPLATES_REGISTRY, TEMPLATE_CATEGORIES, createDefaultSectionsFromTemplate } from "@/lib/templates/registry";
+import SectionRenderer from "@/components/preview/SectionRenderer";
 import { projectService } from "@/lib/projects/projectService";
 import { WebsiteTemplate, TemplateCategory } from "@/types/template";
 import {
   Search,
-  SlidersHorizontal,
   Grid,
   List,
   Heart,
@@ -22,8 +22,6 @@ import {
   PlusCircle,
   ExternalLink,
   Layers,
-  CheckCircle2,
-  Filter,
 } from "lucide-react";
 
 function TemplateGalleryContent() {
@@ -114,29 +112,46 @@ function TemplateGalleryContent() {
   };
 
   return (
-    <div className="d-flex flex-column min-vh-100 bg-light">
+    <div className="d-flex flex-column min-vh-100 position-relative" style={{ backgroundColor: "#0B0D12", color: "#F1F5F9" }}>
       <Navbar />
 
-      <main className="flex-grow-1 py-4 py-md-5">
-        <div className="container">
+      <main className="flex-grow-1 py-4 py-md-5 position-relative">
+        {/* Subtle ambient background glow */}
+        <div className="sb-glow-blob-emerald top-0 start-0 opacity-25" />
+        <div className="sb-glow-blob-violet bottom-0 end-0 opacity-20" />
+
+        <div className="container position-relative" style={{ zIndex: 2 }}>
           {/* ======================================================================
-              7.4 HEADER AREA
+              HEADER AREA
               ====================================================================== */}
-          <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 pb-3 border-bottom">
+          <div
+            className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 pb-3 border-bottom"
+            style={{ borderColor: "#303947" }}
+          >
             <div>
-              <div className="d-flex align-items-center gap-2 mb-1">
-                <h1 className="display-6 fw-extrabold mb-0">Explore Website Templates</h1>
-                <span className="badge bg-primary-subtle text-primary fw-bold" id="total-template-count">
+              <div className="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                <h1 className="display-6 fw-extrabold mb-0 text-white">
+                  Explore Website <span className="sb-text-emerald">Templates</span>
+                </h1>
+                <span
+                  className="badge rounded-pill px-3 py-1.5 fw-bold"
+                  style={{
+                    backgroundColor: "rgba(163, 255, 111, 0.15)",
+                    border: "1px solid rgba(163, 255, 111, 0.35)",
+                    color: "#A3FF6F",
+                  }}
+                  id="total-template-count"
+                >
                   {TEMPLATES_REGISTRY.length} Available
                 </span>
               </div>
-              <p className="text-secondary small mb-0">
+              <p className="small mb-0" style={{ color: "#D1D5DB" }}>
                 Choose a professionally architected starting point and make it yours in the visual editor.
               </p>
             </div>
 
             <div className="d-flex align-items-center gap-2">
-              <Link href="/create" className="btn btn-sg-outline btn-sg-sm">
+              <Link href="/create" className="sb-btn-primary btn-sm py-2 px-3.5 btn-magnetic">
                 <PlusCircle size={15} />
                 Create From Scratch
               </Link>
@@ -144,7 +159,7 @@ function TemplateGalleryContent() {
           </div>
 
           {/* ======================================================================
-              7.4 CATEGORY NAVIGATION (PILLS)
+              CATEGORY NAVIGATION (PILLS)
               ====================================================================== */}
           <div className="mb-4">
             <div className="d-flex gap-2 overflow-x-auto pb-2" style={{ scrollbarWidth: "thin" }}>
@@ -159,18 +174,18 @@ function TemplateGalleryContent() {
                   <button
                     key={cat}
                     type="button"
-                    className={`btn btn-sm text-nowrap rounded-pill px-3 py-2 d-flex align-items-center gap-2 ${
-                      isActive ? "btn-primary shadow-sm" : "btn-white bg-white border text-secondary"
-                    }`}
+                    className={`sb-filter-pill d-flex align-items-center gap-2 ${isActive ? "active" : ""}`}
                     onClick={() => setSelectedCategory(cat)}
                     id={`cat-pill-${cat.toLowerCase().replace(/\s+/g, "-")}`}
                   >
                     <span>{cat}</span>
                     <span
-                      className={`badge rounded-pill ${
-                        isActive ? "bg-white text-primary" : "bg-light text-secondary border"
-                      }`}
-                      style={{ fontSize: "0.72rem" }}
+                      className="badge rounded-pill fw-semibold"
+                      style={{
+                        fontSize: "0.75rem",
+                        backgroundColor: isActive ? "rgba(163, 255, 111, 0.25)" : "#202938",
+                        color: isActive ? "#A3FF6F" : "#D1D5DB",
+                      }}
                     >
                       {count}
                     </span>
@@ -181,27 +196,33 @@ function TemplateGalleryContent() {
           </div>
 
           {/* ======================================================================
-              7.4 SORTING, SEARCH & VIEW CONTROLS
+              SORTING, SEARCH & VIEW CONTROLS
               ====================================================================== */}
-          <div className="sg-card p-3 bg-white mb-4 shadow-sm">
+          <div className="p-3 mb-4 rounded-3 border shadow-sm" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
             <div className="row g-3 align-items-center justify-content-between">
               {/* Search Bar */}
               <div className="col-12 col-md-5 col-lg-4">
-                <div className="input-group">
-                  <span className="input-group-text bg-light text-muted border-end-0">
-                    <Search size={16} />
-                  </span>
+                <div
+                  className="d-flex align-items-center px-3 py-1.5 rounded-pill"
+                  style={{
+                    backgroundColor: "#10141C",
+                    border: "1px solid #303947",
+                  }}
+                >
+                  <Search size={16} className="me-2 flex-shrink-0" style={{ color: "#BFC7D2" }} />
                   <input
                     type="text"
-                    className="form-control sg-form-control border-start-0 ps-0"
+                    className="form-control bg-transparent border-0 text-white p-0 shadow-none small"
                     placeholder="Search by name, category, or style..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     id="template-search-input"
+                    style={{ outline: "none" }}
                   />
                   {searchQuery && (
                     <button
-                      className="btn btn-light border border-start-0"
+                      className="btn btn-link p-0 ms-1"
+                      style={{ color: "#BFC7D2" }}
                       onClick={() => setSearchQuery("")}
                       aria-label="Clear search query"
                     >
@@ -214,26 +235,31 @@ function TemplateGalleryContent() {
               {/* Filters & Sort Controls */}
               <div className="col-12 col-md-7 col-lg-8 d-flex align-items-center justify-content-md-end gap-2 flex-wrap">
                 {/* Sort dropdown */}
-                <div className="d-flex align-items-center gap-1">
-                  <span className="small text-muted d-none d-lg-inline">Sort:</span>
+                <div className="d-flex align-items-center gap-2">
+                  <span className="small d-none d-lg-inline" style={{ color: "#BFC7D2" }}>Sort:</span>
                   <select
-                    className="form-select form-select-sm"
-                    style={{ width: "auto" }}
+                    className="form-select form-select-sm text-white rounded-pill px-3 py-1.5"
+                    style={{
+                      width: "auto",
+                      backgroundColor: "#10141C",
+                      borderColor: "#303947",
+                      color: "#FFFFFF",
+                    }}
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value as "name" | "category")}
                     id="sort-select"
                   >
-                    <option value="name">Sort by Name (A-Z)</option>
-                    <option value="category">Sort by Category</option>
+                    <option value="name" className="bg-dark text-white">Sort by Name (A-Z)</option>
+                    <option value="category" className="bg-dark text-white">Sort by Category</option>
                   </select>
                 </div>
 
                 {/* Featured filter toggle */}
                 <button
                   type="button"
-                  className={`btn btn-sm ${
-                    featuredOnly ? "btn-primary" : "btn-light border text-secondary"
-                  } d-flex align-items-center gap-1`}
+                  className={`sb-filter-pill d-flex align-items-center gap-1.5 py-1.5 px-3 small ${
+                    featuredOnly ? "active" : ""
+                  }`}
                   onClick={() => setFeaturedOnly(!featuredOnly)}
                   id="filter-featured-btn"
                 >
@@ -244,13 +270,13 @@ function TemplateGalleryContent() {
                 {/* Favorites filter toggle */}
                 <button
                   type="button"
-                  className={`btn btn-sm ${
-                    favoritesOnly ? "btn-danger text-white" : "btn-light border text-secondary"
-                  } d-flex align-items-center gap-1`}
+                  className={`sb-filter-pill d-flex align-items-center gap-1.5 py-1.5 px-3 small ${
+                    favoritesOnly ? "active" : ""
+                  }`}
                   onClick={() => setFavoritesOnly(!favoritesOnly)}
                   id="filter-favorites-btn"
                 >
-                  <Heart size={14} className={favoritesOnly ? "fill-white" : ""} />
+                  <Heart size={14} className={favoritesOnly ? "fill-danger text-danger" : ""} />
                   <span>Favorites ({favoriteIds.length})</span>
                 </button>
 
@@ -258,19 +284,33 @@ function TemplateGalleryContent() {
                 <div className="btn-group btn-group-sm" role="group">
                   <button
                     type="button"
-                    className={`btn ${viewMode === "grid" ? "btn-secondary text-white" : "btn-light border text-secondary"}`}
+                    className="btn btn-sm"
                     onClick={() => setViewMode("grid")}
                     title="Grid View"
                     aria-label="Grid view"
+                    style={{
+                      borderRadius: "8px 0 0 8px",
+                      backgroundColor: viewMode === "grid" ? "#A3FF6F" : "#10141C",
+                      color: viewMode === "grid" ? "#0B0D12" : "#FFFFFF",
+                      borderColor: "#303947",
+                      fontWeight: 600,
+                    }}
                   >
                     <Grid size={15} />
                   </button>
                   <button
                     type="button"
-                    className={`btn ${viewMode === "list" ? "btn-secondary text-white" : "btn-light border text-secondary"}`}
+                    className="btn btn-sm"
                     onClick={() => setViewMode("list")}
                     title="List View"
                     aria-label="List view"
+                    style={{
+                      borderRadius: "0 8px 8px 0",
+                      backgroundColor: viewMode === "list" ? "#A3FF6F" : "#10141C",
+                      color: viewMode === "list" ? "#0B0D12" : "#FFFFFF",
+                      borderColor: "#303947",
+                      fontWeight: 600,
+                    }}
                   >
                     <List size={15} />
                   </button>
@@ -280,18 +320,21 @@ function TemplateGalleryContent() {
           </div>
 
           {/* ======================================================================
-              7.4 TEMPLATE CARDS & EMPTY STATE
+              TEMPLATE CARDS & EMPTY STATE
               ====================================================================== */}
           {filteredTemplates.length === 0 ? (
-            <div className="sg-card p-5 text-center bg-white shadow-sm my-4">
-              <div className="d-inline-flex p-3 rounded-circle bg-light text-muted mb-3">
+            <div className="p-5 text-center rounded-3 border shadow-sm my-4" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
+              <div
+                className="d-inline-flex p-3 rounded-circle mb-3"
+                style={{ backgroundColor: "rgba(163, 255, 111, 0.12)", color: "#A3FF6F" }}
+              >
                 <Search size={32} />
               </div>
-              <h4 className="fw-bold mb-2">No templates found matching your criteria</h4>
-              <p className="text-secondary small mb-4 mx-auto" style={{ maxWidth: 460 }}>
+              <h4 className="fw-bold text-white mb-2">No templates found matching your criteria</h4>
+              <p className="small mb-4 mx-auto" style={{ maxWidth: 460, color: "#D1D5DB" }}>
                 Try adjusting your search keywords, clearing active category filters, or turning off the favorites filter.
               </p>
-              <button onClick={handleClearFilters} className="btn btn-sg-primary btn-sg-sm" id="btn-clear-filters">
+              <button onClick={handleClearFilters} className="sb-btn-primary btn-sm py-2 px-4 btn-magnetic" id="btn-clear-filters">
                 Reset All Filters
               </button>
             </div>
@@ -302,19 +345,28 @@ function TemplateGalleryContent() {
                 const isFav = favoriteIds.includes(tmpl.id);
                 return (
                   <div key={tmpl.id} className="col-12 col-sm-6 col-lg-4 col-xl-4">
-                    <div className="sg-card sg-card-hover h-100 bg-white d-flex flex-column">
-                      {/* Thumbnail frame */}
-                      <div className="position-relative bg-light border-bottom overflow-hidden" style={{ height: "220px" }}>
+                    <div
+                      className="sb-card card-3d-tilt card-spotlight h-100 d-flex flex-column overflow-hidden rounded-3 border"
+                      style={{ backgroundColor: "#151A24", borderColor: "#303947" }}
+                    >
+                      {/* Thumbnail frame with hover zoom */}
+                      <div
+                        className="position-relative overflow-hidden border-bottom card-img-zoom"
+                        style={{ height: "220px", borderColor: "#303947", backgroundColor: "#10141C" }}
+                      >
                         {tmpl.id === "w1" ? (
-                          <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3 text-center" style={{ backgroundColor: "#071B32" }}>
+                          <div
+                            className="w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3 text-center"
+                            style={{ backgroundColor: "#0A1D30" }}
+                          >
                             <img
                               src="/templates/w1/coco-pour-logo.png"
                               alt="COCO POUR Logo"
                               className="img-fluid mb-2"
-                              style={{ maxHeight: "80px", objectFit: "contain" }}
+                              style={{ maxHeight: "75px", objectFit: "contain" }}
                             />
                             <div className="text-white small fw-bold">COCO POUR Brand Website</div>
-                            <small className="text-white-50">4 HD Videos &bull; Barista Moments &bull; GSAP</small>
+                            <small style={{ color: "#BFC7D2" }}>4 HD Videos &bull; Barista Moments &bull; GSAP</small>
                           </div>
                         ) : (
                           <img
@@ -327,12 +379,15 @@ function TemplateGalleryContent() {
                         {/* Badges on preview */}
                         <div className="position-absolute top-0 start-0 m-3 d-flex flex-column gap-1">
                           {tmpl.id === "w1" && (
-                            <span className="badge bg-success text-white shadow-sm">
+                            <span className="badge bg-success text-white shadow-sm fw-bold">
                               Template W1
                             </span>
                           )}
                           {tmpl.featured && (
-                            <span className="badge bg-primary text-white shadow-sm">
+                            <span
+                              className="badge shadow-sm fw-bold"
+                              style={{ backgroundColor: "#A3FF6F", color: "#0B0D12" }}
+                            >
                               Featured
                             </span>
                           )}
@@ -341,11 +396,17 @@ function TemplateGalleryContent() {
                         {/* Favorite button */}
                         <button
                           type="button"
-                          className="btn btn-sm btn-light position-absolute top-0 end-0 m-3 rounded-circle p-2 shadow-sm border"
+                          className="btn btn-sm position-absolute top-0 end-0 m-3 rounded-circle p-2 shadow-sm"
+                          style={{
+                            backgroundColor: "rgba(16, 20, 28, 0.85)",
+                            backdropFilter: "blur(6px)",
+                            border: "1px solid #303947",
+                          }}
                           onClick={(e) => toggleFavorite(tmpl.id, e)}
                           aria-label={isFav ? "Remove from favorites" : "Add to favorites"}
+                          title={isFav ? "Remove favorite" : "Save to favorites"}
                         >
-                          <Heart size={15} className={isFav ? "text-danger fill-danger" : "text-secondary"} />
+                          <Heart size={15} className={isFav ? "text-danger fill-danger" : "text-white"} />
                         </button>
                       </div>
 
@@ -354,23 +415,34 @@ function TemplateGalleryContent() {
                         <div>
                           <div className="d-flex align-items-center gap-2 mb-2 flex-wrap">
                             {tmpl.categories.map((c) => (
-                              <span key={c} className="sg-badge sg-badge-primary">
+                              <span
+                                key={c}
+                                className="badge rounded-pill small fw-semibold"
+                                style={{
+                                  backgroundColor: "rgba(163, 255, 111, 0.15)",
+                                  border: "1px solid rgba(163, 255, 111, 0.35)",
+                                  color: "#A3FF6F",
+                                }}
+                              >
                                 {c}
                               </span>
                             ))}
-                            <span className="small text-muted ms-auto">{tmpl.style}</span>
+                            <span className="small ms-auto fw-semibold" style={{ color: "#BFC7D2" }}>{tmpl.style}</span>
                           </div>
 
-                          <h5 className="fw-bold mb-2">{tmpl.name}</h5>
-                          <p className="small text-secondary mb-3" style={{ lineHeight: 1.55 }}>
+                          <h5 className="fw-bold text-white mb-2">{tmpl.name}</h5>
+                          <p className="small mb-3" style={{ lineHeight: 1.6, color: "#D1D5DB" }}>
                             {tmpl.description}
                           </p>
                         </div>
 
-                        <div className="pt-3 border-top d-flex align-items-center justify-content-between gap-2">
+                        <div
+                          className="pt-3 border-top d-flex align-items-center justify-content-between gap-2"
+                          style={{ borderColor: "#303947" }}
+                        >
                           <button
                             type="button"
-                            className="btn btn-sg-outline btn-sg-sm flex-grow-1"
+                            className="sb-btn-outline btn-sm flex-grow-1 py-1.5"
                             onClick={() => {
                               setPreviewTemplate(tmpl);
                               setPreviewViewport("desktop");
@@ -382,7 +454,7 @@ function TemplateGalleryContent() {
                           </button>
                           <button
                             type="button"
-                            className="btn btn-sg-primary btn-sg-sm flex-grow-1"
+                            className="sb-btn-primary btn-sm flex-grow-1 py-1.5"
                             onClick={() => handleUseTemplate(tmpl)}
                             id={`btn-use-template-${tmpl.id}`}
                           >
@@ -402,12 +474,22 @@ function TemplateGalleryContent() {
               {filteredTemplates.map((tmpl) => {
                 const isFav = favoriteIds.includes(tmpl.id);
                 return (
-                  <div key={tmpl.id} className="sg-card p-3 p-md-4 bg-white shadow-sm">
+                  <div
+                    key={tmpl.id}
+                    className="sb-card card-spotlight p-3 p-md-4 rounded-3 border shadow-sm"
+                    style={{ backgroundColor: "#151A24", borderColor: "#303947" }}
+                  >
                     <div className="row align-items-center g-3">
                       <div className="col-12 col-md-3 col-lg-2">
-                        <div className="rounded-3 overflow-hidden bg-light border" style={{ height: "120px" }}>
+                        <div
+                          className="rounded-3 overflow-hidden border card-img-zoom"
+                          style={{ height: "120px", borderColor: "#303947", backgroundColor: "#10141C" }}
+                        >
                           {tmpl.id === "w1" ? (
-                            <div className="w-100 h-100 d-flex align-items-center justify-content-center p-2" style={{ backgroundColor: "#071B32" }}>
+                            <div
+                              className="w-100 h-100 d-flex align-items-center justify-content-center p-2"
+                              style={{ backgroundColor: "#0A1D30" }}
+                            >
                               <img
                                 src="/templates/w1/coco-pour-logo.png"
                                 alt="COCO POUR Logo"
@@ -423,21 +505,29 @@ function TemplateGalleryContent() {
                       <div className="col-12 col-md-6 col-lg-7">
                         <div className="d-flex align-items-center gap-2 mb-1 flex-wrap">
                           {tmpl.categories.map((c) => (
-                            <span key={c} className="sg-badge sg-badge-primary">
+                            <span
+                              key={c}
+                              className="badge rounded-pill small fw-semibold"
+                              style={{
+                                backgroundColor: "rgba(163, 255, 111, 0.15)",
+                                border: "1px solid rgba(163, 255, 111, 0.35)",
+                                color: "#A3FF6F",
+                              }}
+                            >
                               {c}
                             </span>
                           ))}
-                          <span className="small text-muted ms-2">{tmpl.style}</span>
+                          <span className="small ms-2 fw-semibold" style={{ color: "#BFC7D2" }}>{tmpl.style}</span>
                         </div>
-                        <h5 className="fw-bold mb-1">{tmpl.name}</h5>
-                        <p className="small text-secondary mb-0">{tmpl.description}</p>
+                        <h5 className="fw-bold text-white mb-1">{tmpl.name}</h5>
+                        <p className="small mb-0" style={{ color: "#D1D5DB" }}>{tmpl.description}</p>
                       </div>
 
                       <div className="col-12 col-md-3 col-lg-3 d-flex flex-column align-items-end justify-content-center gap-2">
                         <div className="d-flex align-items-center gap-2 w-100">
                           <button
                             type="button"
-                            className="btn btn-sg-outline btn-sg-sm flex-grow-1"
+                            className="sb-btn-outline btn-sm flex-grow-1 py-1.5"
                             onClick={() => {
                               setPreviewTemplate(tmpl);
                               setPreviewViewport("desktop");
@@ -448,18 +538,22 @@ function TemplateGalleryContent() {
                           </button>
                           <button
                             type="button"
-                            className="btn btn-sg-primary btn-sg-sm flex-grow-1"
+                            className="sb-btn-primary btn-sm flex-grow-1 py-1.5"
                             onClick={() => handleUseTemplate(tmpl)}
                           >
                             Use Template
                           </button>
                           <button
                             type="button"
-                            className="btn btn-light btn-sm border p-2"
+                            className="btn btn-sm rounded-circle p-2 border"
+                            style={{
+                              backgroundColor: "#202938",
+                              borderColor: "#303947",
+                            }}
                             onClick={(e) => toggleFavorite(tmpl.id, e)}
                             aria-label="Toggle favorite"
                           >
-                            <Heart size={15} className={isFav ? "text-danger fill-danger" : "text-secondary"} />
+                            <Heart size={15} className={isFav ? "text-danger fill-danger" : "text-white"} />
                           </button>
                         </div>
                       </div>
@@ -471,7 +565,7 @@ function TemplateGalleryContent() {
           )}
 
           {/* ======================================================================
-              7.6 FUNCTIONAL TEMPLATE PREVIEW MODAL
+              FUNCTIONAL TEMPLATE PREVIEW MODAL
               ====================================================================== */}
           {previewTemplate && (
             <div
@@ -479,35 +573,68 @@ function TemplateGalleryContent() {
               tabIndex={-1}
               role="dialog"
               aria-modal="true"
-              style={{ backgroundColor: "rgba(15, 23, 42, 0.75)", backdropFilter: "blur(4px)", zIndex: 1060 }}
+              style={{ backgroundColor: "rgba(11, 13, 18, 0.92)", backdropFilter: "blur(10px)", zIndex: 1060 }}
             >
               <div className="modal-dialog modal-fullscreen p-2 p-md-4">
-                <div className="modal-content rounded-4 shadow-xl border-0 overflow-hidden d-flex flex-column h-100">
+                <div
+                  className="modal-content rounded-4 shadow-2xl overflow-hidden d-flex flex-column h-100 border"
+                  style={{
+                    backgroundColor: "#151A24",
+                    borderColor: "#303947",
+                  }}
+                >
                   {/* Modal Header */}
-                  <div className="modal-header bg-white border-bottom py-3 px-4 d-flex justify-content-between align-items-center">
+                  <div
+                    className="modal-header py-3 px-4 d-flex justify-content-between align-items-center border-bottom"
+                    style={{
+                      backgroundColor: "#10141C",
+                      borderColor: "#303947",
+                    }}
+                  >
                     <div className="d-flex align-items-center gap-3">
                       <div>
                         <div className="d-flex align-items-center gap-2">
-                          <h5 className="modal-title fw-bold mb-0">{previewTemplate.name}</h5>
+                          <h5 className="modal-title fw-bold text-white mb-0">{previewTemplate.name}</h5>
                           {previewTemplate.categories.map((c) => (
-                            <span key={c} className="badge bg-primary-subtle text-primary small">
+                            <span
+                              key={c}
+                              className="badge rounded-pill small fw-semibold"
+                              style={{
+                                backgroundColor: "rgba(163, 255, 111, 0.15)",
+                                border: "1px solid rgba(163, 255, 111, 0.35)",
+                                color: "#A3FF6F",
+                              }}
+                            >
                               {c}
                             </span>
                           ))}
                         </div>
-                        <small className="text-secondary">{previewTemplate.tagline}</small>
+                        <small style={{ color: "#D1D5DB" }}>{previewTemplate.tagline}</small>
                       </div>
                     </div>
 
-                    <div className="d-flex align-items-center gap-3">
+                    <div className="d-flex align-items-center gap-2">
                       <ViewportSwitcher
                         currentMode={previewViewport}
                         onChange={setPreviewViewport}
                       />
 
+                      {(previewTemplate.id === "w1" || previewTemplate.id === "w2") && (
+                        <a
+                          href={previewTemplate.id === "w1" ? "/templates/w1/index.html" : "/templates/w2/index.html"}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="btn btn-sm btn-outline-secondary rounded-pill px-3 text-white d-none d-md-flex align-items-center gap-1.5 text-decoration-none"
+                          style={{ borderColor: "#303947" }}
+                        >
+                          <ExternalLink size={14} />
+                          <span>Open in New Tab</span>
+                        </a>
+                      )}
+
                       <button
                         type="button"
-                        className="btn btn-sg-primary btn-sg-sm"
+                        className="sb-btn-primary btn-sm py-1.5 px-3 btn-magnetic"
                         onClick={() => handleUseTemplate(previewTemplate)}
                         id="modal-btn-use-template"
                       >
@@ -517,58 +644,111 @@ function TemplateGalleryContent() {
 
                       <button
                         type="button"
-                        className="btn-close"
+                        className="btn btn-sm text-white border p-1.5 rounded-circle"
+                        style={{ backgroundColor: "#202938", borderColor: "#303947" }}
                         aria-label="Close modal preview"
                         onClick={() => setPreviewTemplate(null)}
-                      />
+                      >
+                        <X size={18} />
+                      </button>
                     </div>
                   </div>
 
                   {/* Modal Body with Viewport emulation */}
-                  <div className="modal-body bg-light p-3 p-md-4 overflow-y-auto d-flex justify-content-center">
-                    <div className={`viewport-frame-wrapper viewport-${previewViewport}`}>
-                      <div className="preview-browser-frame shadow-lg bg-white h-100">
-                        <div className="browser-header-bar">
+                  <div
+                    className="modal-body p-0 p-md-3 overflow-y-auto d-flex justify-content-center"
+                    style={{ backgroundColor: "#0B0D12" }}
+                  >
+                    <div
+                      className={`viewport-frame-wrapper viewport-${previewViewport} w-100`}
+                      style={{
+                        maxWidth:
+                          previewViewport === "mobile"
+                            ? "390px"
+                            : previewViewport === "tablet"
+                            ? "768px"
+                            : "100%",
+                      }}
+                    >
+                      <div
+                        className="preview-browser-frame shadow-2xl h-100 border"
+                        style={{
+                          backgroundColor: "#151A24",
+                          borderColor: "#303947",
+                        }}
+                      >
+                        <div
+                          className="browser-header-bar border-bottom"
+                          style={{
+                            backgroundColor: "#10141C",
+                            borderColor: "#303947",
+                          }}
+                        >
                           <div className="browser-dots">
                             <span className="browser-dot red"></span>
                             <span className="browser-dot yellow"></span>
                             <span className="browser-dot green"></span>
                           </div>
-                          <div className="browser-url-pill">
+                          <div
+                            className="browser-url-pill"
+                            style={{
+                              backgroundColor: "#0B0D12",
+                              borderColor: "#303947",
+                              color: "#A3FF6F",
+                            }}
+                          >
                             <span>https://preview.sitegenai.app/{previewTemplate.id}</span>
                           </div>
-                          <span className="badge bg-light text-secondary border small">
+                          <span
+                            className="badge border small fw-semibold"
+                            style={{
+                              backgroundColor: "#202938",
+                              borderColor: "#303947",
+                              color: "#BFC7D2",
+                            }}
+                          >
                             {previewViewport.toUpperCase()}
                           </span>
                         </div>
 
-                        <div className="bg-white" style={{ minHeight: "650px" }}>
+                        <div
+                          className="overflow-y-auto w-100"
+                          style={{
+                            minHeight: "80vh",
+                            backgroundColor:
+                              previewTemplate.id === "w1"
+                                ? "#FFFFFF"
+                                : previewTemplate.id === "w2"
+                                ? "#080504"
+                                : previewTemplate.colors.background || "#FFFFFF",
+                          }}
+                        >
                           {previewTemplate.id === "w1" ? (
                             <iframe
                               src="/templates/w1/index.html"
                               title="COCO POUR Template Live Interactive Preview"
                               className="w-100 border-0"
-                              style={{ minHeight: "750px", height: "100%", display: "block" }}
+                              style={{ minHeight: "85vh", height: "100%", display: "block" }}
+                            />
+                          ) : previewTemplate.id === "w2" ? (
+                            <iframe
+                              src="/templates/w2/index.html"
+                              title="BRUVA Coffee Template Live Interactive Preview"
+                              className="w-100 border-0"
+                              style={{ minHeight: "85vh", height: "100%", display: "block" }}
                             />
                           ) : (
-                            <div className="p-5 text-center">
-                              <span className="sg-badge sg-badge-primary mb-3">Built-in Layout Preview</span>
-                              <h2 className="fw-bold mb-2">{previewTemplate.name}</h2>
-                              <p className="text-secondary max-w-700 mx-auto mb-4">{previewTemplate.description}</p>
-                              <img
-                                src={previewTemplate.thumbnail}
-                                alt={previewTemplate.name}
-                                className="img-fluid rounded-4 shadow border mb-4"
-                                style={{ maxHeight: "400px", objectFit: "cover" }}
+                            <div className="w-100 website-template-scope">
+                              <SectionRenderer
+                                sections={createDefaultSectionsFromTemplate(previewTemplate.id)}
+                                theme={{
+                                  primaryColor: previewTemplate.colors.primary,
+                                  secondaryColor: previewTemplate.colors.secondary,
+                                  backgroundColor: previewTemplate.colors.background,
+                                  fontFamily: "Outfit, sans-serif",
+                                }}
+                                isEditableCanvas={false}
                               />
-                              <div className="d-flex justify-content-center gap-3">
-                                <button
-                                  className="btn btn-sg-primary"
-                                  onClick={() => handleUseTemplate(previewTemplate)}
-                                >
-                                  Instantiate Template into Visual Editor
-                                </button>
-                              </div>
                             </div>
                           )}
                         </div>
@@ -589,7 +769,7 @@ function TemplateGalleryContent() {
 
 export default function TemplateGalleryPage() {
   return (
-    <Suspense fallback={<div className="p-5 text-center">Loading template gallery...</div>}>
+    <Suspense fallback={<div className="p-5 text-center text-white min-vh-100" style={{ backgroundColor: "#0B0D12" }}>Loading template gallery...</div>}>
       <TemplateGalleryContent />
     </Suspense>
   );

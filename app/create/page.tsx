@@ -45,11 +45,11 @@ const PRESET_STYLES = [
 ];
 
 const PRESET_PALETTES = [
-  { name: "Oceanic Blue (SiteGenAI)", primary: "#356DFF", secondary: "#0F172A", background: "#FFFFFF", accent: "#EFF5FF" },
+  { name: "Emerald & Dark Charcoal", primary: "#A3FF6F", secondary: "#10141C", background: "#0B0D12", accent: "#202938" },
+  { name: "Violet Creative", primary: "#8B7CFF", secondary: "#151A24", background: "#0B0D12", accent: "#303947" },
+  { name: "Cyan Tech", primary: "#36D9F5", secondary: "#0E1726", background: "#0B0D12", accent: "#1E293B" },
   { name: "Coco Coastal (w1)", primary: "#087FE5", secondary: "#071B32", background: "#FFFFFF", accent: "#F8F5ED" },
-  { name: "Emerald Vitality", primary: "#10B981", secondary: "#064E3B", background: "#FFFFFF", accent: "#ECFDF5" },
-  { name: "Obsidian Luxury", primary: "#18181B", secondary: "#71717A", background: "#FAFAFA", accent: "#F4F4F5" },
-  { name: "Indigo Tech", primary: "#6366F1", secondary: "#1E1B4B", background: "#FFFFFF", accent: "#EEF2FF" },
+  { name: "Obsidian Luxury", primary: "#FFFFFF", secondary: "#27272A", background: "#0B0D12", accent: "#18181B" },
 ];
 
 const PRESET_FONTS = [
@@ -72,7 +72,7 @@ function CreateStudioContent() {
   const [projectName, setProjectName] = useState("");
   const [selectedType, setSelectedType] = useState("Restaurant");
   const [selectedStyle, setSelectedStyle] = useState("Editorial");
-  const [selectedPalette, setSelectedPalette] = useState(PRESET_PALETTES[1]); // Default Coco Coastal
+  const [selectedPalette, setSelectedPalette] = useState(PRESET_PALETTES[0]); // Default Emerald & Dark Charcoal
   const [selectedFont, setSelectedFont] = useState(PRESET_FONTS[0]);
   const [promptValidationErr, setPromptValidationErr] = useState("");
 
@@ -96,12 +96,14 @@ function CreateStudioContent() {
   const [generatedProjectId, setGeneratedProjectId] = useState<string | null>(null);
   const [uploadedAssets, setUploadedAssets] = useState<UploadedAsset[]>([]);
   const [isPlanning, setIsPlanning] = useState(false);
+  const [planningStageText, setPlanningStageText] = useState("Understanding your idea...");
   const [generatedProject, setGeneratedProject] = useState<WebsiteDocument | null>(null);
   const [zipDownloading, setZipDownloading] = useState(false);
   const [zipSuccess, setZipSuccess] = useState<string | null>(null);
 
   const GEN_STAGES = [
-    "Understanding the website description & intent...",
+    "Understanding the website description & prompt intent...",
+    "Querying stock photography and assembling image plan...",
     "Preparing structural page map & semantic hierarchy...",
     "Assembling responsive component blocks & typography...",
     "Applying visual design tokens & harmonious palette...",
@@ -111,7 +113,6 @@ function CreateStudioContent() {
   useEffect(() => {
     if (initialPromptQuery) {
       setPromptDescription(initialPromptQuery);
-      // Auto-extract suggested name if prompt provided
       if (!projectName) {
         setProjectName(initialPromptQuery.slice(0, 32).trim() + "...");
       }
@@ -129,74 +130,61 @@ function CreateStudioContent() {
       }
       setPromptValidationErr("");
       setIsPlanning(true);
+      setPlanningStageText("Understanding your idea...");
 
-      const proposedName = projectName.trim() || `${selectedType} Experience`;
+      const stageMessages = [
+        "Understanding your idea...",
+        "Planning your website sections...",
+        "Finding suitable photographs with Pexels & Unsplash...",
+        "Preparing your visual storyboard...",
+      ];
+      let msgIndex = 0;
+      const progressTimer = setInterval(() => {
+        msgIndex = (msgIndex + 1) % stageMessages.length;
+        setPlanningStageText(stageMessages[msgIndex]);
+      }, 1500);
 
       try {
-        const res = await fetch("/api/ai/plan", {
+        const res = await fetch("/api/storyboard/plan", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             prompt: promptDescription,
             category: selectedType,
             style: selectedStyle,
-            assets: uploadedAssets,
+            palette: selectedPalette,
           }),
         });
+
+        clearInterval(progressTimer);
         const data = await res.json();
-        if (data.success && data.blueprint) {
-          setBlueprint({
-            ...data.blueprint,
-            name: proposedName || data.blueprint.name,
-            palette: selectedPalette,
-            typography: selectedFont,
-            isLiveAI: data.isLiveAI,
-            modelUsed: data.modelUsed,
-          });
+
+        if (data.success && data.storyboard) {
+          router.push(`/storyboard/${data.storyboard.id}`);
+          return;
         } else {
-          throw new Error(data.error || "Plan endpoint returned error");
+          throw new Error(data.error || "Failed to generate storyboard");
         }
-      } catch (err) {
-        // Fallback curated blueprint
-        const sections: BlueprintSection[] = [
-          { id: "sec-header", name: "Header & Navigation", type: "header", enabled: true, description: "Sticky brand logo, page anchors, and primary CTA." },
-          { id: "sec-hero", name: "Hero Headline & Media", type: "hero", enabled: true, description: `Spotlight headline tailored for ${selectedType} audience.` },
-          { id: "sec-features", name: "Key Pillars & Benefits", type: "features", enabled: true, description: "Core pillars with icons and short summaries." },
-          { id: "sec-story", name: "Brand Narrative & Highlights", type: "story", enabled: true, description: "Origin story with key metrics and values." },
-          { id: "sec-cta", name: "Final Call to Action", type: "cta", enabled: true, description: "Lead generation and conversion banner." },
-          { id: "sec-footer", name: "Footer & Legal", type: "footer", enabled: true, description: "Multi-column links and social handles." },
-        ];
-        setBlueprint({
-          name: proposedName,
-          purpose: promptDescription,
-          type: selectedType,
-          style: selectedStyle,
-          pages: ["Home", "About", "Services", "Contact"],
-          sections,
-          palette: selectedPalette,
-          typography: selectedFont,
-          isLiveAI: false,
-        });
+      } catch (err: any) {
+        clearInterval(progressTimer);
+        console.warn("Storyboard planning error:", err);
+        setPromptValidationErr(err.message || "Failed to generate storyboard. Please try again.");
       } finally {
         setIsPlanning(false);
-        setCurrentStep("blueprint");
       }
-    } else if (activeMode === "url") {
-      if (!remixUrl.trim() || !remixUrl.includes(".")) {
-        setUrlValidationErr("Please enter a valid URL (e.g. https://example.com).");
+    }
+    
+    if (activeMode === "url") {
+      if (!remixUrl.trim()) {
+        setUrlValidationErr("Please enter a valid website URL.");
         return;
       }
       setUrlValidationErr("");
 
-      // Simulated URL analysis
-      const domainName = remixUrl.replace(/(^\w+:|^)\/\//, "").split("/")[0];
-      const proposedName = `${domainName} Redesign`;
-
+      const proposedName = `Remix: ${remixUrl.replace(/^https?:\/\//, "").replace(/\/.*$/, "")}`;
       const sections: BlueprintSection[] = [
-        { id: "sec-header", name: "Clean Modernized Header", type: "header", enabled: true, description: `Adapted navigation structure from ${domainName}.` },
-        { id: "sec-hero", name: "Hero Showcase", type: "hero", enabled: true, description: "Refined headline typography and improved hero contrast." },
-        { id: "sec-story", name: "Brand Craftsmanship & Heritage", type: "story", enabled: true, description: "Purpose-driven brand narrative." },
-        { id: "sec-product", name: "Signature Offerings & Catalog", type: "product", enabled: true, description: "Optimized product/service presentation." },
+        { id: "sec-header", name: "Navigation Header", type: "header", enabled: true, description: "Clean sticky header with brand mark and action button." },
+        { id: "sec-hero", name: "Hero Value Proposition", type: "hero", enabled: true, description: "Modernized hero banner with stock photography." },
         { id: "sec-features", name: "Core Capabilities Bento", type: "features", enabled: true, description: "Streamlined grid replacing cluttered legacy lists." },
         { id: "sec-testimonials", name: "Client Reviews & Social Proof", type: "testimonials", enabled: true, description: "Verified reviews and credibility badges." },
         { id: "sec-faq", name: "Frequently Asked Questions", type: "faq", enabled: true, description: "Clear answers to resolve customer hesitations." },
@@ -211,8 +199,8 @@ function CreateStudioContent() {
         style: "Modern",
         pages: ["Home", "Overview", "Contact"],
         sections,
-        palette: PRESET_PALETTES[0],
-        typography: PRESET_FONTS[0],
+        palette: selectedPalette,
+        typography: selectedFont,
       });
 
       setCurrentStep("blueprint");
@@ -278,16 +266,16 @@ function CreateStudioContent() {
     let current = 0;
     const interval = setInterval(() => {
       current++;
-      if (current < 4) {
+      if (current < 5) {
         setGenStage(current);
-        setGenProgress((current + 1) * 20);
+        setGenProgress((current + 1) * 18);
       }
     }, 600);
 
     try {
       if (activeMode === "template" && selectedTemplateId === "w1") {
         clearInterval(interval);
-        setGenStage(4);
+        setGenStage(5);
         setGenProgress(100);
         const createdDoc = projectService.createFromTemplate("w1", blueprint.name);
         createdDoc.assets = uploadedAssets;
@@ -305,35 +293,36 @@ function CreateStudioContent() {
             assets: uploadedAssets,
           }),
         });
-        const data = await res.json();
+
         clearInterval(interval);
-        setGenStage(4);
+        setGenStage(5);
         setGenProgress(100);
 
-        let createdDoc: WebsiteDocument;
-        if (data.success && data.website) {
-          createdDoc = data.website;
-          createdDoc.assets = uploadedAssets;
-          projectService.saveProject(createdDoc);
+        const data = await res.json();
+        if (data.success && data.project) {
+          const projectToSave: WebsiteDocument = {
+            ...data.project,
+            assets: uploadedAssets,
+          };
+          projectService.saveProject(projectToSave);
+          setGeneratedProjectId(projectToSave.id);
+          setGeneratedProject(projectToSave);
+          setCurrentStep("complete");
         } else {
-          createdDoc = projectService.createFromBlueprint(blueprint);
-          createdDoc.assets = uploadedAssets;
-          projectService.saveProject(createdDoc);
+          throw new Error(data.error || "Generation endpoint did not return valid project");
         }
-
-        setGeneratedProjectId(createdDoc.id);
-        setGeneratedProject(createdDoc);
-        setCurrentStep("complete");
       }
     } catch (err) {
+      console.warn("Backend generate error, assembling local project:", err);
       clearInterval(interval);
-      setGenStage(4);
+      setGenStage(5);
       setGenProgress(100);
-      const fallbackDoc = projectService.createFromBlueprint(blueprint);
-      fallbackDoc.assets = uploadedAssets;
-      projectService.saveProject(fallbackDoc);
-      setGeneratedProjectId(fallbackDoc.id);
-      setGeneratedProject(fallbackDoc);
+
+      const localProject = projectService.createFromBlueprint(blueprint);
+      localProject.assets = uploadedAssets;
+      projectService.saveProject(localProject);
+      setGeneratedProjectId(localProject.id);
+      setGeneratedProject(localProject);
       setCurrentStep("complete");
     }
   };
@@ -349,32 +338,68 @@ function CreateStudioContent() {
   });
 
   return (
-    <div className="d-flex flex-column min-vh-100 bg-light">
+    <div className="d-flex flex-column min-vh-100 position-relative" style={{ backgroundColor: "#0B0D12", color: "#F1F5F9" }}>
       <Navbar />
 
-      <main className="flex-grow-1 py-4 py-md-5">
-        <div className="container">
+      <main className="flex-grow-1 py-4 py-md-5 position-relative">
+        {/* Subtle ambient background glow */}
+        <div className="sb-glow-blob-emerald top-0 start-0 opacity-25" />
+        <div className="sb-glow-blob-violet bottom-0 end-0 opacity-20" />
+
+        <div className="container position-relative" style={{ zIndex: 2 }}>
           {/* Header */}
           <div className="text-center max-w-700 mx-auto mb-4">
-            <span className="sg-badge sg-badge-primary mb-2">Interactive Creation Studio</span>
-            <h1 className="display-6 fw-extrabold mb-2">Build Your Website</h1>
-            <p className="text-secondary small mb-0">
+            <span
+              className="badge rounded-pill mb-2 px-3 py-1.5 fw-semibold"
+              style={{
+                backgroundColor: "rgba(163, 255, 111, 0.15)",
+                border: "1px solid rgba(163, 255, 111, 0.35)",
+                color: "#A3FF6F",
+              }}
+            >
+              Interactive Creation Studio
+            </span>
+            <h1 className="display-6 fw-extrabold text-white mb-2">
+              Build Your Website with <span className="sb-text-emerald">AI Discovery</span>
+            </h1>
+            <p className="small mb-0" style={{ color: "#D1D5DB" }}>
               Start with a prompt, remix an existing URL, or choose a starting template.
             </p>
           </div>
 
           {/* Stepper Indicator */}
           <div className="d-flex justify-content-center mb-4">
-            <div className="d-inline-flex align-items-center gap-2 p-1 rounded-pill bg-white border shadow-sm small">
-              <span className={`badge rounded-pill ${currentStep === "configure" ? "bg-primary text-white" : "bg-light text-secondary"}`}>
+            <div
+              className="d-inline-flex align-items-center gap-2 p-1.5 rounded-pill border small"
+              style={{
+                backgroundColor: "#151A24",
+                borderColor: "#303947",
+              }}
+            >
+              <span
+                className={`badge rounded-pill px-3 py-1.5 ${
+                  currentStep === "configure" ? "sb-btn-primary fw-bold" : "text-white"
+                }`}
+                style={currentStep !== "configure" ? { color: "#BFC7D2" } : {}}
+              >
                 1. Mode &amp; Inputs
               </span>
-              <span className="text-muted">&rarr;</span>
-              <span className={`badge rounded-pill ${currentStep === "blueprint" ? "bg-primary text-white" : "bg-light text-secondary"}`}>
+              <span style={{ color: "#BFC7D2" }}>&rarr;</span>
+              <span
+                className={`badge rounded-pill px-3 py-1.5 ${
+                  currentStep === "blueprint" ? "sb-btn-primary fw-bold" : "text-white"
+                }`}
+                style={currentStep !== "blueprint" ? { color: "#BFC7D2" } : {}}
+              >
                 2. Review Blueprint
               </span>
-              <span className="text-muted">&rarr;</span>
-              <span className={`badge rounded-pill ${currentStep === "generating" || currentStep === "complete" ? "bg-primary text-white" : "bg-light text-secondary"}`}>
+              <span style={{ color: "#BFC7D2" }}>&rarr;</span>
+              <span
+                className={`badge rounded-pill px-3 py-1.5 ${
+                  currentStep === "generating" || currentStep === "complete" ? "sb-btn-primary fw-bold" : "text-white"
+                }`}
+                style={currentStep !== "generating" && currentStep !== "complete" ? { color: "#BFC7D2" } : {}}
+              >
                 3. Generation &amp; Editor
               </span>
             </div>
@@ -387,11 +412,11 @@ function CreateStudioContent() {
             <div className="row justify-content-center">
               <div className="col-12 col-lg-9 col-xl-8">
                 {/* Mode Selector Tabs */}
-                <div className="sg-card p-2 mb-4 bg-white shadow-sm">
+                <div className="p-2 mb-4 rounded-3 border" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
                   <div className="nav nav-pills nav-fill gap-1" role="tablist">
                     <button
-                      className={`nav-link py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 ${
-                        activeMode === "prompt" ? "active bg-primary text-white shadow-sm" : "text-secondary"
+                      className={`sb-filter-pill py-2 d-flex align-items-center justify-content-center gap-2 ${
+                        activeMode === "prompt" ? "active" : ""
                       }`}
                       onClick={() => setActiveMode("prompt")}
                       type="button"
@@ -401,8 +426,8 @@ function CreateStudioContent() {
                       Start with a Prompt
                     </button>
                     <button
-                      className={`nav-link py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 ${
-                        activeMode === "url" ? "active bg-primary text-white shadow-sm" : "text-secondary"
+                      className={`sb-filter-pill py-2 d-flex align-items-center justify-content-center gap-2 ${
+                        activeMode === "url" ? "active" : ""
                       }`}
                       onClick={() => setActiveMode("url")}
                       type="button"
@@ -412,8 +437,8 @@ function CreateStudioContent() {
                       Remix a URL
                     </button>
                     <button
-                      className={`nav-link py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 ${
-                        activeMode === "template" ? "active bg-primary text-white shadow-sm" : "text-secondary"
+                      className={`sb-filter-pill py-2 d-flex align-items-center justify-content-center gap-2 ${
+                        activeMode === "template" ? "active" : ""
                       }`}
                       onClick={() => setActiveMode("template")}
                       type="button"
@@ -427,25 +452,34 @@ function CreateStudioContent() {
 
                 {/* MODE 1: PROMPT */}
                 {activeMode === "prompt" && (
-                  <form onSubmit={handleProceedToBlueprint} className="sg-card p-4 p-md-5 bg-white shadow-md">
+                  <form onSubmit={handleProceedToBlueprint} className="p-4 p-md-5 rounded-4 border shadow-md" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
                     <div className="mb-4">
-                      <label htmlFor="prompt-desc" className="sg-form-label d-flex justify-content-between">
-                        <span>Website Description *</span>
-                        <span className="text-muted fw-normal small">{promptDescription.length} / 500 chars</span>
+                      <label htmlFor="prompt-desc" className="d-flex justify-content-between text-white fw-semibold small mb-2">
+                        <span>Website Description &amp; Vision *</span>
+                        <span className="fw-normal" style={{ color: "#BFC7D2" }}>{promptDescription.length} / 500 chars</span>
                       </label>
-                      <textarea
-                        id="prompt-desc"
-                        rows={4}
-                        className="sg-form-control w-100"
-                        placeholder="Describe your brand, services, desired sections, and target audience..."
-                        value={promptDescription}
-                        onChange={(e) => {
-                          setPromptDescription(e.target.value);
-                          if (promptValidationErr) setPromptValidationErr("");
+                      <div
+                        className="rounded-3 p-2"
+                        style={{
+                          backgroundColor: "#10141C",
+                          border: "1px solid #303947",
                         }}
-                        maxLength={500}
-                        required
-                      />
+                      >
+                        <textarea
+                          id="prompt-desc"
+                          rows={4}
+                          className="form-control bg-transparent border-0 text-white shadow-none"
+                          placeholder="Describe your brand, services, desired sections, and target audience. E.g. A modern artisanal coffee roastery with cozy aesthetics and online subscription..."
+                          value={promptDescription}
+                          onChange={(e) => {
+                            setPromptDescription(e.target.value);
+                            if (promptValidationErr) setPromptValidationErr("");
+                          }}
+                          maxLength={500}
+                          required
+                          style={{ outline: "none", resize: "vertical" }}
+                        />
+                      </div>
                       {promptValidationErr && (
                         <div className="text-danger small mt-1 fw-medium">{promptValidationErr}</div>
                       )}
@@ -453,26 +487,40 @@ function CreateStudioContent() {
 
                     <div className="row g-3 mb-4">
                       <div className="col-12 col-md-6">
-                        <label htmlFor="project-name-input" className="sg-form-label">Project Name (Optional)</label>
+                        <label htmlFor="project-name-input" className="text-white fw-semibold small mb-2 d-block">
+                          Project Name (Optional)
+                        </label>
                         <input
                           id="project-name-input"
                           type="text"
-                          className="sg-form-control w-100"
+                          className="form-control rounded-pill text-white px-3 py-2"
                           placeholder="e.g., COCO POUR Brand Experience"
                           value={projectName}
                           onChange={(e) => setProjectName(e.target.value)}
+                          style={{
+                            backgroundColor: "#10141C",
+                            borderColor: "#303947",
+                          }}
                         />
                       </div>
                       <div className="col-12 col-md-6">
-                        <label htmlFor="website-type-select" className="sg-form-label">Website Type</label>
+                        <label htmlFor="website-type-select" className="text-white fw-semibold small mb-2 d-block">
+                          Website Type
+                        </label>
                         <select
                           id="website-type-select"
-                          className="sg-form-control w-100 form-select"
+                          className="form-select rounded-pill text-white px-3 py-2"
                           value={selectedType}
                           onChange={(e) => setSelectedType(e.target.value)}
+                          style={{
+                            backgroundColor: "#10141C",
+                            borderColor: "#303947",
+                          }}
                         >
                           {TEMPLATE_CATEGORIES.filter((c) => c !== "All Templates").map((cat) => (
-                            <option key={cat} value={cat}>{cat}</option>
+                            <option key={cat} value={cat} className="bg-dark text-white">
+                              {cat}
+                            </option>
                           ))}
                         </select>
                       </div>
@@ -480,35 +528,53 @@ function CreateStudioContent() {
 
                     <div className="row g-3 mb-4">
                       <div className="col-12 col-md-6">
-                        <label htmlFor="visual-style-select" className="sg-form-label">Visual Style</label>
+                        <label htmlFor="visual-style-select" className="text-white fw-semibold small mb-2 d-block">
+                          Visual Style
+                        </label>
                         <select
                           id="visual-style-select"
-                          className="sg-form-control w-100 form-select"
+                          className="form-select rounded-pill text-white px-3 py-2"
                           value={selectedStyle}
                           onChange={(e) => setSelectedStyle(e.target.value)}
+                          style={{
+                            backgroundColor: "#10141C",
+                            borderColor: "#303947",
+                          }}
                         >
                           {PRESET_STYLES.map((st) => (
-                            <option key={st} value={st}>{st}</option>
+                            <option key={st} value={st} className="bg-dark text-white">
+                              {st}
+                            </option>
                           ))}
                         </select>
                       </div>
                       <div className="col-12 col-md-6">
-                        <label htmlFor="typography-select" className="sg-form-label">Typography Pairing</label>
+                        <label htmlFor="typography-select" className="text-white fw-semibold small mb-2 d-block">
+                          Typography Pairing
+                        </label>
                         <select
                           id="typography-select"
-                          className="sg-form-control w-100 form-select"
+                          className="form-select rounded-pill text-white px-3 py-2"
                           value={selectedFont}
                           onChange={(e) => setSelectedFont(e.target.value)}
+                          style={{
+                            backgroundColor: "#10141C",
+                            borderColor: "#303947",
+                          }}
                         >
                           {PRESET_FONTS.map((font) => (
-                            <option key={font} value={font}>{font}</option>
+                            <option key={font} value={font} className="bg-dark text-white">
+                              {font}
+                            </option>
                           ))}
                         </select>
                       </div>
                     </div>
 
                     <div className="mb-4">
-                      <label className="sg-form-label d-block mb-2">Color Palette Preference</label>
+                      <label className="text-white fw-semibold small mb-2 d-block">
+                        Color Palette Preference
+                      </label>
                       <div className="row g-2">
                         {PRESET_PALETTES.map((pal, idx) => {
                           const isSelected = selectedPalette.name === pal.name;
@@ -516,12 +582,14 @@ function CreateStudioContent() {
                             <div key={idx} className="col-12 col-sm-6">
                               <div
                                 onClick={() => setSelectedPalette(pal)}
-                                className={`p-2 rounded-3 border d-flex align-items-center justify-content-between cursor-pointer ${
-                                  isSelected ? "border-primary bg-primary-subtle shadow-sm" : "bg-light"
-                                }`}
-                                style={{ cursor: "pointer" }}
+                                className="p-2.5 rounded-3 d-flex align-items-center justify-content-between cursor-pointer transition-all border"
+                                style={{
+                                  cursor: "pointer",
+                                  backgroundColor: isSelected ? "rgba(163, 255, 111, 0.12)" : "#10141C",
+                                  borderColor: isSelected ? "#A3FF6F" : "#303947",
+                                }}
                               >
-                                <span className="small fw-semibold text-truncate">{pal.name}</span>
+                                <span className="small fw-semibold text-truncate text-white">{pal.name}</span>
                                 <div className="d-flex align-items-center gap-1">
                                   <span className="rounded-circle border" style={{ width: 14, height: 14, backgroundColor: pal.primary }}></span>
                                   <span className="rounded-circle border" style={{ width: 14, height: 14, backgroundColor: pal.secondary }}></span>
@@ -535,34 +603,43 @@ function CreateStudioContent() {
                     </div>
 
                     {/* Brand Assets Upload (Logo, Product, Brand, Video) */}
-                    <div className="mb-4 p-3 rounded-4 border bg-light">
+                    <div
+                      className="mb-4 p-3 rounded-4 border"
+                      style={{
+                        backgroundColor: "#10141C",
+                        borderColor: "#303947",
+                      }}
+                    >
                       <div className="mb-2">
-                        <h6 className="fw-bold mb-1 d-flex align-items-center gap-2">
-                          <Sparkles size={16} className="text-primary" />
+                        <h6 className="fw-bold mb-1 text-white d-flex align-items-center gap-2">
+                          <Sparkles size={16} className="sb-text-emerald" />
                           Brand &amp; Media Assets (Optional)
                         </h6>
-                        <p className="small text-secondary mb-0">
-                          Upload your logo, product photography, brand images, or reference videos. They will be integrated directly into your website sections.
+                        <p className="small mb-0" style={{ color: "#D1D5DB" }}>
+                          Upload your logo, product photography, brand images, or reference videos. They will be integrated directly into your website sections alongside stock photography.
                         </p>
                       </div>
                       <AssetUploader assets={uploadedAssets} onAssetsChange={setUploadedAssets} />
                     </div>
 
-                    <div className="d-flex justify-content-end pt-3 border-top">
+                    <div
+                      className="d-flex justify-content-end pt-3 border-top"
+                      style={{ borderColor: "#303947" }}
+                    >
                       <button
                         type="submit"
-                        className="btn btn-sg-primary btn-sg-lg d-flex align-items-center gap-2"
+                        className="sb-btn-primary py-2.5 px-4 d-flex align-items-center gap-2 btn-magnetic"
                         disabled={isPlanning}
                         id="btn-proceed-blueprint"
                       >
                         {isPlanning ? (
                           <>
                             <RefreshCw size={18} className="spin" />
-                            Synthesizing Blueprint with AI...
+                            {planningStageText}
                           </>
                         ) : (
                           <>
-                            Generate Website Blueprint
+                            Generate Storyboard
                             <ArrowRight size={18} />
                           </>
                         )}
@@ -573,24 +650,36 @@ function CreateStudioContent() {
 
                 {/* MODE 2: URL REMIX */}
                 {activeMode === "url" && (
-                  <form onSubmit={handleProceedToBlueprint} className="sg-card p-4 p-md-5 bg-white shadow-md">
-                    <div className="p-3 mb-4 rounded-3 border bg-warning-subtle text-dark small d-flex align-items-center gap-2">
-                      <AlertCircle size={18} className="text-warning flex-shrink-0" />
+                  <form onSubmit={handleProceedToBlueprint} className="p-4 p-md-5 rounded-4 border shadow-md" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
+                    <div
+                      className="p-3 mb-4 rounded-3 border small d-flex align-items-center gap-2 text-white"
+                      style={{
+                        backgroundColor: "rgba(245, 158, 11, 0.12)",
+                        borderColor: "rgba(245, 158, 11, 0.35)",
+                      }}
+                    >
+                      <AlertCircle size={18} className="sb-text-gold flex-shrink-0" />
                       <div>
-                        <strong>Phase 1 Simulated Workflow:</strong> No external website scraping occurs in the browser. A structural modernization blueprint will be generated based on your input URL and instructions.
+                        <strong>Modernization Blueprint Mode:</strong> A structural modernization blueprint and photo plan will be generated based on your input URL and instructions.
                       </div>
                     </div>
 
                     <div className="mb-4">
-                      <label htmlFor="remix-url-input" className="sg-form-label">Website URL to Remix *</label>
-                      <div className="input-group">
-                        <span className="input-group-text bg-light text-muted">
-                          <LinkIcon size={16} />
-                        </span>
+                      <label htmlFor="remix-url-input" className="text-white fw-semibold small mb-2 d-block">
+                        Website URL to Remix *
+                      </label>
+                      <div
+                        className="d-flex align-items-center px-3 py-1.5 rounded-pill"
+                        style={{
+                          backgroundColor: "#10141C",
+                          border: "1px solid #303947",
+                        }}
+                      >
+                        <LinkIcon size={16} className="me-2 flex-shrink-0" style={{ color: "#BFC7D2" }} />
                         <input
                           id="remix-url-input"
                           type="text"
-                          className="form-control sg-form-control"
+                          className="form-control bg-transparent border-0 text-white p-0 shadow-none small"
                           placeholder="https://example.com/brand"
                           value={remixUrl}
                           onChange={(e) => {
@@ -598,25 +687,40 @@ function CreateStudioContent() {
                             if (urlValidationErr) setUrlValidationErr("");
                           }}
                           required
+                          style={{ outline: "none" }}
                         />
                       </div>
                       {urlValidationErr && <div className="text-danger small mt-1">{urlValidationErr}</div>}
                     </div>
 
                     <div className="mb-4">
-                      <label htmlFor="remix-instructions" className="sg-form-label">Design Change Instructions</label>
-                      <textarea
-                        id="remix-instructions"
-                        rows={3}
-                        className="sg-form-control w-100"
-                        placeholder="e.g., Make it look like a high-end luxury editorial, simplify the hero headline, and introduce a modern video loop section..."
-                        value={remixInstructions}
-                        onChange={(e) => setRemixInstructions(e.target.value)}
-                      />
+                      <label htmlFor="remix-instructions" className="text-white fw-semibold small mb-2 d-block">
+                        Design Change Instructions
+                      </label>
+                      <div
+                        className="rounded-3 p-2"
+                        style={{
+                          backgroundColor: "#10141C",
+                          border: "1px solid #303947",
+                        }}
+                      >
+                        <textarea
+                          id="remix-instructions"
+                          rows={3}
+                          className="form-control bg-transparent border-0 text-white shadow-none"
+                          placeholder="e.g., Make it look like a high-end luxury editorial, simplify the hero headline, and introduce modern photography sections..."
+                          value={remixInstructions}
+                          onChange={(e) => setRemixInstructions(e.target.value)}
+                          style={{ outline: "none", resize: "vertical" }}
+                        />
+                      </div>
                     </div>
 
-                    <div className="d-flex justify-content-end pt-3 border-top">
-                      <button type="submit" className="btn btn-sg-primary btn-sg-lg" id="btn-remix-blueprint">
+                    <div
+                      className="d-flex justify-content-end pt-3 border-top"
+                      style={{ borderColor: "#303947" }}
+                    >
+                      <button type="submit" className="sb-btn-primary py-2.5 px-4 btn-magnetic" id="btn-remix-blueprint">
                         Generate Remix Blueprint
                         <ArrowRight size={18} />
                       </button>
@@ -626,19 +730,23 @@ function CreateStudioContent() {
 
                 {/* MODE 3: TEMPLATE */}
                 {activeMode === "template" && (
-                  <div className="sg-card p-4 bg-white shadow-md">
+                  <div className="p-4 rounded-4 border shadow-md" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
                     <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
                       <div>
-                        <h5 className="fw-bold mb-1">Select a Template Starting Point</h5>
-                        <p className="small text-secondary mb-0">Choose from registered templates, including COCO POUR (w1).</p>
+                        <h5 className="fw-bold text-white mb-1">Select a Template Starting Point</h5>
+                        <p className="small mb-0" style={{ color: "#D1D5DB" }}>Choose from registered templates, including COCO POUR (w1).</p>
                       </div>
                       <input
                         type="text"
-                        className="sg-form-control"
+                        className="form-control rounded-pill text-white px-3 py-1.5 small"
                         placeholder="Search templates..."
                         value={templateSearch}
                         onChange={(e) => setTemplateSearch(e.target.value)}
-                        style={{ maxWidth: 220 }}
+                        style={{
+                          maxWidth: 220,
+                          backgroundColor: "#10141C",
+                          borderColor: "#303947",
+                        }}
                       />
                     </div>
 
@@ -648,8 +756,8 @@ function CreateStudioContent() {
                         <button
                           key={cat}
                           type="button"
-                          className={`btn btn-sm text-nowrap ${
-                            templateCategory === cat ? "btn-primary" : "btn-light border text-secondary"
+                          className={`sb-filter-pill py-1.5 px-3 small ${
+                            templateCategory === cat ? "active" : ""
                           }`}
                           onClick={() => setTemplateCategory(cat)}
                         >
@@ -666,30 +774,40 @@ function CreateStudioContent() {
                           <div key={tmpl.id} className="col-12 col-md-6">
                             <div
                               onClick={() => setSelectedTemplateId(tmpl.id)}
-                              className={`sg-card p-3 h-100 cursor-pointer transition-all ${
-                                isSelected ? "border-primary shadow-md" : "border"
-                              }`}
+                              className="p-3 rounded-4 h-100 cursor-pointer transition-all border card-3d-tilt"
                               style={{
                                 cursor: "pointer",
-                                border: isSelected ? "2px solid var(--sg-primary)" : "1px solid var(--sg-border)",
+                                backgroundColor: isSelected ? "rgba(163, 255, 111, 0.12)" : "#10141C",
+                                borderColor: isSelected ? "#A3FF6F" : "#303947",
+                                boxShadow: isSelected ? "0 0 20px rgba(163, 255, 111, 0.25)" : "none",
                               }}
                             >
                               <div className="d-flex justify-content-between align-items-start mb-2">
-                                <span className="badge bg-primary-subtle text-primary small">
+                                <span
+                                  className="badge rounded-pill small fw-semibold"
+                                  style={{
+                                    backgroundColor: "rgba(163, 255, 111, 0.15)",
+                                    border: "1px solid rgba(163, 255, 111, 0.35)",
+                                    color: "#A3FF6F",
+                                  }}
+                                >
                                   {tmpl.categories[0]}
                                 </span>
                                 {tmpl.id === "w1" && (
-                                  <span className="badge bg-success-subtle text-success small">
+                                  <span className="badge bg-success text-white small fw-bold">
                                     Integrated w1
                                   </span>
                                 )}
                               </div>
-                              <h6 className="fw-bold mb-1">{tmpl.name}</h6>
-                              <p className="small text-secondary mb-3" style={{ minHeight: "38px" }}>
+                              <h6 className="fw-bold text-white mb-1">{tmpl.name}</h6>
+                              <p className="small mb-3" style={{ minHeight: "38px", color: "#D1D5DB" }}>
                                 {tmpl.description.slice(0, 95)}...
                               </p>
-                              <div className="d-flex justify-content-between align-items-center pt-2 border-top">
-                                <span className="small text-muted">{tmpl.style}</span>
+                              <div
+                                className="d-flex justify-content-between align-items-center pt-2 border-top"
+                                style={{ borderColor: "#303947" }}
+                              >
+                                <span className="small fw-semibold" style={{ color: "#BFC7D2" }}>{tmpl.style}</span>
                                 <div className="form-check m-0">
                                   <input
                                     type="radio"
@@ -706,11 +824,14 @@ function CreateStudioContent() {
                       })}
                     </div>
 
-                    <div className="d-flex justify-content-end pt-3 border-top">
+                    <div
+                      className="d-flex justify-content-end pt-3 border-top"
+                      style={{ borderColor: "#303947" }}
+                    >
                       <button
                         type="button"
                         onClick={handleProceedToBlueprint}
-                        className="btn btn-sg-primary btn-sg-lg"
+                        className="sb-btn-primary py-2.5 px-4 btn-magnetic"
                         id="btn-template-blueprint"
                       >
                         Continue with Selected Template
@@ -729,18 +850,30 @@ function CreateStudioContent() {
           {currentStep === "blueprint" && blueprint && (
             <div className="row justify-content-center">
               <div className="col-12 col-lg-10 col-xl-9">
-                <div className="sg-card p-4 p-md-5 bg-white shadow-md mb-4">
-                  <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4 pb-3 border-bottom">
+                <div className="p-4 p-md-5 mb-4 rounded-4 border shadow-md" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
+                  <div
+                    className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4 pb-3 border-bottom"
+                    style={{ borderColor: "#303947" }}
+                  >
                     <div>
-                      <span className="sg-badge sg-badge-primary mb-2">Proposed Architecture</span>
-                      <h3 className="fw-bold mb-1">Review Your Website Blueprint</h3>
-                      <p className="small text-secondary mb-0">
-                        Customize sections, color tokens, and pages before generating the interactive draft.
+                      <span
+                        className="badge rounded-pill mb-2 px-3 py-1.5 fw-semibold"
+                        style={{
+                          backgroundColor: "rgba(163, 255, 111, 0.15)",
+                          border: "1px solid rgba(163, 255, 111, 0.35)",
+                          color: "#A3FF6F",
+                        }}
+                      >
+                        Proposed Architecture
+                      </span>
+                      <h3 className="fw-bold text-white mb-1">Review Your Website Blueprint</h3>
+                      <p className="small mb-0" style={{ color: "#D1D5DB" }}>
+                        Customize sections, color tokens, and stock photo planning before generating the interactive draft.
                       </p>
                     </div>
                     <button
                       type="button"
-                      className="btn btn-sg-outline btn-sg-sm d-flex align-items-center gap-1"
+                      className="sb-btn-outline btn-sm py-1.5 px-3 d-flex align-items-center gap-1"
                       onClick={() => setCurrentStep("configure")}
                     >
                       &larr; Back to Inputs
@@ -750,23 +883,36 @@ function CreateStudioContent() {
                   {/* Blueprint Metadata Fields */}
                   <div className="row g-3 mb-4">
                     <div className="col-12 col-md-6">
-                      <label htmlFor="blueprint-name-input" className="sg-form-label">Website Name</label>
+                      <label htmlFor="blueprint-name-input" className="text-white fw-semibold small mb-2 d-block">
+                        Website Name
+                      </label>
                       <input
                         id="blueprint-name-input"
                         type="text"
-                        className="sg-form-control w-100"
+                        className="form-control rounded-pill text-white px-3 py-2"
                         value={blueprint.name}
                         onChange={(e) => setBlueprint({ ...blueprint, name: e.target.value })}
+                        style={{
+                          backgroundColor: "#10141C",
+                          borderColor: "#303947",
+                        }}
                       />
                     </div>
                     <div className="col-12 col-md-6">
-                      <label htmlFor="blueprint-style-input" className="sg-form-label">Visual Style &amp; Category</label>
+                      <label htmlFor="blueprint-style-input" className="text-white fw-semibold small mb-2 d-block">
+                        Visual Style &amp; Category
+                      </label>
                       <input
                         id="blueprint-style-input"
                         type="text"
-                        className="sg-form-control w-100"
-                        value={`${blueprint.type} &bull; ${blueprint.style}`}
+                        className="form-control rounded-pill px-3 py-2"
+                        value={`${blueprint.type} • ${blueprint.style}`}
                         disabled
+                        style={{
+                          backgroundColor: "#10141C",
+                          borderColor: "#303947",
+                          color: "#BFC7D2",
+                        }}
                       />
                     </div>
                   </div>
@@ -774,10 +920,10 @@ function CreateStudioContent() {
                   {/* Ordered Sections Manager */}
                   <div className="mb-4">
                     <div className="d-flex justify-content-between align-items-center mb-2">
-                      <label className="sg-form-label mb-0">
+                      <label className="text-white fw-semibold small mb-0">
                         Proposed Sections ({blueprint.sections.filter((s) => s.enabled).length} Enabled)
                       </label>
-                      <small className="text-muted">Use arrows to reorder, checkboxes to toggle</small>
+                      <small style={{ color: "#BFC7D2" }}>Use arrows to reorder, checkboxes to toggle</small>
                     </div>
 
                     <div className="d-flex flex-column gap-2">
@@ -785,8 +931,12 @@ function CreateStudioContent() {
                         <div
                           key={sec.id}
                           className={`p-3 rounded-3 border d-flex align-items-center justify-content-between gap-3 ${
-                            sec.enabled ? "bg-white shadow-sm" : "bg-light opacity-50"
+                            sec.enabled ? "bg-opacity-10" : "opacity-50"
                           }`}
+                          style={{
+                            backgroundColor: sec.enabled ? "#10141C" : "#0B0D12",
+                            borderColor: sec.enabled ? "rgba(163, 255, 111, 0.35)" : "#303947",
+                          }}
                         >
                           <div className="d-flex align-items-center gap-3">
                             <input
@@ -797,20 +947,32 @@ function CreateStudioContent() {
                               id={`check-${sec.id}`}
                             />
                             <div>
-                              <div className="fw-semibold small d-flex align-items-center gap-2">
+                              <div className="fw-semibold text-white small d-flex align-items-center gap-2">
                                 <span>{sec.name}</span>
-                                <span className="badge bg-light text-secondary border font-monospace" style={{ fontSize: "0.7rem" }}>
+                                <span
+                                  className="badge font-monospace"
+                                  style={{
+                                    fontSize: "0.7rem",
+                                    backgroundColor: "rgba(163, 255, 111, 0.15)",
+                                    color: "#A3FF6F",
+                                  }}
+                                >
                                   {sec.type}
                                 </span>
                               </div>
-                              <small className="text-secondary d-none d-md-block">{sec.description}</small>
+                              <small className="d-none d-md-block" style={{ color: "#D1D5DB" }}>{sec.description}</small>
                             </div>
                           </div>
 
                           <div className="d-flex align-items-center gap-1">
                             <button
                               type="button"
-                              className="btn btn-light btn-sm p-1 border"
+                              className="btn btn-sm p-1 rounded border"
+                              style={{
+                                backgroundColor: "#202938",
+                                borderColor: "#303947",
+                                color: "#FFFFFF",
+                              }}
                               disabled={idx === 0}
                               onClick={() => moveSection(idx, "up")}
                               title="Move section up"
@@ -819,7 +981,12 @@ function CreateStudioContent() {
                             </button>
                             <button
                               type="button"
-                              className="btn btn-light btn-sm p-1 border"
+                              className="btn btn-sm p-1 rounded border"
+                              style={{
+                                backgroundColor: "#202938",
+                                borderColor: "#303947",
+                                color: "#FFFFFF",
+                              }}
                               disabled={idx === blueprint.sections.length - 1}
                               onClick={() => moveSection(idx, "down")}
                               title="Move section down"
@@ -832,13 +999,16 @@ function CreateStudioContent() {
                     </div>
                   </div>
 
-                  <div className="d-flex justify-content-between align-items-center pt-3 border-top">
-                    <span className="small text-muted">
-                      Blueprint is ready for simulated synthesis
+                  <div
+                    className="d-flex justify-content-between align-items-center pt-3 border-top"
+                    style={{ borderColor: "#303947" }}
+                  >
+                    <span className="small" style={{ color: "#D1D5DB" }}>
+                      Blueprint and stock photo discovery ready for generation
                     </span>
                     <button
                       type="button"
-                      className="btn btn-sg-primary btn-sg-lg"
+                      className="sb-btn-primary py-2.5 px-4 btn-magnetic"
                       onClick={handleApproveBlueprint}
                       id="btn-approve-blueprint"
                     >
@@ -852,28 +1022,49 @@ function CreateStudioContent() {
           )}
 
           {/* ======================================================================
-              STEP 3: SIMULATED DEMO GENERATION
+              STEP 3: GENERATION SEQUENCE
               ====================================================================== */}
           {currentStep === "generating" && (
             <div className="row justify-content-center">
               <div className="col-12 col-md-8 col-lg-6 text-center">
-                <div className="sg-card p-5 bg-white shadow-lg">
-                  <div className="d-inline-flex p-3 rounded-circle bg-primary-subtle text-primary mb-4 animate-spin">
+                <div className="p-5 rounded-4 border shadow-xl" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
+                  <div
+                    className="d-inline-flex p-3 rounded-circle mb-4 spin"
+                    style={{
+                      backgroundColor: "rgba(163, 255, 111, 0.15)",
+                      color: "#A3FF6F",
+                    }}
+                  >
                     <RefreshCw size={36} />
                   </div>
 
-                  <span className="sg-badge sg-badge-primary mb-2">Simulated Demo Generation</span>
-                  <h3 className="fw-bold mb-3">Synthesizing Your Website</h3>
-                  <p className="text-secondary small mb-4">
+                  <span
+                    className="badge rounded-pill mb-2 px-3 py-1.5 fw-semibold"
+                    style={{
+                      backgroundColor: "rgba(163, 255, 111, 0.15)",
+                      border: "1px solid rgba(163, 255, 111, 0.35)",
+                      color: "#A3FF6F",
+                    }}
+                  >
+                    AI Synthesis &amp; Stock Photo Discovery
+                  </span>
+                  <h3 className="fw-bold text-white mb-3">Synthesizing Your Website</h3>
+                  <p className="small mb-4" style={{ color: "#D1D5DB" }}>
                     {GEN_STAGES[genStage]}
                   </p>
 
                   {/* Progress Bar */}
-                  <div className="progress mb-4" style={{ height: "8px" }}>
+                  <div
+                    className="progress mb-4 rounded-pill"
+                    style={{ height: "8px", backgroundColor: "#10141C" }}
+                  >
                     <div
-                      className="progress-bar progress-bar-striped progress-bar-animated bg-primary"
+                      className="progress-bar progress-bar-striped progress-bar-animated"
                       role="progressbar"
-                      style={{ width: `${genProgress}%` }}
+                      style={{
+                        width: `${genProgress}%`,
+                        background: "linear-gradient(90deg, #A3FF6F, #7CE643)",
+                      }}
                       aria-valuenow={genProgress}
                       aria-valuemin={0}
                       aria-valuemax={100}
@@ -881,20 +1072,29 @@ function CreateStudioContent() {
                   </div>
 
                   {/* Checklist of stages */}
-                  <div className="text-start bg-light p-3 rounded-3 border">
+                  <div
+                    className="text-start p-3 rounded-3 border"
+                    style={{
+                      backgroundColor: "#10141C",
+                      borderColor: "#303947",
+                    }}
+                  >
                     {GEN_STAGES.map((label, idx) => {
                       const isDone = idx < genStage;
                       const isCurrent = idx === genStage;
                       return (
                         <div key={idx} className="d-flex align-items-center gap-2 py-1 small">
                           {isDone ? (
-                            <CheckCircle2 size={16} className="text-success" />
+                            <CheckCircle2 size={16} className="sb-text-emerald" />
                           ) : isCurrent ? (
-                            <span className="spinner-border spinner-border-sm text-primary" role="status"></span>
+                            <span className="spinner-border spinner-border-sm" role="status" style={{ color: "#A3FF6F" }}></span>
                           ) : (
-                            <span className="rounded-circle border" style={{ width: 14, height: 14 }}></span>
+                            <span
+                              className="rounded-circle border"
+                              style={{ width: 14, height: 14, borderColor: "#303947" }}
+                            ></span>
                           )}
-                          <span className={isDone ? "text-dark fw-medium" : isCurrent ? "text-primary fw-bold" : "text-muted"}>
+                          <span className={isDone ? "text-white fw-medium" : isCurrent ? "sb-text-emerald fw-bold" : "text-white"} style={!isDone && !isCurrent ? { color: "#BFC7D2" } : {}}>
                             {label}
                           </span>
                         </div>
@@ -912,42 +1112,66 @@ function CreateStudioContent() {
           {currentStep === "complete" && generatedProjectId && (
             <div className="row justify-content-center">
               <div className="col-12 col-md-8 col-lg-7 text-center">
-                <div className="sg-card p-4 p-md-5 bg-white shadow-lg">
-                  <div className="d-inline-flex p-3 rounded-circle bg-success-subtle text-success mb-3">
+                <div className="p-4 p-md-5 rounded-4 border shadow-xl" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
+                  <div
+                    className="d-inline-flex p-3 rounded-circle mb-3"
+                    style={{
+                      backgroundColor: "rgba(163, 255, 111, 0.15)",
+                      color: "#A3FF6F",
+                    }}
+                  >
                     <CheckCircle2 size={40} />
                   </div>
 
                   {blueprint?.isLiveAI ? (
                     <div>
-                      <span className="badge bg-primary-subtle text-primary mb-2 px-3 py-2 rounded-pill small d-inline-flex align-items-center gap-1">
+                      <span
+                        className="badge rounded-pill mb-2 px-3 py-1.5 small d-inline-flex align-items-center gap-1 fw-semibold"
+                        style={{
+                          backgroundColor: "rgba(163, 255, 111, 0.15)",
+                          border: "1px solid rgba(163, 255, 111, 0.35)",
+                          color: "#A3FF6F",
+                        }}
+                      >
                         <Sparkles size={14} />
-                        Synthesized Live with {blueprint.modelUsed || "Gemini 3.8 Flash"}
+                        Synthesized Live with {blueprint.modelUsed || "Gemini 3.8 Flash"} &amp; Stock Photo Discovery
                       </span>
                     </div>
                   ) : (
                     <div>
-                      <span className="badge bg-secondary-subtle text-secondary mb-2 px-3 py-2 rounded-pill small d-inline-flex align-items-center gap-1">
+                      <span
+                        className="badge rounded-pill mb-2 px-3 py-1.5 small d-inline-flex align-items-center gap-1 fw-semibold"
+                        style={{
+                          backgroundColor: "rgba(163, 255, 111, 0.15)",
+                          border: "1px solid rgba(163, 255, 111, 0.35)",
+                          color: "#A3FF6F",
+                        }}
+                      >
                         <Sparkles size={14} />
-                        Synthesized with Curated Synthesis Engine
+                        Synthesized with Verified Stock Photography Engine
                       </span>
                     </div>
                   )}
 
-                  <h3 className="fw-bold mb-2">Website Draft Ready!</h3>
-                  <p className="text-secondary small mb-4">
-                    Your website structure, theme tokens, and semantic sections have been synthesized into your local workspace.
+                  <h3 className="fw-bold text-white mb-2">Website Draft Ready!</h3>
+                  <p className="small mb-4" style={{ color: "#D1D5DB" }}>
+                    Your website structure, theme tokens, and verified stock photographs have been synthesized into your local workspace.
                   </p>
 
                   {/* Actions Row */}
                   <div className="d-flex flex-wrap justify-content-center gap-3 mb-4">
-                    <Link href={`/editor/${generatedProjectId}`} className="btn btn-sg-primary btn-sg-lg d-flex align-items-center gap-2" id="btn-open-generated-editor">
+                    <Link
+                      href={`/editor/${generatedProjectId}`}
+                      className="sb-btn-primary py-2.5 px-4 d-flex align-items-center gap-2 btn-magnetic"
+                      id="btn-open-generated-editor"
+                    >
                       Open in Visual Editor
                       <ArrowRight size={18} />
                     </Link>
 
                     <button
                       type="button"
-                      className="btn btn-sg-outline btn-sg-lg d-flex align-items-center gap-2"
+                      className="sb-btn-outline py-2.5 px-4 d-flex align-items-center gap-2"
                       disabled={zipDownloading}
                       onClick={async () => {
                         const project = generatedProject || projectService.getProjectById(generatedProjectId);
@@ -967,21 +1191,42 @@ function CreateStudioContent() {
                   </div>
 
                   {zipSuccess && (
-                    <div className="alert alert-success py-2 px-3 small rounded-3 mb-4">
+                    <div
+                      className="alert py-2 px-3 small rounded-3 mb-4 fw-semibold"
+                      style={{
+                        backgroundColor: "rgba(163, 255, 111, 0.15)",
+                        borderColor: "rgba(163, 255, 111, 0.35)",
+                        color: "#A3FF6F",
+                      }}
+                    >
                       {zipSuccess}
                     </div>
                   )}
 
                   {/* Quick Local Run Helper */}
-                  <div className="p-3 rounded-3 border bg-light text-start small">
-                    <div className="fw-bold mb-1 d-flex align-items-center gap-2 text-dark">
-                      <Terminal size={15} className="text-primary" />
+                  <div
+                    className="p-3 rounded-3 border text-start small"
+                    style={{
+                      backgroundColor: "#10141C",
+                      borderColor: "#303947",
+                    }}
+                  >
+                    <div className="fw-bold mb-1 d-flex align-items-center gap-2 text-white">
+                      <Terminal size={15} className="sb-text-emerald" />
                       Run Standalone Website Locally
                     </div>
-                    <p className="text-secondary mb-2" style={{ fontSize: "0.78rem" }}>
+                    <p className="mb-2" style={{ fontSize: "0.82rem", color: "#D1D5DB" }}>
                       Extract your downloaded ZIP archive and launch with Node.js or Python:
                     </p>
-                    <pre className="p-2 bg-dark text-success rounded-2 mb-0" style={{ fontSize: "0.76rem" }}>
+                    <pre
+                      className="p-2 rounded-2 mb-0"
+                      style={{
+                        backgroundColor: "#0B0D12",
+                        border: "1px solid #303947",
+                        color: "#A3FF6F",
+                        fontSize: "0.78rem",
+                      }}
+                    >
                       <code>npx -y serve -p 3000 .</code>
                     </pre>
                   </div>
@@ -999,7 +1244,7 @@ function CreateStudioContent() {
 
 export default function CreateStudioPage() {
   return (
-    <Suspense fallback={<div className="p-5 text-center">Loading studio...</div>}>
+    <Suspense fallback={<div className="p-5 text-center text-white min-vh-100" style={{ backgroundColor: "#0B0D12" }}>Loading studio...</div>}>
       <CreateStudioContent />
     </Suspense>
   );

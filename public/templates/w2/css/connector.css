@@ -1,0 +1,216 @@
+/* Signature Electric Blue Connector Line & Left Rail Scroll Journey System */
+
+/* --- FIXED LEFT RAIL: SCROLL JOURNEY (From Storyboard) --- */
+.scroll-journey-rail {
+  position: fixed;
+  left: clamp(1rem, 2.5vw, 2.75rem);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: var(--z-rail);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: auto;
+  user-select: none;
+}
+
+.journey-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.journey-title {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-cyan);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  text-shadow: 0 0 8px var(--color-cyan-glow);
+}
+
+.journey-arrow {
+  color: var(--color-cyan);
+  width: 10px;
+  height: 10px;
+  animation: arrowBounce 1.8s infinite ease-in-out;
+}
+
+@keyframes arrowBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
+
+/* Vertical Track & Active Progress Fill */
+.journey-track-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.25rem;
+  padding: 0.5rem 0;
+}
+
+.journey-line-bg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1.5px;
+  background: rgba(197, 160, 89, 0.2);
+  z-index: 1;
+}
+
+.journey-line-progress {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 0%;
+  background: linear-gradient(180deg, var(--color-cyan) 0%, var(--color-cyan-light) 100%);
+  box-shadow: 0 0 10px var(--color-cyan-glow), 0 0 20px rgba(0, 229, 255, 0.4);
+  z-index: 2;
+  transition: height 0.15s linear;
+}
+
+/* Individual Chapter Nodes (01, 02, 03, 04, 05) */
+.journey-node {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.node-bullet {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--bg-primary);
+  border: 1.5px solid rgba(197, 160, 89, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--duration-fast) var(--ease-cinematic);
+}
+
+.node-bullet::after {
+  content: '';
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(197, 160, 89, 0.5);
+  transition: all var(--duration-fast) ease;
+}
+
+.node-number {
+  position: absolute;
+  left: 24px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--color-text-dim);
+  letter-spacing: 0.1em;
+  transition: all var(--duration-fast) ease;
+  white-space: nowrap;
+}
+
+.node-tooltip {
+  position: absolute;
+  left: 52px;
+  background: rgba(14, 9, 7, 0.9);
+  border: 1px solid rgba(197, 160, 89, 0.25);
+  backdrop-filter: blur(8px);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.65rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-6px);
+  transition: all var(--duration-fast) ease;
+}
+
+/* Node Hover & Active States */
+.journey-node:hover .node-bullet {
+  border-color: var(--color-cyan);
+  box-shadow: 0 0 10px var(--color-cyan-glow);
+  transform: scale(1.15);
+}
+
+.journey-node:hover .node-tooltip {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.journey-node:hover .node-number {
+  color: var(--color-text);
+}
+
+.journey-node.active .node-bullet {
+  border-color: var(--color-cyan);
+  background: #080504;
+  box-shadow: 0 0 14px var(--color-cyan-glow), 0 0 25px rgba(0, 229, 255, 0.5);
+  transform: scale(1.3);
+}
+
+.journey-node.active .node-bullet::after {
+  background: var(--color-cyan);
+  box-shadow: 0 0 8px #ffffff;
+}
+
+.journey-node.active .node-number {
+  color: var(--color-cyan);
+  font-weight: 700;
+  text-shadow: 0 0 8px var(--color-cyan-glow);
+}
+
+/* --- CONTINUOUS DYNAMIC SVG CONNECTOR PATH IN MAIN BACKGROUND --- */
+.svg-connector-canvas-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: var(--z-connector);
+  overflow: hidden;
+}
+
+.svg-connector-path {
+  fill: none;
+  stroke: var(--color-cyan);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.75)) drop-shadow(0 0 16px rgba(0, 229, 255, 0.35));
+  opacity: 0.85;
+  transition: stroke-dashoffset 0.1s linear;
+}
+
+/* Ambient glow node that glides along the path */
+.connector-head-glow {
+  fill: #ffffff;
+  filter: drop-shadow(0 0 10px var(--color-cyan)) drop-shadow(0 0 20px var(--color-cyan));
+  r: 4;
+}
+
+/* Responsive Hide for Left Rail on Small Mobile Devices */
+@media (max-width: 900px) {
+  .scroll-journey-rail {
+    display: none;
+  }
+}

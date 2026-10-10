@@ -26,7 +26,7 @@ export interface WebsiteTemplate {
   pages: string[];
   sections: string[];
   colors: TemplateColors;
-  source: "w1" | "built-in";
+  source: "w1" | "w2" | "built-in";
   featured: boolean;
   thumbnail: string;
   previewPath: string;

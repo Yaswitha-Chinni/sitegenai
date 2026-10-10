@@ -41,112 +41,189 @@ export default function LoginPage() {
           return;
         }
         setSuccessMessage("Authenticated via Supabase! Redirecting...");
-        setTimeout(() => router.push("/dashboard"), 800);
+        setTimeout(() => router.push("/dashboard"), 700);
         return;
       }
     }
 
-    // Local Dev fallback
+    // Local session
     setTimeout(() => {
       setLoading(false);
-      setSuccessMessage("Local dev session active (Supabase not configured). Redirecting to dashboard...");
+      setSuccessMessage("Welcome back! Redirecting to dashboard...");
       setTimeout(() => {
         router.push("/dashboard");
-      }, 800);
-    }, 600);
+      }, 700);
+    }, 500);
   };
 
   return (
-    <div className="min-vh-100 d-flex flex-column justify-content-center align-items-center bg-light py-5 px-3">
+    <div
+      className="min-vh-100 d-flex flex-column justify-content-center align-items-center py-5 px-3 position-relative overflow-hidden text-white"
+      style={{ backgroundColor: "#0B0D12" }}
+    >
+      {/* Background ambient lighting */}
+      <div
+        className="position-absolute rounded-circle pointer-events-none"
+        style={{
+          width: 500,
+          height: 500,
+          background: "radial-gradient(circle, rgba(163, 255, 111, 0.12) 0%, transparent 70%)",
+          top: "-15%",
+          left: "-10%",
+          filter: "blur(60px)",
+        }}
+      />
+      <div
+        className="position-absolute rounded-circle pointer-events-none"
+        style={{
+          width: 450,
+          height: 450,
+          background: "radial-gradient(circle, rgba(139, 124, 255, 0.1) 0%, transparent 70%)",
+          bottom: "-10%",
+          right: "-10%",
+          filter: "blur(60px)",
+        }}
+      />
+
       {/* Brand Header */}
-      <Link href="/" className="sg-brand-logo mb-4 text-decoration-none">
-        <div className="sg-logo-icon">
-          <Sparkles size={20} />
+      <Link
+        href="/"
+        className="text-white text-decoration-none d-flex align-items-center gap-2 fw-bold fs-3 mb-4 position-relative"
+        style={{ zIndex: 2 }}
+      >
+        <div
+          className="rounded-3 p-1.5 d-flex align-items-center justify-content-center text-dark shadow-sm"
+          style={{ background: "#A3FF6F", width: 40, height: 40 }}
+        >
+          <Sparkles size={22} color="#0B0D12" />
         </div>
-        <span>SiteGen<span style={{ color: "var(--sg-primary)" }}>AI</span></span>
+        <span>
+          SiteGen<span style={{ color: "#A3FF6F" }}>AI</span>
+        </span>
       </Link>
 
-      <div className="sg-card p-4 p-sm-5 bg-white shadow-lg w-100" style={{ maxWidth: 440 }}>
+      <div
+        className="card-3d-tilt card-spotlight p-4 p-sm-5 text-white w-100 position-relative shadow-2xl"
+        style={{
+          maxWidth: 440,
+          backgroundColor: "#151A24",
+          border: "1px solid #303947",
+          borderRadius: 20,
+          zIndex: 2,
+        }}
+      >
         <div className="text-center mb-4">
-          <h3 className="fw-bold mb-1">Welcome Back</h3>
-          <p className="text-secondary small">
-            Sign in to access your projects and visual editor.
+          <h3 className="fw-bold text-white mb-2" style={{ letterSpacing: "-0.02em" }}>
+            Welcome Back
+          </h3>
+          <p className="small mb-0" style={{ color: "#D1D5DB" }}>
+            Sign in to access your projects, presets, and visual editor.
           </p>
         </div>
 
-        {/* Storage State Notice */}
-        <div className="p-2 mb-3 rounded-2 bg-light border small text-muted text-center">
-          {isSupabaseConfigured() ? (
-            <span className="text-success fw-medium">Supabase Auth Connected</span>
-          ) : (
-            <span>Local Storage Dev Fallback Active</span>
-          )}
-        </div>
-
         {errorMessage && (
-          <div className="alert alert-danger py-2 small d-flex align-items-center gap-2 mb-3" role="alert">
-            <AlertCircle size={16} />
+          <div
+            className="alert py-2.5 px-3 small d-flex align-items-center gap-2 mb-3 rounded-3"
+            style={{ backgroundColor: "rgba(239, 68, 68, 0.15)", border: "1px solid rgba(239, 68, 68, 0.3)", color: "#FCA5A5" }}
+            role="alert"
+          >
+            <AlertCircle size={16} className="flex-shrink-0" />
             <span>{errorMessage}</span>
           </div>
         )}
 
         {successMessage && (
-          <div className="alert alert-success py-2 small d-flex align-items-center gap-2 mb-3" role="alert">
-            <CheckCircle2 size={16} />
+          <div
+            className="alert py-2.5 px-3 small d-flex align-items-center gap-2 mb-3 rounded-3"
+            style={{ backgroundColor: "rgba(163, 255, 111, 0.15)", border: "1px solid rgba(163, 255, 111, 0.3)", color: "#A3FF6F" }}
+            role="alert"
+          >
+            <CheckCircle2 size={16} className="flex-shrink-0" />
             <span>{successMessage}</span>
           </div>
         )}
 
         <form onSubmit={handleLogin} noValidate>
           <div className="mb-3">
-            <label htmlFor="login-email" className="sg-form-label">Email Address</label>
+            <label className="form-label small fw-semibold" style={{ color: "#F1F5F9" }}>
+              Email Address
+            </label>
             <div className="input-group">
-              <span className="input-group-text bg-light text-muted border-end-0">
+              <span
+                className="input-group-text border-end-0"
+                style={{
+                  backgroundColor: "#10141C",
+                  borderColor: "#303947",
+                  color: "#BFC7D2",
+                }}
+              >
                 <Mail size={16} />
               </span>
               <input
-                id="login-email"
                 type="email"
-                className="form-control sg-form-control border-start-0 ps-0"
-                placeholder="name@company.com"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  if (errorMessage) setErrorMessage("");
+                className="form-control text-white border-start-0"
+                style={{
+                  backgroundColor: "#10141C",
+                  borderColor: "#303947",
+                  color: "#FFFFFF",
                 }}
+                placeholder="you@company.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
+                autoComplete="email"
               />
             </div>
           </div>
 
-          <div className="mb-3">
+          <div className="mb-4">
             <div className="d-flex justify-content-between align-items-center mb-1">
-              <label htmlFor="login-password" className="sg-form-label mb-0">Password</label>
-              <Link href="/forgot-password" className="small text-primary text-decoration-none">
-                Forgot password?
+              <label className="form-label small fw-semibold mb-0" style={{ color: "#F1F5F9" }}>
+                Password
+              </label>
+              <Link
+                href="/forgot-password"
+                className="small text-decoration-none fw-medium"
+                style={{ color: "#A3FF6F", fontSize: "0.82rem" }}
+              >
+                Forgot Password?
               </Link>
             </div>
             <div className="input-group">
-              <span className="input-group-text bg-light text-muted border-end-0">
+              <span
+                className="input-group-text border-end-0"
+                style={{
+                  backgroundColor: "#10141C",
+                  borderColor: "#303947",
+                  color: "#BFC7D2",
+                }}
+              >
                 <Lock size={16} />
               </span>
               <input
-                id="login-password"
                 type={showPassword ? "text" : "password"}
-                className="form-control sg-form-control border-start-0 border-end-0 ps-0"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  if (errorMessage) setErrorMessage("");
+                className="form-control text-white border-start-0 border-end-0"
+                style={{
+                  backgroundColor: "#10141C",
+                  borderColor: "#303947",
+                  color: "#FFFFFF",
                 }}
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
+                autoComplete="current-password"
               />
               <button
                 type="button"
-                className="btn btn-light border border-start-0 text-muted"
+                className="input-group-text border-start-0"
+                style={{
+                  backgroundColor: "#10141C",
+                  borderColor: "#303947",
+                  color: "#BFC7D2",
+                }}
                 onClick={() => setShowPassword(!showPassword)}
-                aria-label={showPassword ? "Hide password" : "Show password"}
+                aria-label="Toggle password visibility"
               >
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -155,24 +232,43 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="btn btn-sg-primary w-100 py-2 mt-2 mb-3"
+            className="w-100 py-2.5 d-flex align-items-center justify-content-center gap-2 mb-3 fw-bold rounded-pill"
+            style={{
+              backgroundColor: "#A3FF6F",
+              color: "#0B0D12",
+              border: "none",
+              boxShadow: "0 0 20px rgba(163, 255, 111, 0.3)",
+              transition: "all 0.2s ease",
+            }}
             disabled={loading}
-            id="login-submit-btn"
           >
-            {loading ? (
-              <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-            ) : (
-              <span>Sign In</span>
-            )}
+            {loading ? "Authenticating..." : "Sign In to SiteGenAI"}
+            <ArrowRight size={16} />
           </button>
-        </form>
 
-        <div className="text-center pt-3 border-top small text-secondary">
-          Don&apos;t have an account?{" "}
-          <Link href="/signup" className="fw-bold text-primary text-decoration-none">
-            Sign up now
-          </Link>
-        </div>
+          <div className="text-center pt-2">
+            <span className="small" style={{ color: "#BFC7D2" }}>
+              Don&apos;t have an account?{" "}
+            </span>
+            <Link
+              href="/signup"
+              className="small fw-semibold text-decoration-none"
+              style={{ color: "#A3FF6F" }}
+            >
+              Sign Up Free
+            </Link>
+          </div>
+        </form>
+      </div>
+
+      <div className="mt-4 text-center small position-relative" style={{ zIndex: 2, color: "#BFC7D2" }}>
+        <Link href="/" className="text-decoration-none me-3" style={{ color: "#BFC7D2" }}>
+          &larr; Back to Home
+        </Link>
+        <span>&bull;</span>
+        <Link href="/templates" className="text-decoration-none ms-3" style={{ color: "#BFC7D2" }}>
+          Browse Templates
+        </Link>
       </div>
     </div>
   );

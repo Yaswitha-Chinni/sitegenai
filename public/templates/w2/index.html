@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="BRUVA Coffee — A cinematic journey from earth to extraordinary. Premium South Indian single-origin coffee, traditional brass filter rituals, and exceptional bean selection." />
+  <meta name="theme-color" content="#080504" />
+  <title>BRUVA Coffee — From Earth To Extraordinary</title>
+
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/sections.css" />
+  <link rel="stylesheet" href="css/connector.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+
+  <!-- Vendor Scripts (Downloaded locally with fallback) -->
+  <script src="vendor/lenis.min.js"></script>
+  <script src="vendor/gsap.min.js"></script>
+  <script src="vendor/ScrollTrigger.min.js"></script>
+</head>
+<body>
+  <!-- Accessibility Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Interactive Custom Cursor -->
+  <div class="custom-cursor" aria-hidden="true">
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring">
+      <span class="cursor-text"></span>
+    </div>
+  </div>
+
+  <!-- Dynamic SVG Connector Canvas (Snakes organically through chapters) -->
+  <div class="svg-connector-canvas-wrapper" aria-hidden="true">
+    <svg class="svg-connector-canvas" xmlns="http://www.w3.org/2000/svg">
+      <path class="svg-connector-path" d="" />
+    </svg>
+  </div>
+
+  <!-- Left Rail Scroll Journey Tracker (From Storyboard) -->
+  <aside class="scroll-journey-rail" aria-label="Website chapters navigation">
+    <div class="journey-header">
+      <span class="journey-title">SCROLL JOURNEY</span>
+      <svg class="journey-arrow" viewBox="0 0 10 10" fill="none" stroke="currentColor">
+        <path d="M5 1v8M2 6l3 3 3-3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="journey-track-wrapper">
+      <div class="journey-line-bg"></div>
+      <div class="journey-line-progress"></div>
+
+      <!-- Node 01: Hero -->
+      <button class="journey-node active" data-target="hero" aria-label="Go to Chapter 01: Discover BRUVA">
+        <span class="node-bullet"></span>
+        <span class="node-number">01</span>
+        <span class="node-tooltip">01 / DISCOVER</span>
+      </button>
+
+      <!-- Node 02: Ritual -->
+      <button class="journey-node" data-target="ritual" aria-label="Go to Chapter 02: The Coffee Ritual">
+        <span class="node-bullet"></span>
+        <span class="node-number">02</span>
+        <span class="node-tooltip">02 / THE RITUAL</span>
+      </button>
+
+      <!-- Node 03: Selection -->
+      <button class="journey-node" data-target="selection" aria-label="Go to Chapter 03: The Selection">
+        <span class="node-bullet"></span>
+        <span class="node-number">03</span>
+        <span class="node-tooltip">03 / THE SELECTION</span>
+      </button>
+
+      <!-- Node 04: Estate -->
+      <button class="journey-node" data-target="estate" aria-label="Go to Chapter 04: The Estate">
+        <span class="node-bullet"></span>
+        <span class="node-number">04</span>
+        <span class="node-tooltip">04 / THE ESTATE</span>
+      </button>
+
+      <!-- Node 05: Finale -->
+      <button class="journey-node" data-target="finale" aria-label="Go to Chapter 05: Brand Finale">
+        <span class="node-bullet"></span>
+        <span class="node-number">05</span>
+        <span class="node-tooltip">05 / FINALE</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Site Navigation Header -->
+  <header class="site-header" role="banner">
+    <div class="container header-container">
+      <a href="#hero" class="brand-link" aria-label="BRUVA Coffee Home">
+        <img src="W2/logo.png" alt="Official BRUVA Coffee Crest" class="brand-logo-img" width="48" height="48" />
+        <div class="brand-text-wrapper">
+          <span class="brand-title">BRUVA</span>
+          <span class="brand-subtitle">South Indian Coffee</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="nav-desktop" aria-label="Primary navigation">
+        <a href="#ritual" class="nav-link">Story</a>
+        <a href="#selection" class="nav-link">Our Coffee</a>
+        <a href="#estate" class="nav-link">Estate</a>
+        <a href="#finale" class="nav-link">Shop</a>
+      </nav>
+
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <!-- Ambient Sound Toggle -->
+        <button class="sound-toggle-btn" aria-label="Toggle ambient atmosphere sound" aria-pressed="false">
+          <div class="sound-bars" aria-hidden="true">
+            <span class="sound-bar"></span>
+            <span class="sound-bar"></span>
+            <span class="sound-bar"></span>
+          </div>
+          <span class="sound-label">SOUND</span>
+        </button>
+
+        <!-- CTA Button -->
+        <a href="#selection" class="btn btn-secondary btn-pill" style="padding: 0.55rem 1.35rem; font-size: 0.75rem;">
+          RESERVE
+        </a>
+
+        <!-- Mobile Hamburger -->
+        <button class="menu-toggle-btn" aria-label="Toggle navigation drawer" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="mobile-drawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation Menu">
+    <nav class="drawer-nav">
+      <a href="#hero" class="drawer-link">01 / Discover</a>
+      <a href="#ritual" class="drawer-link">02 / The Ritual</a>
+      <a href="#selection" class="drawer-link">03 / The Selection</a>
+      <a href="#estate" class="drawer-link">04 / The Estate</a>
+      <a href="#finale" class="drawer-link">05 / Reserve</a>
+    </nav>
+    <div class="drawer-footer">
+      <p>BRUVA Coffee — Four Chapters. One Continuous Journey.</p>
+      <p>© 2026 BRUVA Coffee. All rights reserved.</p>
+    </div>
+  </div>
+
+  <!-- Master Content -->
+  <main id="main-content">
+    <!-- ======================================================================
+         SCENE 01 — FULL-SCREEN CINEMATIC HERO
+         Asset: W2/vid1.mp4 (Coffee plantation at golden hour)
+         ====================================================================== -->
+    <section id="hero" class="hero-section" aria-label="Hero Scene: Discover BRUVA" data-cursor="EXPLORE">
+      <div class="hero-video-wrapper">
+        <video 
+          class="hero-video" 
+          autoplay 
+          muted 
+          loop 
+          playsinline 
+          preload="auto"
+          aria-label="Scenic view of the misty coffee plantation at sunrise">
+          <source src="W2/vi4.mp4" type="video/mp4" />
+          <source src="W2/vid4.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div class="hero-overlay"></div>
+      </div>
+
+      <div class="container hero-content">
+        <div class="hero-brand-mark">
+          <img src="W2/logo.png" alt="BRUVA Coffee Crest Emblem" width="72" height="72" />
+        </div>
+
+        <span class="eyebrow hero-eyebrow">THE ART OF EXCEPTIONAL COFFEE</span>
+
+        <h1 class="hero-headline">
+          <span class="headline-line">From Earth</span>
+          <span class="headline-line">To <em>Extraordinary.</em></span>
+        </h1>
+
+        <p class="hero-supporting">
+          Discover the character, craft, and quiet ritual behind every cup of BRUVA Coffee.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="#selection" class="btn btn-primary">
+            <span>EXPLORE OUR COFFEE</span>
+            <svg class="arrow-icon" viewBox="0 0 14 14" fill="none" stroke="currentColor">
+              <path d="M2 7h10M8 3l4 4-4 4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a href="#estate" class="btn btn-secondary">
+            <span>DISCOVER OUR ORIGIN</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Hero Scroll Indicator -->
+      <div class="scroll-indicator" role="button" tabindex="0" aria-label="Scroll to next chapter">
+        <div class="scroll-mouse" aria-hidden="true">
+          <span class="scroll-wheel"></span>
+        </div>
+        <span>SCROLL TO EXPLORE</span>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SCENE 02 — THE COFFEE RITUAL
+         Asset: W2/vi3.mp4 (Traditional South Indian brass filter decoction)
+         Layout: Split-screen (Video LEFT, Text RIGHT)
+         ====================================================================== -->
+    <section id="ritual" class="ritual-section" aria-label="Scene 02: The Coffee Ritual">
+      <div class="container">
+        <div class="split-grid">
+          <!-- LEFT: Cinematic Video Frame -->
+          <div class="cinematic-media-container" data-cursor="RITUAL" tabindex="0" role="region" aria-label="Video of the brewing ritual">
+            <video 
+              class="cinematic-video" 
+              autoplay 
+              muted 
+              loop 
+              playsinline 
+              preload="metadata"
+              aria-label="Traditional South Indian brass filter brewing steaming decoction">
+              <source src="W2/vi3.mp4" type="video/mp4" />
+              <source src="W2/vid3.mp4" type="video/mp4" />
+            </video>
+            <div class="media-vignette"></div>
+            <div class="media-badge-corner">
+              <span class="pulse-indicator"></span>
+              <span>FILTER BREW • 85°C</span>
+            </div>
+          </div>
+
+          <!-- RIGHT: Editorial Text -->
+          <div class="editorial-content-block">
+            <div class="chapter-badge">
+              <span class="cyan-dot"></span>
+              <span>01 / THE RITUAL</span>
+            </div>
+
+            <span class="eyebrow">THE COFFEE RITUAL</span>
+
+            <h2 class="editorial-headline">
+              More Than a<br /><em>Morning Ritual.</em>
+            </h2>
+
+            <p class="editorial-copy">
+              Some moments deserve to slow down. Discover the warmth, aroma, and timeless pleasure of a beautifully brewed cup.
+            </p>
+
+            <div class="ritual-meta-grid">
+              <div class="ritual-meta-item">
+                <span class="ritual-meta-label">EXTRACTION</span>
+                <span class="ritual-meta-value">Slow Brass Gravity Drip</span>
+              </div>
+              <div class="ritual-meta-item">
+                <span class="ritual-meta-label">BODY & CREMA</span>
+                <span class="ritual-meta-value">Velveteen Golden Froth</span>
+              </div>
+              <div class="ritual-meta-item">
+                <span class="ritual-meta-label">HARMONY</span>
+                <span class="ritual-meta-value">80% Estate Arabica / 20% Chicory</span>
+              </div>
+              <div class="ritual-meta-item">
+                <span class="ritual-meta-label">VESSEL</span>
+                <span class="ritual-meta-value">Tumbler & Dabarah Service</span>
+              </div>
+            </div>
+
+            <div>
+              <a href="#selection" class="btn btn-secondary">
+                <span>DISCOVER THE CRAFT</span>
+                <svg class="arrow-icon" viewBox="0 0 14 14" fill="none" stroke="currentColor">
+                  <path d="M2 7h10M8 3l4 4-4 4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SCENE 03 — THE PRODUCT REVEAL (BRUVA SELECTION)
+         Asset: W2/vid3.mp4 (BRUVA premium packaging with roasted beans)
+         Layout: Reversed Split-screen (Text LEFT, Video RIGHT)
+         ====================================================================== -->
+    <section id="selection" class="selection-section" aria-label="Scene 03: The Selection">
+      <div class="container">
+        <div class="split-grid split-grid--reversed">
+          <!-- LEFT: Editorial Content -->
+          <div class="editorial-content-block">
+            <div class="chapter-badge">
+              <span class="cyan-dot"></span>
+              <span>02 / THE SELECTION</span>
+            </div>
+
+            <span class="eyebrow">THE BRUVA SELECTION</span>
+
+            <h2 class="editorial-headline">
+              Character in<br /><em>Every Bean.</em>
+            </h2>
+
+            <p class="editorial-copy">
+              Discover coffee through its aroma, depth, and character. Every detail is part of the experience.
+            </p>
+
+            <!-- Tasting Notes Showcase -->
+            <div class="tasting-notes-card">
+              <div class="tasting-title">ARTISAN ROAST PROFILE</div>
+              <div class="flavor-tags">
+                <span class="flavor-tag accent">Dark Chocolate</span>
+                <span class="flavor-tag">Roasted Hazelnut</span>
+                <span class="flavor-tag">Caramelized Jaggery</span>
+                <span class="flavor-tag accent">Subtle Cardamom</span>
+              </div>
+            </div>
+
+            <div class="feature-badges">
+              <span class="feature-pill">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Small-Batch Drum Roasted
+              </span>
+              <span class="feature-pill">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Foil-Valved Freshness Pack
+              </span>
+            </div>
+
+            <div>
+              <a href="#finale" class="btn btn-primary">
+                <span>EXPLORE OUR COFFEE</span>
+                <svg class="arrow-icon" viewBox="0 0 14 14" fill="none" stroke="currentColor">
+                  <path d="M2 7h10M8 3l4 4-4 4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- RIGHT: Product Video Frame -->
+          <div class="cinematic-media-container" data-cursor="SELECTION" tabindex="0" role="region" aria-label="Video of the BRUVA Coffee Reserve packaging">
+            <video 
+              class="cinematic-video" 
+              autoplay 
+              muted 
+              loop 
+              playsinline 
+              preload="metadata"
+              aria-label="BRUVA Coffee Reserve bag with freshly roasted coffee beans">
+              <source src="W2/vi2.mp4" type="video/mp4" />
+              <source src="W2/vid2.mp4" type="video/mp4" />
+            </video>
+            <div class="media-vignette"></div>
+            <div class="media-badge-corner">
+              <span class="pulse-indicator"></span>
+              <span>ESTATE RESERVE BLEND</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SCENE 04 — THE COFFEE ESTATE
+         Asset: W2/vi1.mp4 (Panoramic coffee estate & cherry harvesting)
+         Layout: Full-width Panoramic Moment then Split Composition
+         ====================================================================== -->
+    <section id="estate" class="estate-section" aria-label="Scene 04: The Coffee Estate">
+      <!-- Part 1: Full-width Panoramic Video Moment -->
+      <div class="estate-panoramic-wrapper" data-cursor="ORIGIN">
+        <video 
+          class="estate-panoramic-video" 
+          autoplay 
+          muted 
+          loop 
+          playsinline 
+          preload="metadata"
+          aria-label="Coffee estate landscape with mountain mist and coffee cherry harvesters">
+          <source src="W2/vi1.mp4" type="video/mp4" />
+          <source src="W2/vid1.mp4" type="video/mp4" />
+        </video>
+        <div class="estate-panoramic-overlay"></div>
+
+        <div class="estate-panoramic-content">
+          <div class="chapter-badge" style="margin: 0 auto var(--space-md);">
+            <span class="cyan-dot"></span>
+            <span>03 / THE ESTATE</span>
+          </div>
+          <h2 class="estate-panoramic-headline">
+            Rooted in the Land.<br />
+            <em>Made for the Moment.</em>
+          </h2>
+          <p class="estate-panoramic-supporting">
+            Every coffee journey begins somewhere.
+          </p>
+        </div>
+      </div>
+
+      <!-- Part 2: Editorial Split Section -->
+      <div class="container estate-detail-wrapper">
+        <div class="split-grid">
+          <!-- LEFT: Editorial Story -->
+          <div class="editorial-content-block">
+            <span class="eyebrow">WESTERN GHATS HERITAGE</span>
+
+            <h3 class="editorial-headline">
+              Closer to the <em>Origin.</em>
+            </h3>
+
+            <p class="editorial-copy">
+              Explore the landscapes, people, and process that shape the journey from coffee cherry to cup.
+            </p>
+
+            <div class="feature-badges" style="margin-top: 1rem;">
+              <span class="feature-pill">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                1,200m High Altitude Shade Grown
+              </span>
+              <span class="feature-pill">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                Handpicked at Peak Crimson Ripeness
+              </span>
+              <span class="feature-pill">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                Biodiverse Forest Canopy
+              </span>
+            </div>
+
+            <div style="margin-top: 1rem;">
+              <a href="#finale" class="btn btn-secondary">
+                <span>RESERVE ESTATE HARVEST</span>
+                <svg class="arrow-icon" viewBox="0 0 14 14" fill="none" stroke="currentColor">
+                  <path d="M2 7h10M8 3l4 4-4 4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- RIGHT: Framed Close-up Video Detail -->
+          <div class="cinematic-media-container" data-cursor="HARVEST" tabindex="0" role="region" aria-label="Harvesters picking ripe coffee cherries">
+            <video 
+              class="cinematic-video" 
+              autoplay 
+              muted 
+              loop 
+              playsinline 
+              preload="metadata"
+              aria-label="Harvesters gently picking ripe crimson cherries in the shaded coffee plantation">
+              <source src="W2/vi1.mp4" type="video/mp4" />
+              <source src="W2/vid1.mp4" type="video/mp4" />
+            </video>
+            <div class="media-vignette"></div>
+            <div class="media-badge-corner">
+              <span class="pulse-indicator"></span>
+              <span>ORIGIN ESTATE HARVEST</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SCENE 05 — BRAND FINALE
+         Asset: W2/logo.png (Authentic BRUVA Crest Logo)
+         Layout: Centered brand crest, closing headline, and dual CTAs
+         ====================================================================== -->
+    <section id="finale" class="finale-section" aria-label="Scene 05: Brand Finale">
+      <div class="finale-glow" aria-hidden="true"></div>
+
+      <div class="container finale-content">
+        <div class="finale-brand-crest">
+          <img src="W2/logo.png" alt="BRUVA Coffee Crest Emblem" width="90" height="90" />
+        </div>
+
+        <div class="chapter-badge">
+          <span class="cyan-dot"></span>
+          <span>THE GRAND FINALE</span>
+        </div>
+
+        <h2 class="finale-headline">
+          Make Every Cup<br /><em>Matter.</em>
+        </h2>
+
+        <p class="finale-supporting">
+          Find your ritual. Discover your coffee.
+        </p>
+
+        <div class="finale-cta-group">
+          <a href="#selection" class="btn btn-primary">
+            <span>EXPLORE BRUVA</span>
+            <svg class="arrow-icon" viewBox="0 0 14 14" fill="none" stroke="currentColor">
+              <path d="M2 7h10M8 3l4 4-4 4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <button class="btn btn-secondary" data-scroll-top aria-label="Smooth scroll back to top of the page">
+            <span>BACK TO THE BEGINNING</span>
+            <svg class="arrow-icon" viewBox="0 0 14 14" fill="none" stroke="currentColor" style="transform: rotate(-90deg);">
+              <path d="M2 7h10M8 3l4 4-4 4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="finale-guarantees">
+          <div class="guarantee-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Single-Estate Harvest</span>
+          </div>
+          <div class="guarantee-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Artisan Slow Drum Roasted</span>
+          </div>
+          <div class="guarantee-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Authentic Heritage Decoction</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Editorial Luxury Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="W2/logo.png" alt="Official BRUVA Coffee Logo" class="footer-logo" width="60" height="60" />
+          <p class="footer-tagline">“From Earth To Extraordinary.”</p>
+          <p class="footer-desc">
+            BRUVA Coffee honors the sacred tradition of South Indian filter coffee through uncompromising estate selection, artisanal roasting, and timeless brewing rituals.
+          </p>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Story Chapters</div>
+          <nav class="footer-nav" aria-label="Footer chapter links">
+            <a href="#hero" class="footer-link">01 / The Earth</a>
+            <a href="#ritual" class="footer-link">02 / The Ritual</a>
+            <a href="#selection" class="footer-link">03 / The Selection</a>
+            <a href="#estate" class="footer-link">04 / The Estate</a>
+            <a href="#finale" class="footer-link">05 / The Finale</a>
+          </nav>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Our Coffee</div>
+          <nav class="footer-nav" aria-label="Footer coffee links">
+            <a href="#selection" class="footer-link">Estate Reserve</a>
+            <a href="#ritual" class="footer-link">Brass Filter Kit</a>
+            <a href="#selection" class="footer-link">Peaberry Special</a>
+            <a href="#estate" class="footer-link">Single-Origin Arabica</a>
+          </nav>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Heritage & Craft</div>
+          <p class="footer-notes">
+            Harvested in the misty elevations of the Western Ghats. Crafted with reverence, served in brass tumblers, and savored one deliberate sip at a time.
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 BRUVA Coffee. All rights reserved.</div>
+        <div class="footer-heritage">Crafted with reverence in South India.</div>
+        <div>Continuous Cinematic Storytelling Experience</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Master ES Module Entrypoint -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

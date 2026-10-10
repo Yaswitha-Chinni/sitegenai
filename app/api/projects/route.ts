@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseServerClient, isSupabaseServerConfigured } from "@/lib/supabase/server";
+import { projectService } from "@/lib/projects/projectService";
 import { WebsiteDocument } from "@/types/project";
 
 export async function GET() {
@@ -8,9 +9,8 @@ export async function GET() {
     if (!supabase) {
       return NextResponse.json({
         success: true,
-        source: "local-fallback",
-        message: "Supabase not configured. Application uses Local Storage Dev Mode on client.",
-        projects: [],
+        source: "local-server",
+        projects: projectService.getProjects(),
       });
     }
 
@@ -45,6 +45,9 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+
+    // Persist in server-side projectService store
+    projectService.saveProject(project);
 
     const supabase = getSupabaseServerClient();
     if (supabase) {

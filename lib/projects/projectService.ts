@@ -27,6 +27,28 @@ const INITIAL_PROJECTS: WebsiteDocument[] = [
     localPort: 3000,
   },
   {
+    id: "proj-w2-bruva",
+    name: "BRUVA — South Indian Coffee",
+    description: "Official interactive brand website for artisanal South Indian filter coffee with brass ritual loops and shade-grown origins.",
+    templateId: "w2",
+    templateSource: "w2",
+    category: "Restaurant",
+    style: "Heritage Artisanal Dark Roast",
+    theme: {
+      primaryColor: "#C59B27",
+      secondaryColor: "#080504",
+      backgroundColor: "#080504",
+      fontFamily: "Outfit, Plus Jakarta Sans",
+    },
+    pages: ["Home", "The Roast", "Ritual", "Origins", "Reserve"],
+    activePage: "Home",
+    sections: createDefaultSectionsFromTemplate("w2"),
+    createdAt: "2026-10-09T11:00:00Z",
+    updatedAt: "2026-10-10T09:00:00Z",
+    isFavorite: true,
+    localPort: 3000,
+  },
+  {
     id: "proj-zenith-cloud",
     name: "Zenith AI Analytics Platform",
     description: "Enterprise SaaS landing page for real-time cloud data pipelines and telemetry.",
@@ -72,10 +94,25 @@ const INITIAL_PROJECTS: WebsiteDocument[] = [
   },
 ];
 
+// Server-side project memory store
+declare global {
+  var __sitegenai_server_projects: Map<string, WebsiteDocument> | undefined;
+}
+
+function getServerProjectsMap(): Map<string, WebsiteDocument> {
+  if (!globalThis.__sitegenai_server_projects) {
+    globalThis.__sitegenai_server_projects = new Map<string, WebsiteDocument>();
+    for (const p of INITIAL_PROJECTS) {
+      globalThis.__sitegenai_server_projects.set(p.id, p);
+    }
+  }
+  return globalThis.__sitegenai_server_projects;
+}
+
 class ProjectService {
   private getStorage(): WebsiteDocument[] {
     if (typeof window === "undefined") {
-      return INITIAL_PROJECTS;
+      return Array.from(getServerProjectsMap().values());
     }
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
@@ -90,7 +127,13 @@ class ProjectService {
   }
 
   private saveStorage(projects: WebsiteDocument[]): void {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined") {
+      const map = getServerProjectsMap();
+      for (const p of projects) {
+        map.set(p.id, p);
+      }
+      return;
+    }
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
     } catch (e) {
@@ -103,17 +146,27 @@ class ProjectService {
   }
 
   public getProjectById(id: string): WebsiteDocument | undefined {
+    if (typeof window === "undefined") {
+      return getServerProjectsMap().get(id);
+    }
     const list = this.getStorage();
     return list.find((p) => p.id === id);
   }
 
   public saveProject(project: WebsiteDocument): void {
-    const list = this.getStorage();
-    const index = list.findIndex((p) => p.id === project.id);
-    const updated = {
+    const updated: WebsiteDocument = {
       ...project,
       updatedAt: new Date().toISOString(),
     };
+
+    if (typeof window === "undefined") {
+      const map = getServerProjectsMap();
+      map.set(updated.id, updated);
+      return;
+    }
+
+    const list = this.getStorage();
+    const index = list.findIndex((p) => p.id === project.id);
 
     if (index >= 0) {
       list[index] = updated;
@@ -123,13 +176,11 @@ class ProjectService {
     this.saveStorage(list);
 
     // Sync to backend API asynchronously
-    if (typeof window !== "undefined") {
-      fetch("/api/projects", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updated),
-      }).catch((e) => console.warn("Server sync notice:", e));
-    }
+    fetch("/api/projects", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updated),
+    }).catch((e) => console.warn("Server sync notice:", e));
   }
 
   public createFromTemplate(templateId: string, customName?: string): WebsiteDocument {

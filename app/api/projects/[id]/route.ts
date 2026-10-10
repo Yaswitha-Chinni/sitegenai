@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { projectService } from "@/lib/projects/projectService";
 import { WebsiteDocument } from "@/types/project";
 
 interface RouteParams {
@@ -10,19 +11,20 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
     const supabase = getSupabaseServerClient();
-    if (!supabase) {
-      return NextResponse.json({
-        success: false,
-        error: "Supabase not configured. Project should be retrieved from client local storage.",
-      }, { status: 404 });
+    if (supabase) {
+      const { data, error } = await supabase.from("projects").select("*").eq("id", id).single();
+      if (!error && data) {
+        return NextResponse.json({ success: true, project: data });
+      }
     }
 
-    const { data, error } = await supabase.from("projects").select("*").eq("id", id).single();
-    if (error || !data) {
-      return NextResponse.json({ success: false, error: "Project not found." }, { status: 404 });
+    // Check server projectService store
+    const local = projectService.getProjectById(id);
+    if (local) {
+      return NextResponse.json({ success: true, project: local });
     }
 
-    return NextResponse.json({ success: true, project: data });
+    return NextResponse.json({ success: false, error: `Project ${id} not found.` }, { status: 404 });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message }, { status: 500 });
   }
@@ -31,21 +33,23 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
 export async function PUT(req: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const project: Partial<WebsiteDocument> = await req.json();
-    const supabase = getSupabaseServerClient();
+    const projectUpdates: Partial<WebsiteDocument> = await req.json();
 
+    const existing = projectService.getProjectById(id);
+    if (existing) {
+      const updated = { ...existing, ...projectUpdates, id };
+      projectService.saveProject(updated as WebsiteDocument);
+    }
+
+    const supabase = getSupabaseServerClient();
     if (supabase) {
-      const { error } = await supabase
+      await supabase
         .from("projects")
         .update({
-          ...project,
+          ...projectUpdates,
           updated_at: new Date().toISOString(),
         })
         .eq("id", id);
-
-      if (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
-      }
     }
 
     return NextResponse.json({
@@ -61,13 +65,11 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
 export async function DELETE(req: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const supabase = getSupabaseServerClient();
+    projectService.deleteProject(id);
 
+    const supabase = getSupabaseServerClient();
     if (supabase) {
-      const { error } = await supabase.from("projects").delete().eq("id", id);
-      if (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
-      }
+      await supabase.from("projects").delete().eq("id", id);
     }
 
     return NextResponse.json({
@@ -79,3 +81,4 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
     return NextResponse.json({ success: false, error: error?.message }, { status: 500 });
   }
 }
+

@@ -18,12 +18,30 @@ export type SectionType =
   | "cta"
   | "footer";
 
+export interface ImageMetadata {
+  id?: string;
+  url: string;
+  thumbnailUrl?: string;
+  source: "pexels" | "unsplash" | "curated" | "upload";
+  photographer?: string;
+  photographerUrl?: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  avgColor?: string;
+  focalPoint?: { x: number; y: number }; // 0 to 100%
+  cropZoom?: number;
+  keywords?: string[];
+}
+
 export interface SectionStyle {
   backgroundColor: string;
   textColor: string;
   paddingY: "sm" | "md" | "lg" | "xl";
   alignment: "left" | "center" | "right";
   borderRadius: "none" | "sm" | "md" | "lg";
+  focalPosition?: string; // e.g. "center center", "50% 25%"
+  imageFit?: "cover" | "contain" | "scale-down";
 }
 
 export interface SectionItem {
@@ -37,6 +55,8 @@ export interface SectionItem {
   price?: string;
   author?: string;
   role?: string;
+  imageUrl?: string;
+  imageMetadata?: ImageMetadata;
 }
 
 export interface SectionContent {
@@ -49,11 +69,45 @@ export interface SectionContent {
   secondaryButtonText?: string;
   secondaryButtonLink?: string;
   imageUrl?: string;
+  imageMetadata?: ImageMetadata;
   videoUrl?: string;
   mediaType?: "image" | "video" | "none";
   activeTab?: string;
   items?: SectionItem[];
   footerLinks?: Array<{ title: string; links: string[] }>;
+}
+
+export interface ElementCustomStyle {
+  fontSize?: number | string;
+  fontWeight?: string;
+  color?: string;
+  backgroundColor?: string;
+  padding?: string;
+  margin?: string;
+  lineHeight?: number | string;
+  letterSpacing?: string;
+  textAlign?: "left" | "center" | "right" | "justify";
+  fontFamily?: string;
+  width?: string;
+  maxWidth?: string;
+  height?: string;
+  minHeight?: string;
+  borderRadius?: string;
+  borderColor?: string;
+  borderWidth?: string;
+  borderStyle?: string;
+  boxShadow?: string;
+  opacity?: number;
+  aspectRatio?: string;
+  objectFit?: "cover" | "contain" | "scale-down";
+  focalPosition?: string;
+  iconName?: string;
+  iconSize?: number;
+  iconColor?: string;
+  iconPosition?: "left" | "right" | "top";
+  iconSpacing?: number;
+  textTransform?: "none" | "uppercase" | "lowercase" | "capitalize";
+  textDecoration?: "none" | "underline";
 }
 
 export interface WebsiteSection {
@@ -64,6 +118,7 @@ export interface WebsiteSection {
   content: SectionContent;
   style: SectionStyle;
   animation: "none" | "fade" | "slide-up" | "zoom";
+  elementStyles?: Record<string, ElementCustomStyle>;
 }
 
 export interface ProjectTheme {
@@ -78,7 +133,7 @@ export interface WebsiteDocument {
   name: string;
   description: string;
   templateId?: string;
-  templateSource?: "w1" | "built-in";
+  templateSource?: "w1" | "w2" | "built-in";
   category: string;
   style: string;
   theme: ProjectTheme;

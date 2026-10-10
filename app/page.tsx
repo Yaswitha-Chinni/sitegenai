@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { TEMPLATES_REGISTRY } from "@/lib/templates/registry";
+import Footer from "@/components/layout/Footer";
 import {
   Sparkles,
   ArrowRight,
@@ -98,58 +99,58 @@ const SHOWCASE_PROJECTS = [
     description: "Architectural residences and modern villas with virtual spatial tours.",
   },
   {
-    id: "terria-world",
-    name: "Terria",
-    tagline: "Explore The World",
+    id: "echo-tech",
+    name: "Echo Magazine",
+    tagline: "Stories That Move You",
     category: "Blog",
-    badge: "Travel & Blog",
-    image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80",
+    badge: "Modern Publication",
+    image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=800&q=80",
     editorId: "proj-zenith-cloud",
-    description: "Expedition travel journal with route maps, gear guides, and photo essays.",
+    description: "Independent cultural journalism with curated essays and weekly audio podcasts.",
   },
 ];
 
-// Advanced Features from Storyboard (8 Cards)
+// Advanced Features from Storyboard
 const ADVANCED_FEATURES = [
   {
-    icon: <PenTool size={22} className="text-warning" />,
-    title: "AI Content Generation",
-    description: "Generate high-quality copy, images and sections with AI.",
+    icon: <Edit3 size={22} className="sb-text-emerald" />,
+    title: "Intuitive AI Website Editor",
+    description: "Edit text, images, styles and layouts with our powerful visual editor.",
   },
   {
-    icon: <ImageIcon size={22} className="text-success" />,
-    title: "AI Image Generation",
-    description: "Create stunning, unique images for your website.",
+    icon: <Sparkles size={22} className="sb-text-violet" />,
+    title: "AI-Generated Media",
+    description: "Create stunning custom images and videos tailored for your brand.",
   },
   {
-    icon: <Globe size={22} className="text-primary" />,
-    title: "Custom Domain Integration",
-    description: "Connect your own domain in minutes.",
+    icon: <Globe size={22} className="sb-text-cyan" />,
+    title: "Custom Domain & Hosting",
+    description: "Publish your website with a custom domain and ultra-fast cloud hosting.",
   },
   {
-    icon: <Search size={22} className="text-info" />,
+    icon: <Search size={22} className="sb-text-emerald" />,
     title: "Built-in SEO Optimization",
-    description: "Get better discoverability with AI-optimized content.",
+    description: "Get better discoverability with AI-optimized content and semantic headings.",
   },
   {
-    icon: <BarChart3 size={22} className="text-warning" />,
+    icon: <BarChart3 size={22} className="sb-text-violet" />,
     title: "Analytics & Insights",
-    description: "Track visitors, traffic and performance in real-time.",
+    description: "Track visitors, traffic and conversion performance in real-time.",
   },
   {
-    icon: <Languages size={22} className="text-info" />,
+    icon: <Languages size={22} className="sb-text-cyan" />,
     title: "Multilingual Support",
-    description: "Create websites in multiple languages.",
+    description: "Create international websites with instant localization.",
   },
   {
-    icon: <ShoppingCart size={22} className="text-success" />,
+    icon: <ShoppingCart size={22} className="sb-text-emerald" />,
     title: "E-commerce Ready",
-    description: "Add products, payments and manage orders easily.",
+    description: "Add products, checkout flows, and inventory controls easily.",
   },
   {
-    icon: <Users size={22} className="text-primary" />,
+    icon: <Users size={22} className="sb-text-violet" />,
     title: "Team Collaboration",
-    description: "Invite team members and work together.",
+    description: "Invite team members and review website revisions seamlessly.",
   },
 ];
 
@@ -235,20 +236,20 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="sb-dark-root min-vh-100 d-flex flex-column font-sans">
+    <div className="min-vh-100 d-flex flex-column position-relative" style={{ backgroundColor: "#0B0D12", color: "#F1F5F9" }}>
       {/* Background Glow Blobs */}
-      <div className="sb-glow-blob-emerald top-0 start-0 opacity-40" />
-      <div className="sb-glow-blob-gold top-0 end-0 opacity-25" />
+      <div className="sb-glow-blob-emerald top-0 start-0 opacity-30" />
+      <div className="sb-glow-blob-violet top-0 end-0 opacity-20" />
 
       {/* ======================================================================
-          1. HEADER & NAVIGATION (Cinematic Storyboard Dark Emerald)
+          1. HEADER & NAVIGATION
           ====================================================================== */}
       <header
         className="sticky-top py-3 border-bottom position-relative"
         style={{
-          backgroundColor: "rgba(4, 18, 12, 0.88)",
+          backgroundColor: "rgba(16, 20, 28, 0.94)",
           backdropFilter: "blur(14px)",
-          borderColor: "rgba(16, 185, 129, 0.16)",
+          borderColor: "#303947",
           zIndex: 1040,
         }}
       >
@@ -257,10 +258,10 @@ export default function LandingPage() {
             {/* Logo */}
             <Link href="/" className="text-white text-decoration-none d-flex align-items-center gap-2 fw-bold fs-4">
               <div
-                className="rounded-3 p-1 d-flex align-items-center justify-content-center text-white shadow-sm"
-                style={{ background: "linear-gradient(135deg, #10B981 0%, #059669 100%)", width: 34, height: 34 }}
+                className="rounded-3 p-1 d-flex align-items-center justify-content-center text-dark shadow-sm"
+                style={{ background: "linear-gradient(135deg, #A3FF6F 0%, #7CE643 100%)", width: 34, height: 34 }}
               >
-                <Sparkles size={18} />
+                <Sparkles size={18} color="#0B0D12" />
               </div>
               <span>
                 SiteGen<span className="sb-text-emerald">AI</span>
@@ -269,29 +270,29 @@ export default function LandingPage() {
 
             {/* Desktop Nav Links */}
             <nav className="d-none d-lg-flex align-items-center gap-4">
-              <Link href="#our-work" className="text-secondary text-decoration-none fw-medium small hover-text-white">
-                Product
+              <Link href="#our-work" className="text-decoration-none fw-semibold small hover-text-white" style={{ color: "#D1D5DB" }}>
+                Showcase
               </Link>
-              <Link href="/templates" className="text-secondary text-decoration-none fw-medium small hover-text-white">
+              <Link href="/templates" className="text-decoration-none fw-semibold small hover-text-white" style={{ color: "#D1D5DB" }}>
                 Templates
               </Link>
-              <Link href="#features" className="text-secondary text-decoration-none fw-medium small hover-text-white">
+              <Link href="#features" className="text-decoration-none fw-semibold small hover-text-white" style={{ color: "#D1D5DB" }}>
                 Features
               </Link>
-              <Link href="#pricing" className="text-secondary text-decoration-none fw-medium small hover-text-white">
+              <Link href="#pricing" className="text-decoration-none fw-semibold small hover-text-white" style={{ color: "#D1D5DB" }}>
                 Pricing
               </Link>
-              <Link href="#how-it-works" className="text-secondary text-decoration-none fw-medium small hover-text-white">
-                Resources
+              <Link href="#how-it-works" className="text-decoration-none fw-semibold small hover-text-white" style={{ color: "#D1D5DB" }}>
+                How It Works
               </Link>
             </nav>
 
             {/* Right CTAs */}
             <div className="d-none d-md-flex align-items-center gap-3">
-              <Link href="/login" className="text-white text-decoration-none fw-medium small px-2">
+              <Link href="/login" className="sb-btn-outline btn-sm py-1.5 px-3 small btn-magnetic">
                 Sign In
               </Link>
-              <Link href="/create" className="sb-btn-primary small">
+              <Link href="/create" className="sb-btn-primary btn-sm py-1.5 px-3.5 small btn-magnetic">
                 Get Started
               </Link>
             </div>
@@ -299,7 +300,8 @@ export default function LandingPage() {
             {/* Mobile Toggle */}
             <button
               type="button"
-              className="btn btn-outline-secondary btn-sm d-lg-none text-white border-secondary"
+              className="btn btn-sm d-lg-none text-white border p-1.5 rounded-3"
+              style={{ backgroundColor: "#151A24", borderColor: "#303947" }}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle navigation"
             >
@@ -309,28 +311,25 @@ export default function LandingPage() {
 
           {/* Mobile Dropdown */}
           {mobileMenuOpen && (
-            <div className="d-lg-none pt-3 pb-2 border-top mt-3" style={{ borderColor: "rgba(16, 185, 129, 0.2)" }}>
+            <div className="d-lg-none pt-3 pb-2 border-top mt-3" style={{ borderColor: "#303947" }}>
               <div className="d-flex flex-column gap-2">
-                <Link href="/templates" className="text-white py-1 text-decoration-none small" onClick={() => setMobileMenuOpen(false)}>
+                <Link href="/templates" className="text-white py-1.5 px-2 rounded-2 text-decoration-none small fw-semibold" onClick={() => setMobileMenuOpen(false)}>
                   Templates
                 </Link>
-                <Link href="#features" className="text-white py-1 text-decoration-none small" onClick={() => setMobileMenuOpen(false)}>
+                <Link href="#features" className="text-white py-1.5 px-2 rounded-2 text-decoration-none small fw-semibold" onClick={() => setMobileMenuOpen(false)}>
                   Features
                 </Link>
-                <Link href="#pricing" className="text-white py-1 text-decoration-none small" onClick={() => setMobileMenuOpen(false)}>
+                <Link href="#pricing" className="text-white py-1.5 px-2 rounded-2 text-decoration-none small fw-semibold" onClick={() => setMobileMenuOpen(false)}>
                   Pricing
                 </Link>
-                <Link href="/dashboard" className="text-white py-1 text-decoration-none small" onClick={() => setMobileMenuOpen(false)}>
+                <Link href="/dashboard" className="text-white py-1.5 px-2 rounded-2 text-decoration-none small fw-semibold" onClick={() => setMobileMenuOpen(false)}>
                   My Dashboard
                 </Link>
-                <Link href="/admin" className="text-warning py-1 text-decoration-none small" onClick={() => setMobileMenuOpen(false)}>
-                  Admin Portal (Dev)
-                </Link>
-                <div className="d-flex gap-2 pt-2 border-top" style={{ borderColor: "rgba(16, 185, 129, 0.2)" }}>
-                  <Link href="/login" className="btn btn-outline-light btn-sm w-50" onClick={() => setMobileMenuOpen(false)}>
+                <div className="d-flex gap-2 pt-2 border-top" style={{ borderColor: "#303947" }}>
+                  <Link href="/login" className="sb-btn-outline btn-sm w-50 justify-content-center" onClick={() => setMobileMenuOpen(false)}>
                     Sign In
                   </Link>
-                  <Link href="/create" className="sb-btn-primary btn-sm w-50" onClick={() => setMobileMenuOpen(false)}>
+                  <Link href="/create" className="sb-btn-primary btn-sm w-50 justify-content-center" onClick={() => setMobileMenuOpen(false)}>
                     Get Started
                   </Link>
                 </div>
@@ -342,35 +341,60 @@ export default function LandingPage() {
 
       <main className="flex-grow-1 position-relative">
         {/* ======================================================================
-            2. HERO SECTION — "Turn Your Ideas Into Stunning Websites"
+            2. HERO SECTION
             ====================================================================== */}
         <section className="py-5 position-relative overflow-hidden">
-          <div className="container py-4 py-lg-5">
+          {/* Background Video Layer */}
+          <div className="sb-hero-video-wrapper" aria-hidden="true">
+            <video
+              className="sb-hero-video"
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster="/hero-poster.jpg"
+              preload="metadata"
+            >
+              <source src="/hero-video.mp4" type="video/mp4" />
+              <source src="/video.mp4" type="video/mp4" />
+            </video>
+            <img
+              src="/hero-poster.jpg"
+              alt=""
+              className="sb-hero-fallback-poster"
+            />
+            <div className="sb-hero-video-overlay" />
+          </div>
+
+          <div className="container py-4 py-lg-5 position-relative" style={{ zIndex: 2 }}>
             <div className="row justify-content-center text-center">
               <div className="col-12 col-xl-10">
                 {/* Badge */}
-                <div className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-4 border" style={{ backgroundColor: "rgba(16, 185, 129, 0.1)", borderColor: "rgba(16, 185, 129, 0.3)" }}>
+                <div
+                  className="d-inline-flex align-items-center gap-2 px-3 py-1.5 rounded-pill mb-4 border"
+                  style={{ backgroundColor: "rgba(163, 255, 111, 0.12)", borderColor: "rgba(163, 255, 111, 0.35)" }}
+                >
                   <Sparkles size={14} className="sb-text-emerald" />
-                  <span className="small fw-semibold text-white">AI-Powered Website Builder</span>
+                  <span className="small fw-semibold text-white">Next-Generation AI Website Builder</span>
                 </div>
 
                 {/* Headline */}
-                <h1 className="display-3 fw-bold mb-3 tracking-tight text-white" style={{ lineHeight: 1.15 }}>
+                <h1 className="display-3 fw-extrabold mb-3 tracking-tight text-white" style={{ lineHeight: 1.15 }}>
                   Turn Your Ideas <br className="d-none d-sm-block" />
                   Into <span className="sb-text-emerald">Stunning Websites</span>
                 </h1>
 
                 {/* Subtitle */}
-                <p className="lead text-secondary mb-4 mx-auto" style={{ maxWidth: 700, fontSize: "1.18rem" }}>
-                  Describe your idea, and let AI create a beautiful, customizable website in seconds. No coding. No limits. Just your imagination.
+                <p className="lead mb-4 mx-auto" style={{ maxWidth: 700, fontSize: "1.18rem", color: "#D1D5DB", lineHeight: 1.6 }}>
+                  Describe your idea, and let AI create a beautiful, customizable website in seconds. No coding. No limits. Just pure creativity.
                 </p>
 
                 {/* Primary Buttons */}
                 <div className="d-flex flex-wrap justify-content-center gap-3 mb-4">
-                  <Link href="/create" className="sb-btn-primary btn-lg px-4 py-3 fs-6">
+                  <Link href="/create" className="sb-btn-primary btn-lg px-4 py-3 fs-6 btn-magnetic">
                     Build with AI <ArrowRight size={18} />
                   </Link>
-                  <Link href="/templates" className="sb-btn-outline btn-lg px-4 py-3 fs-6">
+                  <Link href="/templates" className="sb-btn-outline btn-lg px-4 py-3 fs-6 btn-magnetic">
                     Explore Templates
                   </Link>
                 </div>
@@ -379,25 +403,25 @@ export default function LandingPage() {
                 <div className="d-flex flex-wrap justify-content-center align-items-center gap-4 gap-md-5 mb-5 pt-2">
                   <div className="text-center">
                     <div className="h3 fw-bold text-white mb-0">10K+</div>
-                    <div className="small text-secondary">Websites Created</div>
+                    <div className="small" style={{ color: "#BFC7D2" }}>Websites Created</div>
                   </div>
                   <div className="text-center">
                     <div className="h3 fw-bold text-white mb-0 d-flex align-items-center justify-content-center gap-1">
                       <Star size={18} className="text-warning fill-warning" />
                       4.9/5
                     </div>
-                    <div className="small text-secondary">User Rating</div>
+                    <div className="small" style={{ color: "#BFC7D2" }}>User Rating</div>
                   </div>
                   <div className="text-center">
                     <div className="h3 fw-bold text-white mb-0">100%</div>
-                    <div className="small text-secondary">No Code Required</div>
+                    <div className="small" style={{ color: "#BFC7D2" }}>No Code Required</div>
                   </div>
                 </div>
 
                 {/* Interactive AI Prompt Input Bar */}
                 <div className="mx-auto mb-5" style={{ maxWidth: 680 }}>
-                  <form onSubmit={handlePromptSubmit} className="sb-prompt-box d-flex align-items-center gap-2">
-                    <Sparkles size={18} className="sb-text-gold flex-shrink-0" />
+                  <form onSubmit={handlePromptSubmit} className="sb-prompt-box d-flex align-items-center gap-2 border" style={{ borderColor: "#303947" }}>
+                    <Sparkles size={18} className="sb-text-emerald flex-shrink-0" />
                     <input
                       type="text"
                       className="sb-prompt-input"
@@ -407,8 +431,8 @@ export default function LandingPage() {
                     />
                     <button
                       type="submit"
-                      className="btn rounded-circle d-flex align-items-center justify-content-center text-white flex-shrink-0"
-                      style={{ width: 40, height: 40, backgroundColor: "#10B981" }}
+                      className="btn rounded-circle d-flex align-items-center justify-content-center text-dark flex-shrink-0"
+                      style={{ width: 40, height: 40, backgroundColor: "#A3FF6F" }}
                       aria-label="Generate website from prompt"
                     >
                       <ArrowRight size={18} />
@@ -418,39 +442,41 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* FLOATING WEBSITE PREVIEWS (From Storyboard) */}
+            {/* FLOATING WEBSITE PREVIEWS */}
             <div className="position-relative pt-3 pb-4">
               <div className="row g-4 justify-content-center align-items-center">
                 {/* Left Preview: SaaS Dashboard Mockup */}
                 <div className="col-12 col-md-3 d-none d-lg-block">
-                  <div className="sb-card p-3 shadow-lg transform -rotate-2" style={{ transform: "rotate(-3deg)" }}>
-                    <div className="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom border-secondary border-opacity-25">
+                  <div className="sb-card card-3d-tilt card-spotlight p-3 shadow-lg rounded-4 border" style={{ borderColor: "#303947", backgroundColor: "#151A24" }}>
+                    <div className="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom" style={{ borderColor: "#303947" }}>
                       <span className="small fw-bold text-white">ZenithFlow AI</span>
-                      <span className="badge bg-primary-subtle text-primary small">SaaS</span>
+                      <span className="badge small" style={{ backgroundColor: "rgba(139, 124, 255, 0.15)", color: "#8B7CFF", border: "1px solid rgba(139, 124, 255, 0.35)" }}>SaaS</span>
                     </div>
-                    <img
-                      src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80"
-                      alt="Build Smarter with AI"
-                      className="img-fluid rounded-3 mb-2"
-                      style={{ maxHeight: 160, objectFit: "cover", width: "100%" }}
-                    />
+                    <div className="card-img-zoom rounded-3 overflow-hidden mb-2">
+                      <img
+                        src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80"
+                        alt="Build Smarter with AI"
+                        className="img-fluid"
+                        style={{ maxHeight: 160, objectFit: "cover", width: "100%" }}
+                      />
+                    </div>
                     <div className="small fw-semibold text-white">Build Smarter with AI</div>
-                    <div className="small text-secondary" style={{ fontSize: "0.78rem" }}>Real-time telemetry pipeline</div>
+                    <div className="small" style={{ fontSize: "0.8rem", color: "#D1D5DB" }}>Real-time telemetry pipeline</div>
                   </div>
                 </div>
 
                 {/* Center Main Preview: HoneyNest Hero Card */}
                 <div className="col-12 col-lg-6">
                   <div
-                    className="sb-card p-4 shadow-2xl position-relative overflow-hidden border border-emerald"
-                    style={{ borderColor: "rgba(16, 185, 129, 0.4)", background: "rgba(10, 36, 24, 0.85)" }}
+                    className="sb-card card-3d-tilt card-spotlight p-4 shadow-2xl position-relative overflow-hidden rounded-4 border"
+                    style={{ borderColor: "rgba(163, 255, 111, 0.4)", background: "#151A24" }}
                   >
-                    <div className="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+                    <div className="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom" style={{ borderColor: "#303947" }}>
                       <div className="d-flex align-items-center gap-2">
                         <span className="p-1 rounded bg-warning text-dark fw-bold small">🍯</span>
                         <span className="fw-bold text-white">HoneyNest</span>
                       </div>
-                      <div className="d-flex gap-3 small text-secondary">
+                      <div className="d-flex gap-3 small fw-semibold" style={{ color: "#D1D5DB" }}>
                         <span>Home</span>
                         <span>Shop</span>
                         <span>About</span>
@@ -459,17 +485,17 @@ export default function LandingPage() {
 
                     <div className="row align-items-center g-3">
                       <div className="col-12 col-sm-6 text-start">
-                        <span className="badge bg-warning text-dark mb-2 fw-semibold">100% Raw & Organic</span>
+                        <span className="badge bg-warning text-dark mb-2 fw-semibold">100% Raw &amp; Organic</span>
                         <h3 className="fw-bold text-white mb-2">Pure Nature in Every Drop</h3>
-                        <p className="small text-secondary mb-3">Premium organic honey straight from nature to your home.</p>
+                        <p className="small mb-3" style={{ color: "#D1D5DB" }}>Premium organic honey straight from nature to your home.</p>
                         <Link href="/editor/proj-w1-cocopour" className="btn btn-warning btn-sm text-dark fw-bold px-3 py-2 rounded-pill shadow-xs">
                           Shop Now &rarr;
                         </Link>
                       </div>
                       <div className="col-12 col-sm-6 text-center position-relative">
                         <div
-                          className="rounded-4 overflow-hidden shadow-lg border position-relative"
-                          style={{ borderColor: "rgba(245, 158, 11, 0.3)" }}
+                          className="rounded-4 overflow-hidden shadow-lg border position-relative card-img-zoom"
+                          style={{ borderColor: "#303947" }}
                         >
                           <img
                             src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&w=700&q=80"
@@ -481,30 +507,31 @@ export default function LandingPage() {
                       </div>
                     </div>
 
-                    {/* Bottom floating sticker */}
                     <div className="position-absolute bottom-0 end-0 m-3 d-none d-sm-block">
-                      <span className="badge bg-emerald text-white p-2 rounded-pill shadow small" style={{ backgroundColor: "#10B981" }}>
+                      <span className="badge text-dark p-2 rounded-pill shadow small fw-bold" style={{ backgroundColor: "#A3FF6F" }}>
                         ✨ Turn ideas into reality
                       </span>
                     </div>
                   </div>
                 </div>
 
-                {/* Right Preview: Creative Portfolio Portrait */}
+                {/* Right Preview: Creative Portfolio */}
                 <div className="col-12 col-md-3 d-none d-lg-block">
-                  <div className="sb-card p-3 shadow-lg" style={{ transform: "rotate(3deg)" }}>
-                    <div className="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom border-secondary border-opacity-25">
+                  <div className="sb-card card-3d-tilt card-spotlight p-3 shadow-lg rounded-4 border" style={{ borderColor: "#303947", backgroundColor: "#151A24" }}>
+                    <div className="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom" style={{ borderColor: "#303947" }}>
                       <span className="small fw-bold text-white">Alex Atelier</span>
-                      <span className="badge bg-success-subtle text-success small">Portfolio</span>
+                      <span className="badge small" style={{ backgroundColor: "rgba(54, 217, 245, 0.15)", color: "#36D9F5", border: "1px solid rgba(54, 217, 245, 0.35)" }}>Portfolio</span>
                     </div>
-                    <img
-                      src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80"
-                      alt="Creative Portfolio"
-                      className="img-fluid rounded-3 mb-2"
-                      style={{ maxHeight: 160, objectFit: "cover", width: "100%" }}
-                    />
+                    <div className="card-img-zoom rounded-3 overflow-hidden mb-2">
+                      <img
+                        src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80"
+                        alt="Creative Portfolio"
+                        className="img-fluid"
+                        style={{ maxHeight: 160, objectFit: "cover", width: "100%" }}
+                      />
+                    </div>
                     <div className="small fw-semibold text-white">Design Create Inspire</div>
-                    <div className="small text-secondary" style={{ fontSize: "0.78rem" }}>Spatial visual director</div>
+                    <div className="small" style={{ fontSize: "0.8rem", color: "#D1D5DB" }}>Spatial visual director</div>
                   </div>
                 </div>
               </div>
@@ -513,21 +540,171 @@ export default function LandingPage() {
         </section>
 
         {/* ======================================================================
-            3. SECTION 2: OUR WORK — "From Imagination to Reality"
+            3. SECTION 2: OUR WORK — SHOWCASE W1 & W2
             ====================================================================== */}
-        <section id="our-work" className="py-5 sb-bg-forest-alt position-relative border-top border-bottom" style={{ borderColor: "rgba(16, 185, 129, 0.12)" }}>
+        <section id="our-work" className="py-5 position-relative border-top border-bottom" style={{ backgroundColor: "#10141C", borderColor: "#303947" }}>
           <div className="container py-4">
             <div className="text-center mb-5">
-              <span className="badge rounded-pill px-3 py-1 mb-2 text-white" style={{ backgroundColor: "rgba(16, 185, 129, 0.15)", border: "1px solid rgba(16, 185, 129, 0.3)" }}>
+              <span className="badge rounded-pill px-3 py-1 mb-2 fw-semibold" style={{ backgroundColor: "rgba(163, 255, 111, 0.15)", border: "1px solid rgba(163, 255, 111, 0.35)", color: "#A3FF6F" }}>
                 OUR WORK
               </span>
               <h2 className="display-5 fw-bold text-white mb-2">From Imagination to Reality</h2>
-              <p className="text-secondary lead mx-auto" style={{ maxWidth: 650 }}>
-                Explore amazing websites created with SiteGenAI. Different ideas. Infinite possibilities.
+              <p className="lead mx-auto" style={{ maxWidth: 650, color: "#D1D5DB" }}>
+                Explore live website projects and interactive designs built with SiteGenAI. Real interactive code, infinite possibilities.
               </p>
+            </div>
 
-              {/* Category Filter Pills */}
-              <div className="d-flex flex-wrap justify-content-center gap-2 mt-4">
+            {/* FEATURED WORK SHOWCASE: W1 & W2 */}
+            <div className="row g-4 mb-5 align-items-stretch">
+              {/* Project 1: W1 */}
+              <div className="col-12 col-lg-6">
+                <div className="sb-browser-frame h-100 rounded-4 border card-3d-tilt" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
+                  <div className="sb-browser-header border-bottom" style={{ backgroundColor: "#10141C", borderColor: "#303947" }}>
+                    <div className="sb-browser-dots" aria-hidden="true">
+                      <span className="sb-browser-dot sb-browser-dot-red" />
+                      <span className="sb-browser-dot sb-browser-dot-yellow" />
+                      <span className="sb-browser-dot sb-browser-dot-green" />
+                    </div>
+                    <div className="sb-browser-address-bar" title="https://w1.sitegenai.local/">
+                      <span className="sb-text-emerald" style={{ fontSize: "0.75rem" }}>🔒</span>
+                      <span>https://w1.sitegenai.local/</span>
+                    </div>
+                    <span className="badge rounded-pill px-2.5 py-1 fw-semibold border" style={{ backgroundColor: "rgba(163, 255, 111, 0.15)", borderColor: "rgba(163, 255, 111, 0.35)", color: "#A3FF6F", fontSize: "0.72rem" }}>
+                      Live Rendered
+                    </span>
+                  </div>
+
+                  <div className="sb-browser-viewport position-relative">
+                    <iframe
+                      src="/templates/w1/index.html"
+                      title="W1 Website Project Preview"
+                      className="sb-browser-iframe"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <div className="p-4 d-flex flex-column justify-content-between flex-grow-1" style={{ background: "#151A24" }}>
+                    <div>
+                      <div className="d-flex align-items-center justify-content-between mb-2">
+                        <div className="d-flex align-items-center gap-2">
+                          <h3 className="h4 fw-bold text-white mb-0">W1</h3>
+                          <span className="badge border small" style={{ backgroundColor: "#202938", borderColor: "#303947", color: "#D1D5DB" }}>
+                            COCO POUR
+                          </span>
+                        </div>
+                        <span className="sb-text-emerald small fw-bold">Interactive Video</span>
+                      </div>
+                      <p className="small mb-3" style={{ lineHeight: 1.6, color: "#D1D5DB" }}>
+                        Artisanal pure cold-pressed coconut milk website featuring interactive barista pouring moments, cinematic video loops, botanical ingredient specs, and culinary recipe cards.
+                      </p>
+                    </div>
+
+                    <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 pt-3 border-top mt-auto" style={{ borderColor: "#303947" }}>
+                      <div className="d-flex align-items-center gap-2">
+                        <a
+                          href="/templates/w1/index.html"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="sb-btn-primary btn-sm py-2 px-3.5 d-inline-flex align-items-center gap-2 text-decoration-none shadow-sm btn-magnetic"
+                          id="btn-view-website-w1"
+                        >
+                          <ExternalLink size={15} />
+                          View Website
+                        </a>
+                        <Link
+                          href="/editor/proj-w1-cocopour"
+                          className="sb-btn-outline btn-sm py-2 px-3 d-inline-flex align-items-center gap-1.5 text-decoration-none"
+                          style={{ fontSize: "0.85rem" }}
+                        >
+                          <Edit3 size={13} />
+                          Open in Studio
+                        </Link>
+                      </div>
+                      <span className="small fw-semibold" style={{ fontSize: "0.8rem", color: "#BFC7D2" }}>
+                        HTML5 &bull; CSS3 &bull; GSAP 3.12
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Project 2: W2 */}
+              <div className="col-12 col-lg-6">
+                <div className="sb-browser-frame h-100 rounded-4 border card-3d-tilt" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
+                  <div className="sb-browser-header border-bottom" style={{ backgroundColor: "#10141C", borderColor: "#303947" }}>
+                    <div className="sb-browser-dots" aria-hidden="true">
+                      <span className="sb-browser-dot sb-browser-dot-red" />
+                      <span className="sb-browser-dot sb-browser-dot-yellow" />
+                      <span className="sb-browser-dot sb-browser-dot-green" />
+                    </div>
+                    <div className="sb-browser-address-bar" title="https://w2.sitegenai.local/">
+                      <span className="text-warning" style={{ fontSize: "0.75rem" }}>🔒</span>
+                      <span>https://w2.sitegenai.local/</span>
+                    </div>
+                    <span className="badge rounded-pill px-2.5 py-1 fw-semibold border" style={{ backgroundColor: "rgba(245, 158, 11, 0.15)", borderColor: "rgba(245, 158, 11, 0.35)", color: "#F59E0B", fontSize: "0.72rem" }}>
+                      Live Rendered
+                    </span>
+                  </div>
+
+                  <div className="sb-browser-viewport position-relative">
+                    <iframe
+                      src="/templates/w2/index.html"
+                      title="W2 Website Project Preview"
+                      className="sb-browser-iframe"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <div className="p-4 d-flex flex-column justify-content-between flex-grow-1" style={{ background: "#151A24" }}>
+                    <div>
+                      <div className="d-flex align-items-center justify-content-between mb-2">
+                        <div className="d-flex align-items-center gap-2">
+                          <h3 className="h4 fw-bold text-white mb-0">W2</h3>
+                          <span className="badge border small" style={{ backgroundColor: "#202938", borderColor: "#303947", color: "#D1D5DB" }}>
+                            BRUVA Coffee
+                          </span>
+                        </div>
+                        <span className="text-warning small fw-bold">Brass Filter Ritual</span>
+                      </div>
+                      <p className="small mb-3" style={{ lineHeight: 1.6, color: "#D1D5DB" }}>
+                        Artisanal South Indian single-origin coffee with traditional brass filter decoction, Lenis smooth scrolling, GSAP interactive chapters, and rich coffee videos.
+                      </p>
+                    </div>
+
+                    <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 pt-3 border-top mt-auto" style={{ borderColor: "#303947" }}>
+                      <div className="d-flex align-items-center gap-2">
+                        <a
+                          href="/templates/w2/index.html"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="sb-btn-primary btn-sm py-2 px-3.5 d-inline-flex align-items-center gap-2 text-decoration-none shadow-sm btn-magnetic"
+                          id="btn-view-website-w2"
+                        >
+                          <ExternalLink size={15} />
+                          View Website
+                        </a>
+                        <Link
+                          href="/editor/proj-w1-cocopour"
+                          className="sb-btn-outline btn-sm py-2 px-3 d-inline-flex align-items-center gap-1.5 text-decoration-none"
+                          style={{ fontSize: "0.85rem" }}
+                        >
+                          <Edit3 size={13} />
+                          Open in Studio
+                        </Link>
+                      </div>
+                      <span className="small fw-semibold" style={{ fontSize: "0.8rem", color: "#BFC7D2" }}>
+                        HTML5 &bull; Lenis &bull; GSAP 3.12
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Category Filter Pills & Showcase Portfolio */}
+            <div className="text-center mb-4">
+              <h4 className="fw-bold text-white mb-2 fs-5">More Categories &amp; Design Styles</h4>
+              <div className="d-flex flex-wrap justify-content-center gap-2 mt-3">
                 {CATEGORIES.map((cat) => (
                   <button
                     key={cat}
@@ -545,26 +722,26 @@ export default function LandingPage() {
             <div className="row g-4">
               {filteredProjects.map((proj) => (
                 <div key={proj.id} className="col-12 col-md-6 col-lg-4">
-                  <div className="sb-card h-100 overflow-hidden d-flex flex-column justify-content-between p-3">
+                  <div className="sb-card card-3d-tilt card-spotlight h-100 overflow-hidden d-flex flex-column justify-content-between p-3.5 rounded-4 border" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
                     <div>
-                      <div className="position-relative rounded-3 overflow-hidden mb-3" style={{ height: 210 }}>
+                      <div className="position-relative rounded-3 overflow-hidden mb-3 card-img-zoom" style={{ height: 210 }}>
                         <img
                           src={proj.image}
                           alt={proj.name}
                           className="w-100 h-100"
                           style={{ objectFit: "cover" }}
                         />
-                        <span className="position-absolute top-0 start-0 m-2 badge bg-dark bg-opacity-75 text-white border border-secondary border-opacity-50 small">
+                        <span className="position-absolute top-0 start-0 m-2 badge border small fw-semibold" style={{ backgroundColor: "#10141C", borderColor: "#303947", color: "#FFFFFF" }}>
                           {proj.badge}
                         </span>
                       </div>
                       <h4 className="fw-bold text-white mb-1 fs-5">{proj.name}</h4>
                       <h6 className="sb-text-emerald small fw-semibold mb-2">{proj.tagline}</h6>
-                      <p className="small text-secondary mb-3">{proj.description}</p>
+                      <p className="small mb-3" style={{ color: "#D1D5DB", lineHeight: 1.55 }}>{proj.description}</p>
                     </div>
 
-                    <div className="d-flex align-items-center justify-content-between pt-3 border-top border-secondary border-opacity-25">
-                      <span className="small text-white-50">{proj.category}</span>
+                    <div className="d-flex align-items-center justify-content-between pt-3 border-top" style={{ borderColor: "#303947" }}>
+                      <span className="small fw-semibold" style={{ color: "#BFC7D2" }}>{proj.category}</span>
                       <Link
                         href={`/editor/${proj.editorId}`}
                         className="btn btn-sm sb-btn-outline py-1 px-3 d-flex align-items-center gap-1"
@@ -581,45 +758,44 @@ export default function LandingPage() {
         </section>
 
         {/* ======================================================================
-            4. SECTION 3: HOW SITEGENAI WORKS — "3 Simple Steps"
+            4. SECTION 3: HOW SITEGENAI WORKS
             ====================================================================== */}
         <section id="how-it-works" className="py-5 position-relative">
           <div className="container py-4">
             <div className="text-center mb-5">
-              <span className="badge rounded-pill px-3 py-1 mb-2 text-white" style={{ backgroundColor: "rgba(16, 185, 129, 0.15)", border: "1px solid rgba(16, 185, 129, 0.3)" }}>
+              <span className="badge rounded-pill px-3 py-1 mb-2 fw-semibold" style={{ backgroundColor: "rgba(163, 255, 111, 0.15)", border: "1px solid rgba(163, 255, 111, 0.35)", color: "#A3FF6F" }}>
                 HOW SITEGENAI WORKS
               </span>
               <h2 className="display-5 fw-bold text-white mb-2">
                 Turn Your Idea Into a Live Website <br />
                 in <span className="sb-text-emerald">3 Simple Steps</span>
               </h2>
-              <p className="text-secondary lead">Simple • Fast • Powerful</p>
+              <p className="lead" style={{ color: "#D1D5DB" }}>Simple • Fast • Powerful</p>
             </div>
 
             <div className="row g-4 align-items-stretch">
               {/* Step 1 */}
               <div className="col-12 col-md-4">
-                <div className="sb-card p-4 h-100 d-flex flex-column justify-content-between">
+                <div className="sb-card card-3d-tilt card-spotlight p-4 h-100 d-flex flex-column justify-content-between rounded-4 border" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
                   <div>
                     <div className="d-flex align-items-center justify-content-between mb-3">
-                      <div className="p-3 rounded-circle text-white" style={{ backgroundColor: "rgba(16, 185, 129, 0.15)", color: "#10B981" }}>
+                      <div className="p-3 rounded-circle" style={{ backgroundColor: "rgba(163, 255, 111, 0.15)" }}>
                         <MessageSquare size={24} className="sb-text-emerald" />
                       </div>
-                      <span className="fs-3 fw-bold text-white-50">01</span>
+                      <span className="fs-3 fw-bold" style={{ color: "#BFC7D2" }}>01</span>
                     </div>
                     <h4 className="fw-bold text-white mb-2">Describe Your Idea</h4>
-                    <p className="text-secondary small mb-4">
-                      Simply tell us what kind of website you want. Be as detailed as you like.
+                    <p className="small mb-4" style={{ color: "#D1D5DB", lineHeight: 1.6 }}>
+                      Simply tell us what kind of website you want. Be as detailed as you like, or remix an existing URL.
                     </p>
                   </div>
 
-                  {/* Step 1 Interactive Card */}
-                  <div className="p-3 rounded-3 border bg-dark bg-opacity-50" style={{ borderColor: "rgba(16, 185, 129, 0.2)" }}>
-                    <div className="small text-white-50 mb-1">Example Prompt:</div>
+                  <div className="p-3 rounded-3 border" style={{ backgroundColor: "#10141C", borderColor: "#303947" }}>
+                    <div className="small mb-1" style={{ color: "#BFC7D2" }}>Example Prompt:</div>
                     <div className="small text-white font-monospace mb-2">
                       "Create a modern e-commerce website for a honey brand..."
                     </div>
-                    <Link href="/create" className="btn btn-sm btn-outline-success w-100 rounded-pill py-1 small">
+                    <Link href="/create" className="sb-btn-outline w-100 rounded-pill py-1 small text-center d-block">
                       Try This Prompt &rarr;
                     </Link>
                   </div>
@@ -628,33 +804,32 @@ export default function LandingPage() {
 
               {/* Step 2 */}
               <div className="col-12 col-md-4">
-                <div className="sb-card p-4 h-100 d-flex flex-column justify-content-between">
+                <div className="sb-card card-3d-tilt card-spotlight p-4 h-100 d-flex flex-column justify-content-between rounded-4 border" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
                   <div>
                     <div className="d-flex align-items-center justify-content-between mb-3">
-                      <div className="p-3 rounded-circle text-white" style={{ backgroundColor: "rgba(16, 185, 129, 0.15)", color: "#10B981" }}>
-                        <Layout size={24} className="sb-text-emerald" />
+                      <div className="p-3 rounded-circle" style={{ backgroundColor: "rgba(139, 124, 255, 0.15)" }}>
+                        <Layout size={24} className="sb-text-violet" />
                       </div>
-                      <span className="fs-3 fw-bold text-white-50">02</span>
+                      <span className="fs-3 fw-bold" style={{ color: "#BFC7D2" }}>02</span>
                     </div>
                     <h4 className="fw-bold text-white mb-2">Customize Your Design</h4>
-                    <p className="text-secondary small mb-4">
-                      Fine-tune with our visual editor. Change content, images, colors, and more.
+                    <p className="small mb-4" style={{ color: "#D1D5DB", lineHeight: 1.6 }}>
+                      Fine-tune with our visual editor. Change typography, images, colors, and layout blocks in real-time.
                     </p>
                   </div>
 
-                  {/* Step 2 Mini Editor Card */}
-                  <div className="p-3 rounded-3 border bg-dark bg-opacity-50" style={{ borderColor: "rgba(16, 185, 129, 0.2)" }}>
+                  <div className="p-3 rounded-3 border" style={{ backgroundColor: "#10141C", borderColor: "#303947" }}>
                     <div className="d-flex align-items-center justify-content-between mb-2">
                       <span className="small text-white fw-bold">Live Visual Canvas</span>
-                      <span className="badge bg-success-subtle text-success small">Editing</span>
+                      <span className="badge small" style={{ backgroundColor: "rgba(163, 255, 111, 0.15)", color: "#A3FF6F" }}>Editing</span>
                     </div>
-                    <div className="d-flex gap-1 mb-2">
-                      <span className="p-2 rounded-circle" style={{ backgroundColor: "#10B981", width: 14, height: 14 }} />
-                      <span className="p-2 rounded-circle" style={{ backgroundColor: "#F59E0B", width: 14, height: 14 }} />
-                      <span className="p-2 rounded-circle" style={{ backgroundColor: "#061A12", width: 14, height: 14 }} />
-                      <span className="p-2 rounded-circle" style={{ backgroundColor: "#FFFFFF", width: 14, height: 14 }} />
+                    <div className="d-flex gap-1.5 mb-2">
+                      <span className="rounded-circle" style={{ backgroundColor: "#A3FF6F", width: 14, height: 14 }} />
+                      <span className="rounded-circle" style={{ backgroundColor: "#8B7CFF", width: 14, height: 14 }} />
+                      <span className="rounded-circle" style={{ backgroundColor: "#36D9F5", width: 14, height: 14 }} />
+                      <span className="rounded-circle" style={{ backgroundColor: "#FFFFFF", width: 14, height: 14 }} />
                     </div>
-                    <Link href="/editor/proj-w1-cocopour" className="btn btn-sm btn-outline-light w-100 rounded-pill py-1 small">
+                    <Link href="/editor/proj-w1-cocopour" className="sb-btn-outline w-100 rounded-pill py-1 small text-center d-block">
                       Explore Visual Editor &rarr;
                     </Link>
                   </div>
@@ -663,30 +838,29 @@ export default function LandingPage() {
 
               {/* Step 3 */}
               <div className="col-12 col-md-4">
-                <div className="sb-card p-4 h-100 d-flex flex-column justify-content-between">
+                <div className="sb-card card-3d-tilt card-spotlight p-4 h-100 d-flex flex-column justify-content-between rounded-4 border" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
                   <div>
                     <div className="d-flex align-items-center justify-content-between mb-3">
-                      <div className="p-3 rounded-circle text-white" style={{ backgroundColor: "rgba(16, 185, 129, 0.15)", color: "#10B981" }}>
-                        <Rocket size={24} className="sb-text-emerald" />
+                      <div className="p-3 rounded-circle" style={{ backgroundColor: "rgba(54, 217, 245, 0.15)" }}>
+                        <Rocket size={24} className="sb-text-cyan" />
                       </div>
-                      <span className="fs-3 fw-bold text-white-50">03</span>
+                      <span className="fs-3 fw-bold" style={{ color: "#BFC7D2" }}>03</span>
                     </div>
-                    <h4 className="fw-bold text-white mb-2">Publish Your Website</h4>
-                    <p className="text-secondary small mb-4">
-                      Launch your website with one click and share it with the world.
+                    <h4 className="fw-bold text-white mb-2">Publish &amp; Export</h4>
+                    <p className="small mb-4" style={{ color: "#D1D5DB", lineHeight: 1.6 }}>
+                      Launch your website or download standalone ZIP packages with clean HTML, CSS, and assets.
                     </p>
                   </div>
 
-                  {/* Step 3 Live Launch Card */}
-                  <div className="p-3 rounded-3 border bg-dark bg-opacity-50 text-center" style={{ borderColor: "rgba(16, 185, 129, 0.2)" }}>
-                    <div className="small fw-bold text-white mb-1">Your Website is Live! 🚀</div>
-                    <div className="p-2 rounded bg-black bg-opacity-50 font-monospace text-emerald small d-flex align-items-center justify-content-between mb-2">
+                  <div className="p-3 rounded-3 border text-center" style={{ backgroundColor: "#10141C", borderColor: "#303947" }}>
+                    <div className="small fw-bold text-white mb-1">Your Website is Ready! 🚀</div>
+                    <div className="p-2 rounded font-monospace small d-flex align-items-center justify-content-between mb-2 border" style={{ backgroundColor: "#0B0D12", borderColor: "#303947", color: "#A3FF6F" }}>
                       <span style={{ fontSize: "0.78rem" }}>https://honeynest.sitegenai.app</span>
-                      <button type="button" className="btn btn-xs btn-link p-0 text-white" onClick={copyLiveDemoUrl}>
+                      <button type="button" className="btn btn-xs btn-link p-0 text-white" onClick={copyLiveDemoUrl} aria-label="Copy demo URL">
                         {copiedUrl ? <CheckCircle2 size={14} className="text-success" /> : <Copy size={14} />}
                       </button>
                     </div>
-                    <Link href="/dashboard" className="btn btn-sm sb-btn-primary w-100 py-1 small">
+                    <Link href="/dashboard" className="sb-btn-primary w-100 py-1 small text-center d-block">
                       View Live Project
                     </Link>
                   </div>
@@ -697,19 +871,19 @@ export default function LandingPage() {
         </section>
 
         {/* ======================================================================
-            5. SECTION 4: ADVANCED FEATURES — "Everything You Need to Build"
+            5. SECTION 4: ADVANCED FEATURES
             ====================================================================== */}
-        <section id="features" className="py-5 sb-bg-forest-alt border-top border-bottom" style={{ borderColor: "rgba(16, 185, 129, 0.12)" }}>
+        <section id="features" className="py-5 border-top border-bottom" style={{ backgroundColor: "#10141C", borderColor: "#303947" }}>
           <div className="container py-4">
             <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5">
               <div>
-                <span className="badge rounded-pill px-3 py-1 mb-2 text-white" style={{ backgroundColor: "rgba(16, 185, 129, 0.15)", border: "1px solid rgba(16, 185, 129, 0.3)" }}>
+                <span className="badge rounded-pill px-3 py-1 mb-2 fw-semibold" style={{ backgroundColor: "rgba(163, 255, 111, 0.15)", border: "1px solid rgba(163, 255, 111, 0.35)", color: "#A3FF6F" }}>
                   ADVANCED FEATURES
                 </span>
                 <h2 className="display-5 fw-bold text-white mb-2">
                   Everything You Need to <span className="sb-text-emerald">Build, Grow and Scale</span>
                 </h2>
-                <p className="text-secondary lead mb-0" style={{ maxWidth: 640 }}>
+                <p className="lead mb-0" style={{ maxWidth: 640, color: "#D1D5DB" }}>
                   Powerful AI tools and modern features to create professional websites without limits.
                 </p>
               </div>
@@ -724,12 +898,12 @@ export default function LandingPage() {
             <div className="row g-4">
               {ADVANCED_FEATURES.map((feat, idx) => (
                 <div key={idx} className="col-12 col-sm-6 col-lg-3">
-                  <div className="sb-card p-4 h-100">
-                    <div className="p-3 rounded-3 d-inline-flex mb-3" style={{ backgroundColor: "rgba(255, 255, 255, 0.05)" }}>
+                  <div className="sb-card card-3d-tilt card-spotlight p-4 h-100 rounded-4 border" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
+                    <div className="p-3 rounded-3 d-inline-flex mb-3 border" style={{ backgroundColor: "#10141C", borderColor: "#303947" }}>
                       {feat.icon}
                     </div>
                     <h5 className="fw-bold text-white mb-2 fs-6">{feat.title}</h5>
-                    <p className="text-secondary small mb-0">{feat.description}</p>
+                    <p className="small mb-0" style={{ color: "#D1D5DB", lineHeight: 1.55 }}>{feat.description}</p>
                   </div>
                 </div>
               ))}
@@ -738,17 +912,17 @@ export default function LandingPage() {
         </section>
 
         {/* ======================================================================
-            6. SECTION 5: BEAUTIFUL TEMPLATES — "Professionally Designed"
+            6. SECTION 5: BEAUTIFUL TEMPLATES
             ====================================================================== */}
         <section id="templates" className="py-5 position-relative">
           <div className="container py-4">
             <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5">
               <div>
-                <span className="badge rounded-pill px-3 py-1 mb-2 text-white" style={{ backgroundColor: "rgba(16, 185, 129, 0.15)", border: "1px solid rgba(16, 185, 129, 0.3)" }}>
+                <span className="badge rounded-pill px-3 py-1 mb-2 fw-semibold" style={{ backgroundColor: "rgba(163, 255, 111, 0.15)", border: "1px solid rgba(163, 255, 111, 0.35)", color: "#A3FF6F" }}>
                   BEAUTIFUL TEMPLATES
                 </span>
                 <h2 className="display-5 fw-bold text-white mb-2">Professionally Designed Templates</h2>
-                <p className="text-secondary lead mb-0">Kickstart your website with stunning, fully customizable templates.</p>
+                <p className="lead mb-0" style={{ color: "#D1D5DB" }}>Kickstart your website with stunning, fully customizable templates.</p>
               </div>
 
               <div className="mt-3 mt-md-0">
@@ -761,33 +935,35 @@ export default function LandingPage() {
             <div className="row g-4">
               {TEMPLATES_REGISTRY.slice(0, 3).map((tpl) => (
                 <div key={tpl.id} className="col-12 col-md-4">
-                  <div className="sb-card h-100 overflow-hidden d-flex flex-column justify-content-between p-3">
+                  <div className="sb-card card-3d-tilt card-spotlight h-100 overflow-hidden d-flex flex-column justify-content-between p-3.5 rounded-4 border" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
                     <div>
-                      <div className="position-relative rounded-3 overflow-hidden mb-3" style={{ height: 220 }}>
+                      <div className="position-relative rounded-3 overflow-hidden mb-3 card-img-zoom" style={{ height: 220 }}>
                         <img
                           src={tpl.thumbnail}
                           alt={tpl.name}
                           className="w-100 h-100"
                           style={{ objectFit: "cover" }}
                         />
-                        <span className="position-absolute top-0 end-0 m-2 badge bg-primary text-white shadow-xs">
+                        <span className="position-absolute top-0 end-0 m-2 badge border small fw-bold" style={{ backgroundColor: "#A3FF6F", color: "#0B0D12", borderColor: "#A3FF6F" }}>
                           {tpl.previewBadge || "Featured"}
                         </span>
                       </div>
                       <h4 className="fw-bold text-white mb-1 fs-5">{tpl.name}</h4>
                       <h6 className="sb-text-emerald small fw-semibold mb-2">{tpl.tagline}</h6>
-                      <p className="small text-secondary mb-3">{tpl.description}</p>
+                      <p className="small mb-3" style={{ color: "#D1D5DB" }}>{tpl.description}</p>
                     </div>
 
-                    <div className="d-flex gap-2 pt-3 border-top border-secondary border-opacity-25">
-                      <Link href={`/editor/proj-${tpl.id}`} className="btn btn-sm sb-btn-primary flex-grow-1 py-2">
+                    <div className="d-flex gap-2 pt-3 border-top" style={{ borderColor: "#303947" }}>
+                      <Link href={`/editor/proj-${tpl.id}`} className="sb-btn-primary btn-sm flex-grow-1 py-2 text-center">
                         Customize in Studio
                       </Link>
                       <a
                         href={tpl.previewPath || `/templates`}
                         target={tpl.previewPath ? "_blank" : "_self"}
                         rel="noreferrer"
-                        className="btn btn-sm btn-outline-secondary text-white border-secondary px-3"
+                        className="btn btn-sm border px-3 text-white"
+                        style={{ backgroundColor: "#202938", borderColor: "#303947" }}
+                        aria-label="Preview template"
                       >
                         <ExternalLink size={14} />
                       </a>
@@ -800,29 +976,28 @@ export default function LandingPage() {
         </section>
 
         {/* ======================================================================
-            7. SECTION 6: MEET OUR TEAM — "Meet the Team Behind the Magic"
+            7. SECTION 6: MEET OUR TEAM
             ====================================================================== */}
-        <section id="team" className="py-5 sb-bg-forest-alt border-top border-bottom" style={{ borderColor: "rgba(16, 185, 129, 0.12)" }}>
+        <section id="team" className="py-5 border-top border-bottom" style={{ backgroundColor: "#10141C", borderColor: "#303947" }}>
           <div className="container py-4">
             <div className="text-center mb-5">
-              <span className="badge rounded-pill px-3 py-1 mb-2 text-white" style={{ backgroundColor: "rgba(16, 185, 129, 0.15)", border: "1px solid rgba(16, 185, 129, 0.3)" }}>
+              <span className="badge rounded-pill px-3 py-1 mb-2 fw-semibold" style={{ backgroundColor: "rgba(163, 255, 111, 0.15)", border: "1px solid rgba(163, 255, 111, 0.35)", color: "#A3FF6F" }}>
                 OUR TEAM
               </span>
               <h2 className="display-5 fw-bold text-white mb-2">
-                Meet the Team Behind <span className="sb-text-emerald">the Magic</span>
+                Meet the Team Behind <span className="sb-text-emerald">the Platform</span>
               </h2>
-              <p className="text-secondary lead mx-auto" style={{ maxWidth: 650 }}>
-                People • Passion • Possibilities | Building tools that turn imagination into reality.
+              <p className="lead mx-auto" style={{ maxWidth: 650, color: "#D1D5DB" }}>
+                Passion • Craftsmanship • AI Systems | Building tools that empower creator autonomy.
               </p>
-              <small className="text-muted d-block mt-1">(Demonstration Profiles for Project Presentation)</small>
             </div>
 
             <div className="row g-4">
               {TEAM_MEMBERS.map((member, idx) => (
                 <div key={idx} className="col-12 col-sm-6 col-lg-3">
-                  <div className="sb-card p-4 text-center h-100 d-flex flex-column justify-content-between">
+                  <div className="sb-card card-3d-tilt card-spotlight p-4 text-center h-100 d-flex flex-column justify-content-between rounded-4 border" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
                     <div>
-                      <div className="position-relative mx-auto rounded-circle overflow-hidden mb-3 shadow" style={{ width: 110, height: 110, border: "2px solid #10B981" }}>
+                      <div className="position-relative mx-auto rounded-circle overflow-hidden mb-3 shadow" style={{ width: 110, height: 110, border: "2px solid #A3FF6F" }}>
                         <img
                           src={member.image}
                           alt={member.name}
@@ -832,15 +1007,13 @@ export default function LandingPage() {
                       </div>
                       <h5 className="fw-bold text-white mb-1">{member.name}</h5>
                       <div className="sb-text-emerald small fw-semibold mb-2">{member.role}</div>
-                      <p className="small text-secondary mb-3">{member.bio}</p>
+                      <p className="small mb-3" style={{ color: "#D1D5DB" }}>{member.bio}</p>
                     </div>
 
-                    <div className="d-flex justify-content-center gap-3 pt-3 border-top border-secondary border-opacity-25 text-secondary">
-                      <span className="small text-white-50 cursor-pointer">LinkedIn</span>
+                    <div className="d-flex justify-content-center gap-3 pt-3 border-top" style={{ borderColor: "#303947", color: "#BFC7D2" }}>
+                      <span className="small hover-text-white cursor-pointer">LinkedIn</span>
                       <span>&bull;</span>
-                      <span className="small text-white-50 cursor-pointer">X</span>
-                      <span>&bull;</span>
-                      <span className="small text-white-50 cursor-pointer">GitHub</span>
+                      <span className="small hover-text-white cursor-pointer">GitHub</span>
                     </div>
                   </div>
                 </div>
@@ -850,25 +1023,25 @@ export default function LandingPage() {
         </section>
 
         {/* ======================================================================
-            8. SECTION 7: WHAT OUR USERS SAY — "Loved by Creators"
+            8. SECTION 7: WHAT OUR USERS SAY
             ====================================================================== */}
         <section id="testimonials" className="py-5 position-relative">
           <div className="container py-4">
             <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5">
               <div>
-                <span className="badge rounded-pill px-3 py-1 mb-2 text-white" style={{ backgroundColor: "rgba(16, 185, 129, 0.15)", border: "1px solid rgba(16, 185, 129, 0.3)" }}>
+                <span className="badge rounded-pill px-3 py-1 mb-2 fw-semibold" style={{ backgroundColor: "rgba(163, 255, 111, 0.15)", border: "1px solid rgba(163, 255, 111, 0.35)", color: "#A3FF6F" }}>
                   WHAT OUR USERS SAY
                 </span>
                 <h2 className="display-5 fw-bold text-white mb-2">
-                  Loved by <span className="sb-text-emerald">Creators, Founders and Businesses</span>
+                  Loved by <span className="sb-text-emerald">Creators, Founders &amp; Builders</span>
                 </h2>
               </div>
 
-              {/* Navigation arrows */}
               <div className="d-flex gap-2 mt-3 mt-md-0">
                 <button
                   type="button"
-                  className="btn btn-outline-secondary rounded-circle p-2 text-white border-secondary"
+                  className="btn rounded-circle p-2 text-white border"
+                  style={{ backgroundColor: "#151A24", borderColor: "#303947" }}
                   onClick={() => setTestimonialIndex((testimonialIndex - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)}
                   aria-label="Previous testimonial"
                 >
@@ -876,7 +1049,8 @@ export default function LandingPage() {
                 </button>
                 <button
                   type="button"
-                  className="btn btn-outline-secondary rounded-circle p-2 text-white border-secondary"
+                  className="btn rounded-circle p-2 text-white border"
+                  style={{ backgroundColor: "#151A24", borderColor: "#303947" }}
                   onClick={() => setTestimonialIndex((testimonialIndex + 1) % TESTIMONIALS.length)}
                   aria-label="Next testimonial"
                 >
@@ -888,26 +1062,26 @@ export default function LandingPage() {
             <div className="row g-4">
               {TESTIMONIALS.map((t, idx) => (
                 <div key={idx} className="col-12 col-md-4">
-                  <div className="sb-card p-4 h-100 d-flex flex-column justify-content-between">
+                  <div className="sb-card card-3d-tilt card-spotlight p-4 h-100 d-flex flex-column justify-content-between rounded-4 border" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
                     <div>
                       <div className="d-flex gap-1 text-warning mb-3">
                         {[...Array(t.rating)].map((_, i) => (
                           <Star key={i} size={16} fill="#F59E0B" color="#F59E0B" />
                         ))}
                       </div>
-                      <p className="text-secondary mb-4 fs-6">"{t.quote}"</p>
+                      <p className="mb-4 fs-6" style={{ color: "#F1F5F9", fontStyle: "italic", lineHeight: 1.6 }}>"{t.quote}"</p>
                     </div>
 
-                    <div className="d-flex align-items-center gap-3 pt-3 border-top border-secondary border-opacity-25">
+                    <div className="d-flex align-items-center gap-3 pt-3 border-top" style={{ borderColor: "#303947" }}>
                       <img
                         src={t.image}
                         alt={t.name}
-                        className="rounded-circle"
-                        style={{ width: 44, height: 44, objectFit: "cover" }}
+                        className="rounded-circle border"
+                        style={{ width: 44, height: 44, objectFit: "cover", borderColor: "#303947" }}
                       />
                       <div>
                         <div className="fw-bold text-white small">{t.name}</div>
-                        <div className="text-secondary small" style={{ fontSize: "0.78rem" }}>{t.role}</div>
+                        <div className="small" style={{ fontSize: "0.8rem", color: "#BFC7D2" }}>{t.role}</div>
                       </div>
                     </div>
                   </div>
@@ -918,30 +1092,31 @@ export default function LandingPage() {
         </section>
 
         {/* ======================================================================
-            9. SECTION 8: SIMPLE & TRANSPARENT PRICING — "Choose the Plan"
+            9. SECTION 8: SIMPLE & TRANSPARENT PRICING
             ====================================================================== */}
-        <section id="pricing" className="py-5 sb-bg-forest-alt border-top border-bottom" style={{ borderColor: "rgba(16, 185, 129, 0.12)" }}>
+        <section id="pricing" className="py-5 border-top border-bottom" style={{ backgroundColor: "#10141C", borderColor: "#303947" }}>
           <div className="container py-4">
             <div className="text-center mb-5">
-              <span className="badge rounded-pill px-3 py-1 mb-2 text-white" style={{ backgroundColor: "rgba(16, 185, 129, 0.15)", border: "1px solid rgba(16, 185, 129, 0.3)" }}>
+              <span className="badge rounded-pill px-3 py-1 mb-2 fw-semibold" style={{ backgroundColor: "rgba(163, 255, 111, 0.15)", border: "1px solid rgba(163, 255, 111, 0.35)", color: "#A3FF6F" }}>
                 SIMPLE &amp; TRANSPARENT PRICING
               </span>
               <h2 className="display-5 fw-bold text-white mb-2">
                 Choose the Plan That <span className="sb-text-emerald">Fits You</span>
               </h2>
 
-              {/* Monthly / Yearly Toggle */}
-              <div className="d-inline-flex align-items-center p-1 rounded-pill bg-dark border border-secondary border-opacity-25 mt-3">
+              <div className="d-inline-flex align-items-center p-1 rounded-pill border mt-3" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
                 <button
                   type="button"
-                  className={`btn btn-sm rounded-pill px-4 ${billingCycle === "monthly" ? "sb-btn-primary" : "text-secondary"}`}
+                  className={`btn btn-sm rounded-pill px-4 ${billingCycle === "monthly" ? "sb-btn-primary" : "text-white"}`}
+                  style={billingCycle !== "monthly" ? { color: "#D1D5DB" } : {}}
                   onClick={() => setBillingCycle("monthly")}
                 >
                   Monthly
                 </button>
                 <button
                   type="button"
-                  className={`btn btn-sm rounded-pill px-4 position-relative ${billingCycle === "yearly" ? "sb-btn-primary" : "text-secondary"}`}
+                  className={`btn btn-sm rounded-pill px-4 position-relative ${billingCycle === "yearly" ? "sb-btn-primary" : "text-white"}`}
+                  style={billingCycle !== "yearly" ? { color: "#D1D5DB" } : {}}
                   onClick={() => setBillingCycle("yearly")}
                 >
                   Yearly
@@ -955,13 +1130,13 @@ export default function LandingPage() {
             <div className="row g-4 align-items-stretch">
               {/* Free Plan */}
               <div className="col-12 col-md-6 col-lg-3">
-                <div className="sb-card p-4 h-100 d-flex flex-column justify-content-between">
+                <div className="sb-card card-3d-tilt card-spotlight p-4 h-100 d-flex flex-column justify-content-between rounded-4 border" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
                   <div>
                     <h5 className="fw-bold text-white mb-1">Free</h5>
-                    <p className="text-secondary small mb-3">Perfect for getting started</p>
-                    <div className="display-6 fw-bold text-white mb-3">$0<span className="fs-6 text-secondary fw-normal">/month</span></div>
+                    <p className="small mb-3" style={{ color: "#D1D5DB" }}>Perfect for exploring the studio</p>
+                    <div className="display-6 fw-bold text-white mb-3">$0<span className="fs-6 fw-normal" style={{ color: "#BFC7D2" }}>/month</span></div>
 
-                    <ul className="list-unstyled d-flex flex-column gap-2 small text-secondary mb-4">
+                    <ul className="list-unstyled d-flex flex-column gap-2 small mb-4" style={{ color: "#D1D5DB" }}>
                       <li className="d-flex align-items-center gap-2"><Check size={14} className="sb-text-emerald" /> AI website generation</li>
                       <li className="d-flex align-items-center gap-2"><Check size={14} className="sb-text-emerald" /> Basic templates</li>
                       <li className="d-flex align-items-center gap-2"><Check size={14} className="sb-text-emerald" /> SiteGenAI subdomain</li>
@@ -975,30 +1150,33 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* Pro Plan (Most Popular) */}
+              {/* Pro Plan */}
               <div className="col-12 col-md-6 col-lg-3">
-                <div className="sb-card p-4 h-100 d-flex flex-column justify-content-between border-emerald position-relative" style={{ borderColor: "#10B981" }}>
-                  <span className="position-absolute top-0 end-0 m-3 badge bg-emerald text-white" style={{ backgroundColor: "#10B981" }}>
+                <div
+                  className="sb-card card-3d-tilt card-spotlight p-4 h-100 d-flex flex-column justify-content-between rounded-4 border position-relative"
+                  style={{ backgroundColor: "#151A24", borderColor: "#A3FF6F", boxShadow: "0 0 25px rgba(163, 255, 111, 0.2)" }}
+                >
+                  <span className="position-absolute top-0 end-0 m-3 badge text-dark fw-bold" style={{ backgroundColor: "#A3FF6F" }}>
                     Most Popular
                   </span>
                   <div>
                     <h5 className="fw-bold text-white mb-1">Pro</h5>
-                    <p className="text-secondary small mb-3">For creators and professionals</p>
+                    <p className="small mb-3" style={{ color: "#D1D5DB" }}>For creators and professionals</p>
                     <div className="display-6 fw-bold text-white mb-3">
                       {billingCycle === "monthly" ? "$12" : "$9"}
-                      <span className="fs-6 text-secondary fw-normal">/month</span>
+                      <span className="fs-6 fw-normal" style={{ color: "#BFC7D2" }}>/month</span>
                     </div>
 
-                    <ul className="list-unstyled d-flex flex-column gap-2 small text-secondary mb-4">
+                    <ul className="list-unstyled d-flex flex-column gap-2 small mb-4">
                       <li className="d-flex align-items-center gap-2 text-white"><Check size={14} className="sb-text-emerald" /> Everything in Free</li>
-                      <li className="d-flex align-items-center gap-2 text-white"><Check size={14} className="sb-text-emerald" /> Premium templates (w1 included)</li>
-                      <li className="d-flex align-items-center gap-2 text-white"><Check size={14} className="sb-text-emerald" /> Custom domain</li>
-                      <li className="d-flex align-items-center gap-2 text-white"><Check size={14} className="sb-text-emerald" /> Advanced AI features</li>
-                      <li className="d-flex align-items-center gap-2 text-white"><Check size={14} className="sb-text-emerald" /> Priority support</li>
+                      <li className="d-flex align-items-center gap-2 text-white"><Check size={14} className="sb-text-emerald" /> Premium templates (w1 &amp; w2)</li>
+                      <li className="d-flex align-items-center gap-2 text-white"><Check size={14} className="sb-text-emerald" /> Custom domain publishing</li>
+                      <li className="d-flex align-items-center gap-2 text-white"><Check size={14} className="sb-text-emerald" /> Advanced stock photo search</li>
+                      <li className="d-flex align-items-center gap-2 text-white"><Check size={14} className="sb-text-emerald" /> Priority generation</li>
                     </ul>
                   </div>
 
-                  <Link href="/create" className="sb-btn-primary w-100 text-center py-2">
+                  <Link href="/create" className="sb-btn-primary w-100 text-center py-2 btn-magnetic">
                     Start Pro Plan
                   </Link>
                 </div>
@@ -1006,21 +1184,21 @@ export default function LandingPage() {
 
               {/* Business Plan */}
               <div className="col-12 col-md-6 col-lg-3">
-                <div className="sb-card p-4 h-100 d-flex flex-column justify-content-between">
+                <div className="sb-card card-3d-tilt card-spotlight p-4 h-100 d-flex flex-column justify-content-between rounded-4 border" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
                   <div>
                     <h5 className="fw-bold text-white mb-1">Business</h5>
-                    <p className="text-secondary small mb-3">For growing businesses</p>
+                    <p className="small mb-3" style={{ color: "#D1D5DB" }}>For growing teams &amp; brands</p>
                     <div className="display-6 fw-bold text-white mb-3">
                       {billingCycle === "monthly" ? "$29" : "$23"}
-                      <span className="fs-6 text-secondary fw-normal">/month</span>
+                      <span className="fs-6 fw-normal" style={{ color: "#BFC7D2" }}>/month</span>
                     </div>
 
-                    <ul className="list-unstyled d-flex flex-column gap-2 small text-secondary mb-4">
+                    <ul className="list-unstyled d-flex flex-column gap-2 small mb-4" style={{ color: "#D1D5DB" }}>
                       <li className="d-flex align-items-center gap-2"><Check size={14} className="sb-text-emerald" /> Everything in Pro</li>
-                      <li className="d-flex align-items-center gap-2"><Check size={14} className="sb-text-emerald" /> E-commerce features</li>
-                      <li className="d-flex align-items-center gap-2"><Check size={14} className="sb-text-emerald" /> Team collaboration</li>
+                      <li className="d-flex align-items-center gap-2"><Check size={14} className="sb-text-emerald" /> E-commerce checkout builder</li>
+                      <li className="d-flex align-items-center gap-2"><Check size={14} className="sb-text-emerald" /> Team collaboration seats</li>
                       <li className="d-flex align-items-center gap-2"><Check size={14} className="sb-text-emerald" /> Analytics &amp; SEO tools</li>
-                      <li className="d-flex align-items-center gap-2"><Check size={14} className="sb-text-emerald" /> Multilingual support</li>
+                      <li className="d-flex align-items-center gap-2"><Check size={14} className="sb-text-emerald" /> Multilingual localization</li>
                     </ul>
                   </div>
 
@@ -1032,18 +1210,18 @@ export default function LandingPage() {
 
               {/* Enterprise Plan */}
               <div className="col-12 col-md-6 col-lg-3">
-                <div className="sb-card p-4 h-100 d-flex flex-column justify-content-between">
+                <div className="sb-card card-3d-tilt card-spotlight p-4 h-100 d-flex flex-column justify-content-between rounded-4 border" style={{ backgroundColor: "#151A24", borderColor: "#303947" }}>
                   <div>
                     <h5 className="fw-bold text-white mb-1">Enterprise</h5>
-                    <p className="text-secondary small mb-3">For large teams &amp; agencies</p>
+                    <p className="small mb-3" style={{ color: "#D1D5DB" }}>For agencies &amp; organizations</p>
                     <div className="display-6 fw-bold text-white mb-3">Custom</div>
 
-                    <ul className="list-unstyled d-flex flex-column gap-2 small text-secondary mb-4">
+                    <ul className="list-unstyled d-flex flex-column gap-2 small mb-4" style={{ color: "#D1D5DB" }}>
                       <li className="d-flex align-items-center gap-2"><Check size={14} className="sb-text-emerald" /> Everything in Business</li>
                       <li className="d-flex align-items-center gap-2"><Check size={14} className="sb-text-emerald" /> Dedicated account manager</li>
-                      <li className="d-flex align-items-center gap-2"><Check size={14} className="sb-text-emerald" /> Custom integrations</li>
+                      <li className="d-flex align-items-center gap-2"><Check size={14} className="sb-text-emerald" /> Custom API integrations</li>
                       <li className="d-flex align-items-center gap-2"><Check size={14} className="sb-text-emerald" /> Advanced security &amp; RLS</li>
-                      <li className="d-flex align-items-center gap-2"><Check size={14} className="sb-text-emerald" /> SLA support</li>
+                      <li className="d-flex align-items-center gap-2"><Check size={14} className="sb-text-emerald" /> Enterprise SLA support</li>
                     </ul>
                   </div>
 
@@ -1053,36 +1231,30 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
-
-            <div className="text-center mt-4">
-              <small className="text-muted">
-                Note: Plans represent architectural capability tiers. Live payments are disabled for local and evaluation demonstration.
-              </small>
-            </div>
           </div>
         </section>
 
         {/* ======================================================================
-            10. SECTION 9 & 10: FINAL CTA & COMPREHENSIVE FOOTER
+            10. FINAL CTA
             ====================================================================== */}
         <section className="py-5 position-relative">
           <div className="container py-4 text-center">
             <div
-              className="p-5 rounded-4 shadow-xl text-center mx-auto position-relative overflow-hidden"
+              className="p-5 rounded-4 shadow-2xl text-center mx-auto position-relative overflow-hidden border"
               style={{
-                background: "linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(6, 26, 18, 0.95) 100%)",
-                border: "1px solid rgba(16, 185, 129, 0.35)",
+                background: "linear-gradient(135deg, rgba(163, 255, 111, 0.15) 0%, #151A24 100%)",
+                borderColor: "#303947",
                 maxWidth: 960,
               }}
             >
-              <span className="badge rounded-pill px-3 py-1 mb-3 text-white" style={{ backgroundColor: "rgba(16, 185, 129, 0.2)" }}>
+              <span className="badge rounded-pill px-3 py-1 mb-3 fw-semibold" style={{ backgroundColor: "rgba(163, 255, 111, 0.2)", color: "#A3FF6F" }}>
                 GET STARTED TODAY
               </span>
               <h2 className="display-4 fw-bold text-white mb-3">Your Next Great Website Starts Here.</h2>
-              <p className="lead text-secondary mb-4 mx-auto" style={{ maxWidth: 600 }}>
+              <p className="lead mb-4 mx-auto" style={{ maxWidth: 600, color: "#D1D5DB" }}>
                 Bring your ideas to life with the power of AI. No coding. No limits. Just endless possibilities.
               </p>
-              <Link href="/create" className="sb-btn-primary btn-lg px-5 py-3 fs-6">
+              <Link href="/create" className="sb-btn-primary btn-lg px-5 py-3 fs-6 btn-magnetic">
                 Start Building for Free <ArrowRight size={18} />
               </Link>
             </div>
@@ -1090,80 +1262,7 @@ export default function LandingPage() {
         </section>
       </main>
 
-      {/* FOOTER */}
-      <footer className="py-5 border-top" style={{ backgroundColor: "#020B07", borderColor: "rgba(16, 185, 129, 0.15)" }}>
-        <div className="container">
-          <div className="row g-4 justify-content-between mb-4">
-            <div className="col-12 col-lg-4">
-              <Link href="/" className="text-white text-decoration-none d-flex align-items-center gap-2 fw-bold fs-5 mb-3">
-                <div
-                  className="rounded-3 p-1 d-flex align-items-center justify-content-center text-white"
-                  style={{ background: "linear-gradient(135deg, #10B981 0%, #059669 100%)", width: 28, height: 28 }}
-                >
-                  <Sparkles size={16} />
-                </div>
-                <span>
-                  SiteGen<span className="sb-text-emerald">AI</span>
-                </span>
-              </Link>
-              <p className="text-secondary small mb-3" style={{ maxWidth: 320 }}>
-                Turn your ideas into stunning websites with the power of AI. Built for creators, founders, and engineers.
-              </p>
-              <div className="d-flex gap-3 text-secondary small">
-                <span className="cursor-pointer">LinkedIn</span>
-                <span className="cursor-pointer">X (Twitter)</span>
-                <span className="cursor-pointer">GitHub</span>
-              </div>
-            </div>
-
-            <div className="col-6 col-md-3 col-lg-2">
-              <h6 className="fw-bold text-white small mb-3">Product</h6>
-              <ul className="list-unstyled d-flex flex-column gap-2 small text-secondary">
-                <li><Link href="#features" className="text-secondary text-decoration-none">Features</Link></li>
-                <li><Link href="/templates" className="text-secondary text-decoration-none">Templates</Link></li>
-                <li><Link href="#pricing" className="text-secondary text-decoration-none">Pricing</Link></li>
-                <li><Link href="/admin" className="text-warning text-decoration-none">Admin Portal</Link></li>
-              </ul>
-            </div>
-
-            <div className="col-6 col-md-3 col-lg-2">
-              <h6 className="fw-bold text-white small mb-3">Resources</h6>
-              <ul className="list-unstyled d-flex flex-column gap-2 small text-secondary">
-                <li><Link href="#how-it-works" className="text-secondary text-decoration-none">Overview</Link></li>
-                <li><Link href="/dashboard" className="text-secondary text-decoration-none">Dashboard</Link></li>
-                <li><Link href="/create" className="text-secondary text-decoration-none">Creation Studio</Link></li>
-                <li><Link href="/editor/proj-w1-cocopour" className="text-secondary text-decoration-none">COCO POUR</Link></li>
-              </ul>
-            </div>
-
-            <div className="col-6 col-md-3 col-lg-2">
-              <h6 className="fw-bold text-white small mb-3">Company</h6>
-              <ul className="list-unstyled d-flex flex-column gap-2 small text-secondary">
-                <li><Link href="#team" className="text-secondary text-decoration-none">About</Link></li>
-                <li><Link href="#team" className="text-secondary text-decoration-none">Careers</Link></li>
-                <li><Link href="#pricing" className="text-secondary text-decoration-none">Contact</Link></li>
-                <li><Link href="/admin" className="text-secondary text-decoration-none">Press</Link></li>
-              </ul>
-            </div>
-
-            <div className="col-6 col-md-3 col-lg-2">
-              <h6 className="fw-bold text-white small mb-3">Legal</h6>
-              <ul className="list-unstyled d-flex flex-column gap-2 small text-secondary">
-                <li><span className="text-secondary">Privacy Policy</span></li>
-                <li><span className="text-secondary">Terms of Service</span></li>
-                <li><span className="text-secondary">Cookie Policy</span></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="d-flex flex-column flex-sm-row align-items-center justify-content-between pt-4 border-top border-secondary border-opacity-25 small text-secondary">
-            <div>&copy; {new Date().getFullYear()} SiteGenAI. All rights reserved. Imagine it. Design it. Make it yours.</div>
-            <div className="mt-2 mt-sm-0">
-              <span className="badge bg-dark text-success border border-success border-opacity-25">TRICITY Evaluation Build</span>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
