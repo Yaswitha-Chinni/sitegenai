@@ -49,3 +49,6 @@ scratch/
 .projects_cache/
 
 
+
+.vercel
+.env*

@@ -48,11 +48,16 @@ Return strictly valid SVG markup starting with <svg and ending with </svg> only.
         if (svgCode.startsWith("<svg") && svgCode.endsWith("</svg>")) {
           const uniqueId = "enhanced-" + Math.random().toString(36).substring(2, 9);
           const fileName = `${uniqueId}.svg`;
-          const uploadsDir = path.join(process.cwd(), "public", "uploads");
-          await fs.mkdir(uploadsDir, { recursive: true });
-          await fs.writeFile(path.join(uploadsDir, fileName), svgCode, "utf-8");
+          let enhancedUrl = `data:image/svg+xml;utf8,${encodeURIComponent(svgCode)}`;
 
-          const enhancedUrl = `/uploads/${fileName}`;
+          try {
+            const uploadsDir = path.join(process.cwd(), "public", "uploads");
+            await fs.mkdir(uploadsDir, { recursive: true });
+            await fs.writeFile(path.join(uploadsDir, fileName), svgCode, "utf-8");
+            enhancedUrl = `/uploads/${fileName}`;
+          } catch {
+            // Read-only filesystem fallback
+          }
 
           return NextResponse.json({
             success: true,

@@ -64,20 +64,9 @@ export async function POST(req: NextRequest) {
     const uniqueId = "asset-" + Math.random().toString(36).substring(2, 9);
     const fileName = `${uniqueId}${ext}`;
 
-    // Ensure uploads directory exists
-    const uploadsDir = path.join(process.cwd(), "public", "uploads");
-    await fs.mkdir(uploadsDir, { recursive: true });
-
-    // Write file to public/uploads
-    const filePath = path.join(uploadsDir, fileName);
-    await fs.writeFile(filePath, buffer);
-
-    const publicUrl = `/uploads/${fileName}`;
-
-    // Optionally upload to Supabase Storage if configured
+    // 1. Try Supabase Storage if configured
+    let finalUrl: string | null = null;
     const supabase = getSupabaseServerClient();
-    let finalUrl = publicUrl;
-
     if (supabase) {
       try {
         const { data: storageData, error: storageErr } = await supabase.storage
@@ -96,7 +85,22 @@ export async function POST(req: NextRequest) {
           }
         }
       } catch (storageException) {
-        console.warn("Supabase Storage upload fallback to local:", storageException);
+        console.warn("Supabase Storage upload fallback:", storageException);
+      }
+    }
+
+    // 2. If not uploaded to Supabase, attempt local filesystem write (for local development)
+    if (!finalUrl) {
+      try {
+        const uploadsDir = path.join(process.cwd(), "public", "uploads");
+        await fs.mkdir(uploadsDir, { recursive: true });
+        const filePath = path.join(uploadsDir, fileName);
+        await fs.writeFile(filePath, buffer);
+        finalUrl = `/uploads/${fileName}`;
+      } catch (fsErr) {
+        // Read-only serverless environment (e.g. Vercel) fallback to self-contained Data URL
+        console.info("Local filesystem write skipped (serverless environment). Using Data URL fallback.");
+        finalUrl = `data:${mimeType};base64,${buffer.toString("base64")}`;
       }
     }
 
