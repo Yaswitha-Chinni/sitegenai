@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COCO POUR — Naturally Good | Pure Coconut Milk</title>
+  <meta name="description" content="COCO POUR — Pure coconut goodness made for every pour. Ethically harvested, naturally creamy coconut milk for coffees, smoothies, and culinary creations.">
+  <link rel="icon" type="image/png" href="./coco-pour-logo.png">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       Custom Desktop Cursor Layer (Fluid Lerp & Magnetic Rings)
+       ========================================================================== -->
+  <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursor-ring" aria-hidden="true">
+    <span class="cursor-label" id="cursor-label"></span>
+  </div>
+
+  <!-- ==========================================================================
+       Header & Navigation
+       ========================================================================== -->
+  <header class="site-header" id="site-header">
+    <div class="container nav-container">
+      <a href="#hero" class="logo-link" aria-label="COCO POUR Homepage" data-cursor="hover">
+        <img src="./coco-pour-logo.png" alt="COCO POUR Logo" class="brand-logo-img">
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-menu">
+          <li><a href="#hero" class="nav-link active" data-cursor="hover">Home</a></li>
+          <li><a href="#story" class="nav-link" data-cursor="hover">Our Story</a></li>
+          <li><a href="#pouring" class="nav-link" data-cursor="hover">Pouring</a></li>
+          <li><a href="#product" class="nav-link" data-cursor="hover">Product</a></li>
+          <li><a href="#editorial" class="nav-link" data-cursor="hover">Recipes</a></li>
+          <li><a href="#footer" class="nav-link" data-cursor="hover">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="#product" class="btn btn-primary nav-cta-btn" data-magnetic="true" data-cursor="hover">
+          Taste COCO POUR
+        </a>
+        <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
+    <ul class="mobile-nav-links">
+      <li><a href="#hero" class="mobile-nav-link">Home</a></li>
+      <li><a href="#story" class="mobile-nav-link">Our Story</a></li>
+      <li><a href="#pouring" class="mobile-nav-link">Pouring</a></li>
+      <li><a href="#product" class="mobile-nav-link">Product</a></li>
+      <li><a href="#editorial" class="mobile-nav-link">Recipes</a></li>
+      <li><a href="#footer" class="mobile-nav-link">Contact</a></li>
+    </ul>
+    <a href="#product" class="btn btn-primary mobile-cta">Taste COCO POUR</a>
+  </div>
+
+  <main>
+    <!-- ==========================================================================
+         Connected Storyboard Wrapper with Progressive Animated SVG Path
+         ========================================================================== -->
+    <div class="storyboard-flow-container" id="storyboard-flow">
+      
+      <!-- Continuous Scroll-Linked Animated Blue Line Canvas -->
+      <div class="story-connector-canvas" id="story-connector-canvas" aria-hidden="true">
+        <svg class="story-connector-svg" id="story-connector-svg">
+          <defs>
+            <filter id="story-blue-glow" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="7" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+            <linearGradient id="story-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#087FE5" stop-opacity="0.35"/>
+              <stop offset="15%" stop-color="#087FE5" stop-opacity="0.95"/>
+              <stop offset="60%" stop-color="#087FE5" stop-opacity="1"/>
+              <stop offset="85%" stop-color="#0755A5" stop-opacity="0.95"/>
+              <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.85"/>
+            </linearGradient>
+          </defs>
+          <path class="connector-path-bg" id="connector-path-bg" />
+          <path class="connector-path-glow" id="connector-path-glow" filter="url(#story-blue-glow)" />
+          <path class="connector-path-active" id="connector-path-active" stroke="url(#story-gradient)" />
+        </svg>
+
+        <!-- Small Glowing Blue Indicator Nodes along Path -->
+        <div class="story-node-glow node-hero-pt" id="node-hero-pt"></div>
+        <div class="story-node-glow node-story-pt" id="node-story-pt"></div>
+        <div class="story-node-glow node-pouring-pt" id="node-pouring-pt"></div>
+        <div class="story-node-glow node-product-pt" id="node-product-pt"></div>
+        <div class="story-node-glow node-promo-pt" id="node-promo-pt"></div>
+      </div>
+
+      <!-- ========================================================================
+           1. Full-Width Cinematic Hero (vid1.mp4)
+           ======================================================================== -->
+      <section class="hero-section hero-cinematic-mode" id="hero">
+        <div class="hero-spotlight" id="hero-spotlight" aria-hidden="true"></div>
+
+        <div class="container hero-container-cinematic">
+          <!-- Editorial Intro Header -->
+          <div class="hero-header-center">
+            <div class="section-tag hero-tag-reveal">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/>
+              </svg>
+              100% Pure Plant Goodness
+            </div>
+
+            <!-- Masked Headline Reveal -->
+            <h1 class="hero-headline hero-title-cinematic">
+              <span class="reveal-line-wrap">
+                <span class="reveal-word">Naturally</span>
+              </span>
+              <span class="reveal-line-wrap">
+                <span class="reveal-word gradient-word">good.</span>
+              </span>
+            </h1>
+
+            <p class="hero-supporting-text hero-desc-reveal">
+              Pure coconut goodness. Made for every pour.
+            </p>
+
+            <div class="hero-cta-group hero-buttons-reveal">
+              <a href="#product" class="btn btn-primary" data-magnetic="true" data-cursor="hover">
+                <span>Discover Our Milk</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </a>
+              <a href="#story" class="btn btn-secondary" data-magnetic="true" data-cursor="hover">
+                <span>Explore Our Story</span>
+              </a>
+            </div>
+
+            <div class="hero-badges-row hero-badges-reveal">
+              <div class="badge-item">
+                <div class="badge-icon-box">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  </svg>
+                </div>
+                <span>No Dairy or Gums</span>
+              </div>
+              <div class="badge-item">
+                <div class="badge-icon-box">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                  </svg>
+                </div>
+                <span>Zero Added Sugar</span>
+              </div>
+              <div class="badge-item">
+                <div class="badge-icon-box">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  </svg>
+                </div>
+                <span>Barista Approved</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Full-Width Cinematic Video Theater Frame -->
+          <div class="hero-cinematic-theater">
+            <div class="floating-product-pill">
+              <span class="pill-dot"></span>
+              Cold-Pressed Coconut Milk • 1L
+            </div>
+
+            <div class="video-frame-card hero-video-card" data-cursor="play">
+              <video 
+                id="hero-video" 
+                class="video-element" 
+                autoplay 
+                muted 
+                loop 
+                playsinline 
+                preload="auto"
+                aria-label="COCO POUR 3D bottle and coconut milk splash animation"
+              >
+                <source src="./vid1.mp4" type="video/mp4">
+                Your browser does not support HTML5 video playback.
+              </video>
+
+              <button class="video-control-pill" data-video-target="hero-video" aria-label="Toggle mute hero video" data-cursor="hover">
+                <svg class="mute-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                  <line x1="23" y1="9" x2="17" y2="15"></line>
+                  <line x1="17" y1="9" x2="23" y2="15"></line>
+                </svg>
+                <span class="audio-state-text">Muted</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Refined Scroll Cue -->
+          <a href="#story" class="hero-scroll-cue" aria-label="Scroll down to explore story" data-cursor="hover">
+            <span class="scroll-cue-text">SCROLL TO EXPLORE STORY</span>
+            <div class="scroll-cue-pill">
+              <div class="scroll-cue-dot"></div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Connection Node 1 -->
+        <div class="connection-anchor" id="node-hero"></div>
+      </section>
+
+      <!-- Kinetic Brand Ticker Ribbon -->
+      <div class="marquee-ticker-section" aria-hidden="true">
+        <div class="marquee-track">
+          <div class="marquee-content">
+            <span>🌴 100% Sustainably Harvested</span>
+            <span class="bullet">•</span>
+            <span>🥥 Pure Single-Origin Coconuts</span>
+            <span class="bullet">•</span>
+            <span>🥛 Silky Velvety Texture</span>
+            <span class="bullet">•</span>
+            <span>☕ Micro-Foams for Barista Latte Art</span>
+            <span class="bullet">•</span>
+            <span>🌿 Zero Artificial Additives</span>
+            <span class="bullet">•</span>
+            <span>⚡ Natural Electrolytes &amp; MCTs</span>
+            <span class="bullet">•</span>
+          </div>
+          <div class="marquee-content">
+            <span>🌴 100% Sustainably Harvested</span>
+            <span class="bullet">•</span>
+            <span>🥥 Pure Single-Origin Coconuts</span>
+            <span class="bullet">•</span>
+            <span>🥛 Silky Velvety Texture</span>
+            <span class="bullet">•</span>
+            <span>☕ Micro-Foams for Barista Latte Art</span>
+            <span class="bullet">•</span>
+            <span>🌿 Zero Artificial Additives</span>
+            <span class="bullet">•</span>
+            <span>⚡ Natural Electrolytes &amp; MCTs</span>
+            <span class="bullet">•</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================================
+           2. Alternating Split Section: Left Video (vid2.mp4) / Right Text
+           ======================================================================== -->
+      <section class="story-section alternating-section" id="story">
+        <div class="connection-anchor" id="node-story"></div>
+
+        <div class="story-leaf-accent" aria-hidden="true">
+          <svg viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 130C30 90 60 50 110 10C80 50 60 90 10 130Z" fill="rgba(8, 127, 229, 0.08)" stroke="rgba(8, 127, 229, 0.2)" stroke-width="1.5"/>
+          </svg>
+        </div>
+
+        <div class="container story-grid">
+          <!-- LEFT: Video slides in from left -->
+          <div class="story-video-container slide-from-left">
+            <div class="story-video-card" data-cursor="play">
+              <video 
+                id="story-video" 
+                class="video-element" 
+                muted 
+                loop 
+                playsinline 
+                preload="metadata"
+                aria-label="Coconut harvesting in coastal palm grove"
+              >
+                <source src="./vid2.mp4" type="video/mp4">
+                Your browser does not support HTML5 video playback.
+              </video>
+
+              <button class="video-control-pill" data-video-target="story-video" aria-label="Toggle mute story video" data-cursor="hover">
+                <svg class="mute-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                  <line x1="23" y1="9" x2="17" y2="15"></line>
+                  <line x1="17" y1="9" x2="23" y2="15"></line>
+                </svg>
+                <span class="audio-state-text">Muted</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- RIGHT: Text staggers in from right -->
+          <div class="story-content stagger-from-right">
+            <div class="section-tag">Direct From The Source</div>
+            
+            <h2 class="section-title">
+              <span class="reveal-line-wrap">
+                <span class="reveal-word">From palm</span>
+              </span>
+              <span class="reveal-line-wrap">
+                <span class="reveal-word text-blue">to pour.</span>
+              </span>
+            </h2>
+
+            <p class="section-desc" style="margin-bottom: 20px;">
+              Discover the natural inspiration behind every pour.
+            </p>
+            <p class="story-body-text">
+              Every drop of COCO POUR begins high in sun-drenched coastal palm groves, where coconuts are carefully hand-harvested by local farming partners at peak ripeness. We gently cold-press the fragrant coconut meat within 24 hours of harvest, locking in its delicate aroma, velvety body, and nutrient richness.
+            </p>
+
+            <div class="story-stats-grid">
+              <div class="stat-card" data-cursor="hover">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Single-Origin Coastal Groves</div>
+              </div>
+              <div class="stat-card" data-cursor="hover">
+                <div class="stat-number">&lt; 24h</div>
+                <div class="stat-label">Harvest to Fresh Cold-Press</div>
+              </div>
+              <div class="stat-card" data-cursor="hover">
+                <div class="stat-number">0g</div>
+                <div class="stat-label">Gums, Fillers &amp; Added Sugars</div>
+              </div>
+              <div class="stat-card" data-cursor="hover">
+                <div class="stat-number">4x</div>
+                <div class="stat-label">Natural Electrolytes &amp; MCTs</div>
+              </div>
+            </div>
+
+            <div>
+              <a href="#product" class="btn btn-secondary" data-magnetic="true" data-cursor="hover">
+                <span>Taste The Difference</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================================
+           3. Reversed Split Section: Left Text / Right Video (vid3.mp4)
+           ======================================================================== -->
+      <section class="pouring-section alternating-section reversed-split" id="pouring">
+        <div class="connection-anchor" id="node-pouring"></div>
+
+        <div class="section-wave-top" aria-hidden="true">
+          <svg viewBox="0 0 1440 60" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,0 C320,50 640,10 960,40 C1280,60 1440,20 1440,0 L1440,0 L0,0 Z" fill="#F8F5ED"/>
+          </svg>
+        </div>
+
+        <div class="milk-bubbles-ambient" aria-hidden="true">
+          <span class="bubble bubble-1"></span>
+          <span class="bubble bubble-2"></span>
+          <span class="bubble bubble-3"></span>
+          <span class="bubble bubble-4"></span>
+          <span class="bubble bubble-5"></span>
+        </div>
+
+        <div class="container pouring-grid">
+          <!-- LEFT: Text staggers in from left -->
+          <div class="pouring-content stagger-from-left">
+            <div class="section-tag">Crafted For The Daily Ritual</div>
+            
+            <h2 class="section-title">
+              <span class="reveal-line-wrap">
+                <span class="reveal-word">Pour something</span>
+              </span>
+              <span class="reveal-line-wrap">
+                <span class="reveal-word gradient-word">good.</span>
+              </span>
+            </h2>
+
+            <p class="section-desc">
+              Creamy coconut goodness for your everyday moments.
+            </p>
+
+            <div class="moments-container">
+              <div class="moments-tabs">
+                <button class="moment-tab-btn active" data-moment="latte" data-cursor="hover">☕ Barista Latte</button>
+                <button class="moment-tab-btn" data-moment="matcha" data-cursor="hover">🍵 Iced Matcha</button>
+                <button class="moment-tab-btn" data-moment="smoothie" data-cursor="hover">🥣 Smoothie Bowl</button>
+                <button class="moment-tab-btn" data-moment="culinary" data-cursor="hover">🍲 Culinary Curries</button>
+              </div>
+
+              <div class="moment-card" id="moment-card-content" data-cursor="hover">
+                <h3 class="moment-card-title">
+                  <span>The Morning Flat White</span>
+                </h3>
+                <p class="moment-card-desc">
+                  Engineered with natural plant fats that steam and stretch like dairy, producing glossy micro-foam without separating or altering the delicate nuances of specialty espresso beans.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT: Video slides in from right -->
+          <div class="pouring-video-container slide-from-right">
+            <div class="pouring-video-card" data-cursor="play">
+              <video 
+                id="pouring-video" 
+                class="video-element" 
+                muted 
+                loop 
+                playsinline 
+                preload="metadata"
+                aria-label="Pouring silky coconut milk into a glass"
+              >
+                <source src="./vid3.mp4" type="video/mp4">
+                Your browser does not support HTML5 video playback.
+              </video>
+
+              <button class="video-control-pill" data-video-target="pouring-video" aria-label="Toggle mute pouring video" data-cursor="hover">
+                <svg class="mute-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                  <line x1="23" y1="9" x2="17" y2="15"></line>
+                  <line x1="17" y1="9" x2="23" y2="15"></line>
+                </svg>
+                <span class="audio-state-text">Muted</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================================
+           4. Large Product Showcase Section (vid4.mp4)
+           ======================================================================== -->
+      <section class="product-section" id="product">
+        <div class="connection-anchor" id="node-product"></div>
+        <div class="product-ambient-glow" aria-hidden="true"></div>
+
+        <div class="container">
+          <div class="product-header-center">
+            <div class="section-tag">Pure Botanical Excellence</div>
+            <h2 class="section-title">
+              <span class="reveal-line-wrap">
+                <span class="reveal-word">Made for</span>
+              </span>
+              <span class="reveal-line-wrap">
+                <span class="reveal-word text-blue">every pour.</span>
+              </span>
+            </h2>
+            <p class="section-desc">
+              A premium coconut milk thoughtfully formulated to deliver pure flavor, luxurious mouthfeel, and wholesome vitality.
+            </p>
+          </div>
+
+          <div class="product-showcase-layout">
+            <div class="product-video-wrapper">
+              <div class="product-video-card" data-cursor="play">
+                <video 
+                  id="product-video" 
+                  class="video-element" 
+                  muted 
+                  loop 
+                  playsinline 
+                  preload="metadata"
+                  aria-label="COCO POUR 1L bottle on stone pedestal with coconuts and milk splash"
+                >
+                  <source src="./vid4.mp4" type="video/mp4">
+                  Your browser does not support HTML5 video playback.
+                </video>
+
+                <button class="video-control-pill" data-video-target="product-video" aria-label="Toggle mute product video" data-cursor="hover">
+                  <svg class="mute-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <line x1="23" y1="9" x2="17" y2="15"></line>
+                    <line x1="17" y1="9" x2="23" y2="15"></line>
+                  </svg>
+                  <span class="audio-state-text">Muted</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="benefits-list">
+              <!-- Benefit 1 -->
+              <div class="benefit-card" data-cursor="hover">
+                <div class="benefit-icon-wrapper">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                  </svg>
+                </div>
+                <div class="benefit-text-box">
+                  <h3>Naturally creamy</h3>
+                  <p>
+                    Cold-pressed from mature coconut meat for a velvety, full-bodied mouthfeel without artificial gums, carrageenan, or thickeners.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Benefit 2 -->
+              <div class="benefit-card" data-cursor="hover">
+                <div class="benefit-icon-wrapper">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                    <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                    <line x1="6" y1="1" x2="6" y2="4"></line>
+                    <line x1="10" y1="1" x2="10" y2="4"></line>
+                    <line x1="14" y1="1" x2="14" y2="4"></line>
+                  </svg>
+                </div>
+                <div class="benefit-text-box">
+                  <h3>Versatile for everyday recipes</h3>
+                  <p>
+                    Performs with effortless perfection in morning coffees, iced teas, protein shakes, artisanal baking, and savory curries.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Benefit 3 -->
+              <div class="benefit-card" data-cursor="hover">
+                <div class="benefit-icon-wrapper">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                  </svg>
+                </div>
+                <div class="benefit-text-box">
+                  <h3>Coconut goodness in every moment</h3>
+                  <p>
+                    Naturally packed with beneficial medium-chain triglycerides (MCTs) and electrolytes to replenish and fuel your active lifestyle.
+                  </p>
+                </div>
+              </div>
+
+              <div class="product-cta-bar">
+                <button class="btn btn-primary" id="open-nutrition-btn" data-magnetic="true" data-cursor="hover">
+                  <span>View Nutrition &amp; Specs</span>
+                </button>
+                <a href="#promo" class="btn btn-secondary" data-magnetic="true" data-cursor="hover">
+                  <span>Where To Buy</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================================
+           5. Full-Width Electric-Blue Promotional Banner
+           ======================================================================== -->
+      <section class="promo-section" id="promo">
+        <div class="connection-anchor" id="node-promo"></div>
+
+        <div class="promo-decor-bg" aria-hidden="true">
+          <div class="splash-drop splash-drop-1"></div>
+          <div class="splash-drop splash-drop-2"></div>
+          <div class="splash-drop splash-drop-3"></div>
+
+          <svg class="promo-svg-wave" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#ffffff" fill-opacity="0.08" d="M0,192L48,208C96,224,192,256,288,245.3C384,235,480,181,576,170.7C672,160,768,192,864,208C960,224,1056,224,1152,197.3C1248,171,1344,117,1392,90.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+          </svg>
+        </div>
+
+        <div class="container promo-grid">
+          <div class="promo-content">
+            <div class="section-tag light">Special Offer &amp; Stockists</div>
+            
+            <h2 class="section-title light">
+              <span class="reveal-line-wrap">
+                <span class="reveal-word">Goodness in</span>
+              </span>
+              <span class="reveal-line-wrap">
+                <span class="reveal-word">every drop.</span>
+              </span>
+            </h2>
+
+            <p class="section-desc light">
+              Discover COCO POUR and bring a fresh touch to your everyday routine.
+            </p>
+
+            <div class="promo-actions">
+              <button class="btn btn-white" id="promo-locate-btn" data-magnetic="true" data-cursor="hover">
+                <span>Find In Nearby Stores</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polygon points="12 8 8 12 12 16 12 8"></polygon>
+                </svg>
+              </button>
+              <a href="#product" class="btn btn-outline-white" data-magnetic="true" data-cursor="hover">
+                <span>Explore 1L Bottle</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="promo-visual-card" data-cursor="hover">
+            <!-- Fluid Animated Milk Drop With Expanding Concentric Rings -->
+            <div class="ripple-rings-wrap" aria-hidden="true">
+              <span class="ripple-ring ring-1"></span>
+              <span class="ripple-ring ring-2"></span>
+              <span class="ripple-ring ring-3"></span>
+            </div>
+
+            <div class="liquid-splash-art">
+              <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M100 20C100 20 60 70 60 115C60 137.091 77.9086 155 100 155C122.091 155 140 137.091 140 115C140 70 100 20 100 20Z" fill="#FFFFFF"/>
+                <ellipse cx="100" cy="115" rx="28" ry="18" fill="#F8F5ED"/>
+                <circle cx="48" cy="138" r="8" fill="#FFFFFF" fill-opacity="0.8"/>
+                <circle cx="156" cy="128" r="10" fill="#FFFFFF" fill-opacity="0.75"/>
+                <circle cx="138" cy="85" r="6" fill="#FFFFFF" fill-opacity="0.9"/>
+                <circle cx="70" cy="75" r="5" fill="#FFFFFF" fill-opacity="0.85"/>
+              </svg>
+            </div>
+
+            <div class="retailers-title">Available At Leading Retailers</div>
+            <div class="retailers-row">
+              <span class="retailer-badge" data-cursor="hover">Whole Foods</span>
+              <span class="retailer-badge" data-cursor="hover">Sprouts</span>
+              <span class="retailer-badge" data-cursor="hover">Erewhon</span>
+              <span class="retailer-badge" data-cursor="hover">Target</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div> <!-- End .storyboard-flow-container -->
+
+    <!-- ==========================================================================
+         6. Refined Kitchen Inspiration Section (“Crafted for your kitchen.”)
+         ========================================================================== -->
+    <section class="recipes-highlight-section" id="editorial">
+      <div class="container">
+        <div class="product-header-center">
+          <div class="section-tag">Culinary &amp; Beverage Journal</div>
+          <h2 class="section-title">
+            <span class="reveal-line-wrap">
+              <span class="reveal-word">Crafted for</span>
+            </span>
+            <span class="reveal-line-wrap">
+              <span class="reveal-word text-blue">your kitchen.</span>
+            </span>
+          </h2>
+          <p class="section-desc">
+            Explore how baristas, chefs, and wellness creators elevate everyday recipes with COCO POUR.
+          </p>
+        </div>
+
+        <div class="recipes-grid">
+          <!-- Card 1 -->
+          <div class="recipe-card" data-cursor="hover" data-recipe-id="flatwhite">
+            <div class="recipe-card-art">
+              <svg viewBox="0 0 120 100" fill="none" class="recipe-art-svg" xmlns="http://www.w3.org/2000/svg">
+                <rect x="25" y="35" width="55" height="45" rx="14" fill="#087FE5" fill-opacity="0.1" stroke="#087FE5" stroke-width="2"/>
+                <path d="M80 45C88 45 94 50 94 58C94 66 88 71 80 71" stroke="#087FE5" stroke-width="2" stroke-linecap="round"/>
+                <ellipse cx="52.5" cy="45" rx="20" ry="6" fill="#F8F5ED" stroke="#087FE5" stroke-width="1.5"/>
+                <path d="M52.5 42C48 42 46 45 52.5 47C59 49 57 52 52.5 52" stroke="#087FE5" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <span class="recipe-time-tag">3 Min • Beverage</span>
+            </div>
+            <div class="recipe-tag">Specialty Coffee</div>
+            <h3 class="recipe-card-title">Iced Coconut Flat White</h3>
+            <p class="recipe-card-desc">
+              Velvety cold-frothed COCO POUR poured over double espresso shots with a hint of warm cinnamon.
+            </p>
+            <div class="recipe-specs-row">
+              <span class="spec-pill">Silky Microfoam</span>
+              <span class="spec-pill">No Curdling</span>
+            </div>
+            <button class="recipe-open-btn" data-recipe="flatwhite">View Recipe &amp; Barista Notes &rarr;</button>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="recipe-card" data-cursor="hover" data-recipe-id="smoothie">
+            <div class="recipe-card-art">
+              <svg viewBox="0 0 120 100" fill="none" class="recipe-art-svg" xmlns="http://www.w3.org/2000/svg">
+                <path d="M25 45C25 72 45 80 60 80C75 80 95 72 95 45Z" fill="#087FE5" fill-opacity="0.1" stroke="#087FE5" stroke-width="2"/>
+                <ellipse cx="60" cy="45" rx="35" ry="10" fill="#F8F5ED" stroke="#087FE5" stroke-width="1.5"/>
+                <circle cx="50" cy="45" r="4" fill="#087FE5"/>
+                <circle cx="62" cy="43" r="3" fill="#22C55E"/>
+                <circle cx="72" cy="46" r="3.5" fill="#EAB308"/>
+              </svg>
+              <span class="recipe-time-tag">5 Min • Breakfast</span>
+            </div>
+            <div class="recipe-tag">Breakfast &amp; Wellness</div>
+            <h3 class="recipe-card-title">Tropical Glow Smoothie</h3>
+            <p class="recipe-card-desc">
+              Frozen mango, baby spinach, and cold-pressed COCO POUR for an electrolyte-packed morning boost.
+            </p>
+            <div class="recipe-specs-row">
+              <span class="spec-pill">Rich MCT Fats</span>
+              <span class="spec-pill">Potassium Rich</span>
+            </div>
+            <button class="recipe-open-btn" data-recipe="smoothie">View Recipe &amp; Barista Notes &rarr;</button>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="recipe-card" data-cursor="hover" data-recipe-id="curry">
+            <div class="recipe-card-art">
+              <svg viewBox="0 0 120 100" fill="none" class="recipe-art-svg" xmlns="http://www.w3.org/2000/svg">
+                <rect x="30" y="40" width="60" height="40" rx="8" fill="#087FE5" fill-opacity="0.1" stroke="#087FE5" stroke-width="2"/>
+                <path d="M22 50H30M90 50H98" stroke="#087FE5" stroke-width="2" stroke-linecap="round"/>
+                <path d="M45 35C45 30 50 25 60 25C70 25 75 30 75 35" stroke="#087FE5" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <span class="recipe-time-tag">20 Min • Gourmet</span>
+            </div>
+            <div class="recipe-tag">Gourmet Cooking</div>
+            <h3 class="recipe-card-title">Aromatic Lemongrass Curry</h3>
+            <p class="recipe-card-desc">
+              Simmered with fresh galangal, kaffir lime, and coconut milk for a restaurant-quality velvety sauce.
+            </p>
+            <div class="recipe-specs-row">
+              <span class="spec-pill">Heat-Stable</span>
+              <span class="spec-pill">Authentic Depth</span>
+            </div>
+            <button class="recipe-open-btn" data-recipe="curry">View Recipe &amp; Barista Notes &rarr;</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==========================================================================
+       Footer (Deep Navy #071B32)
+       ========================================================================== -->
+  <footer class="site-footer" id="footer">
+    <div class="container">
+      <div class="footer-top-grid">
+        <!-- Col 1: Brand & Logo -->
+        <div class="footer-brand-box">
+          <a href="#hero" class="footer-logo-wrap" aria-label="COCO POUR Homepage" data-cursor="hover">
+            <img src="./coco-pour-logo.png" alt="COCO POUR Brand Logo" class="footer-logo-img">
+          </a>
+          <p class="footer-brand-desc">
+            COCO POUR delivers pure, cold-pressed coconut milk with unparalleled richness and natural sweetness. Crafted for baristas, home cooks, and coconut lovers everywhere.
+          </p>
+          <div class="social-links">
+            <a href="#" class="social-icon-btn" aria-label="Instagram" data-cursor="hover">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+            <a href="#" class="social-icon-btn" aria-label="TikTok" data-cursor="hover">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>
+              </svg>
+            </a>
+            <a href="#" class="social-icon-btn" aria-label="YouTube" data-cursor="hover">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg>
+            </a>
+            <a href="#" class="social-icon-btn" aria-label="Twitter / X" data-cursor="hover">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Col 2: Navigation Links -->
+        <div>
+          <h4 class="footer-col-title">Navigation</h4>
+          <ul class="footer-links-list">
+            <li><a href="#hero" class="footer-link" data-cursor="hover">Home</a></li>
+            <li><a href="#story" class="footer-link" data-cursor="hover">Our Story</a></li>
+            <li><a href="#pouring" class="footer-link" data-cursor="hover">Pouring Moments</a></li>
+            <li><a href="#product" class="footer-link" data-cursor="hover">Product Showcase</a></li>
+            <li><a href="#editorial" class="footer-link" data-cursor="hover">Culinary Journal</a></li>
+            <li><a href="#promo" class="footer-link" data-cursor="hover">Where to Buy</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Brand & Integrity -->
+        <div>
+          <h4 class="footer-col-title">About &amp; Values</h4>
+          <ul class="footer-links-list">
+            <li><a href="#story" class="footer-link" data-cursor="hover">Ethical Sourcing</a></li>
+            <li><a href="#product" class="footer-link" data-cursor="hover">Ingredients &amp; Quality</a></li>
+            <li><a href="#promo" class="footer-link" data-cursor="hover">Retail Partners</a></li>
+            <li><a href="#footer" class="footer-link" data-cursor="hover">Sustainability Pledge</a></li>
+            <li><a href="#footer" class="footer-link" data-cursor="hover">Barista Wholesale</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Newsletter -->
+        <div class="footer-newsletter-box">
+          <h4 class="footer-col-title">Join The Pour</h4>
+          <p class="newsletter-info-text">
+            Subscribe for seasonal recipes, retail restock alerts, and exclusive stories from our coastal groves.
+          </p>
+
+          <form class="newsletter-form" id="newsletter-form" novalidate>
+            <div class="newsletter-input-group">
+              <input 
+                type="email" 
+                id="newsletter-email" 
+                class="newsletter-input" 
+                placeholder="Enter your email address"
+                required
+                aria-label="Email address for newsletter"
+              >
+            </div>
+            <button type="submit" class="btn btn-primary newsletter-submit-btn" data-magnetic="true" data-cursor="hover">
+              Subscribe
+            </button>
+            <div class="newsletter-feedback" id="newsletter-feedback" role="alert"></div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom-bar">
+        <div>
+          &copy; 2026 COCO POUR. All rights reserved. Pure coconut goodness.
+        </div>
+        <button class="back-to-top-btn" id="back-to-top" aria-label="Back to top of page" data-cursor="hover">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       Nutrition & Specs Modal
+       ========================================================================== -->
+  <div class="modal-overlay" id="nutrition-modal" aria-hidden="true" role="dialog" aria-labelledby="modal-title">
+    <div class="modal-dialog">
+      <button class="modal-close-btn" id="modal-close-btn" aria-label="Close modal" data-cursor="hover">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <h3 class="modal-title" id="modal-title">COCO POUR 1L</h3>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;">
+        100% Cold-Pressed Pure Coconut Milk
+      </p>
+
+      <table class="nutrition-table">
+        <tbody>
+          <tr>
+            <td>Serving Size</td>
+            <td>240 ml (1 Cup)</td>
+          </tr>
+          <tr>
+            <td>Calories</td>
+            <td>90 kcal</td>
+          </tr>
+          <tr>
+            <td>Total Fat</td>
+            <td>8g (MCTs 6g)</td>
+          </tr>
+          <tr>
+            <td>Sodium</td>
+            <td>45mg</td>
+          </tr>
+          <tr>
+            <td>Potassium</td>
+            <td>380mg (Natural Electrolyte)</td>
+          </tr>
+          <tr>
+            <td>Total Sugars</td>
+            <td>1g (Naturally Occurring)</td>
+          </tr>
+          <tr>
+            <td>Added Sugars</td>
+            <td>0g (Zero Added Sugar)</td>
+          </tr>
+          <tr>
+            <td>Protein</td>
+            <td>1.5g</td>
+          </tr>
+          <tr>
+            <td>Ingredients</td>
+            <td>Fresh Coconut Extract, Water, Sea Salt</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" id="modal-confirm-btn" data-magnetic="true" data-cursor="hover">
+        Find In Local Store
+      </button>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       Interactive Culinary Recipe Sheet Modal
+       ========================================================================== -->
+  <div class="modal-overlay" id="recipe-modal" aria-hidden="true" role="dialog" aria-labelledby="recipe-modal-title">
+    <div class="modal-dialog">
+      <button class="modal-close-btn" id="recipe-modal-close" aria-label="Close recipe modal" data-cursor="hover">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div id="recipe-modal-body">
+        <!-- Dynamically populated from JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- GSAP & ScrollTrigger for High-End Motion Design -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- Custom JavaScript -->
+  <script src="./script.js"></script>
+</body>
+</html>

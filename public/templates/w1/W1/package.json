@@ -1,0 +1,20 @@
+{
+  "name": "coco-pour-website",
+  "version": "1.0.0",
+  "description": "Premium animated brand website for COCO POUR coconut milk",
+  "main": "index.html",
+  "scripts": {
+    "start": "python server.py",
+    "dev": "python server.py",
+    "serve": "python -m http.server 3000"
+  },
+  "keywords": [
+    "coco-pour",
+    "coconut-milk",
+    "gsap",
+    "animations",
+    "html5-video"
+  ],
+  "author": "COCO POUR",
+  "license": "ISC"
+}
