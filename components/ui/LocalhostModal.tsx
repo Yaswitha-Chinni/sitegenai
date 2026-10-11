@@ -15,6 +15,8 @@ import {
   CheckCircle2,
   X,
   Radio,
+  Download,
+  Cloud,
 } from "lucide-react";
 
 interface LocalhostModalProps {
@@ -24,14 +26,16 @@ interface LocalhostModalProps {
 }
 
 export default function LocalhostModal({ project, isOpen, onClose }: LocalhostModalProps) {
-  const [status, setStatus] = useState<"stopped" | "starting" | "running" | "error">("stopped");
-  const [port, setPort] = useState<number>(project.localPort || 3001);
+  const [status, setStatus] = useState<"stopped" | "starting" | "running" | "cloud" | "error">("stopped");
+  const [port, setPort] = useState<number>(project.localPort || 3000);
   const [url, setUrl] = useState<string>("");
   const [framework, setFramework] = useState<string>("");
   const [logs, setLogs] = useState<Array<{ timestamp: string; message: string; level: string }>>([]);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
   const [copiedUrl, setCopiedUrl] = useState(false);
+  const [copiedCmd, setCopiedCmd] = useState<string | null>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -70,6 +74,15 @@ export default function LocalhostModal({ project, isOpen, onClose }: LocalhostMo
       const data = await res.json();
       if (!res.ok || !data.success) {
         throw new Error(data.error || "Failed to start localhost server.");
+      }
+
+      if (data.isCloud || data.server?.status === "cloud") {
+        setStatus("cloud");
+        setPort(data.server?.port || port);
+        setUrl(data.server?.url || `http://localhost:${port}`);
+        setFramework(data.server?.framework || "");
+        setLogs(data.server?.logs || []);
+        return;
       }
 
       setStatus("running");
@@ -123,6 +136,46 @@ export default function LocalhostModal({ project, isOpen, onClose }: LocalhostMo
     navigator.clipboard.writeText(url);
     setCopiedUrl(true);
     setTimeout(() => setCopiedUrl(false), 2000);
+  };
+
+  const handleCopyCommand = (cmd: string) => {
+    navigator.clipboard.writeText(cmd);
+    setCopiedCmd(cmd);
+    setTimeout(() => setCopiedCmd(null), 2000);
+  };
+
+  const handleDownloadZip = async () => {
+    setIsExporting(true);
+    try {
+      const res = await fetch("/api/export", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(project),
+      });
+      if (!res.ok) throw new Error("Failed to export project archive.");
+      const blob = await res.blob();
+      const downloadUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = downloadUrl;
+      const slug = (project.name || "website").toLowerCase().replace(/[^a-z0-9]+/g, "-");
+      a.download = `${slug}-site.zip`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(downloadUrl);
+      setLogs((prev) => [
+        ...prev,
+        {
+          timestamp: new Date().toLocaleTimeString(),
+          message: `Package exported (${slug}-site.zip). Unzip & run: npx -y serve -p ${port} .`,
+          level: "success",
+        },
+      ]);
+    } catch (err: any) {
+      setErrorMsg(err.message || "Failed to download export package.");
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -195,7 +248,7 @@ export default function LocalhostModal({ project, isOpen, onClose }: LocalhostMo
                       backgroundColor:
                         status === "running"
                           ? "rgba(163, 255, 111, 0.15)"
-                          : status === "starting"
+                          : status === "starting" || status === "cloud"
                           ? "rgba(54, 217, 245, 0.15)"
                           : status === "error"
                           ? "rgba(239, 68, 68, 0.15)"
@@ -203,14 +256,18 @@ export default function LocalhostModal({ project, isOpen, onClose }: LocalhostMo
                       color:
                         status === "running"
                           ? "#A3FF6F"
-                          : status === "starting"
+                          : status === "starting" || status === "cloud"
                           ? "#36D9F5"
                           : status === "error"
                           ? "#FCA5A5"
                           : "#BFC7D2",
                     }}
                   >
-                    <Radio size={24} className={status === "starting" ? "spin" : ""} />
+                    {status === "cloud" ? (
+                      <Cloud size={24} />
+                    ) : (
+                      <Radio size={24} className={status === "starting" ? "spin" : ""} />
+                    )}
                   </div>
 
                   <div>
@@ -221,7 +278,7 @@ export default function LocalhostModal({ project, isOpen, onClose }: LocalhostMo
                           backgroundColor:
                             status === "running"
                               ? "rgba(163, 255, 111, 0.2)"
-                              : status === "starting"
+                              : status === "starting" || status === "cloud"
                               ? "rgba(54, 217, 245, 0.2)"
                               : status === "error"
                               ? "rgba(239, 68, 68, 0.2)"
@@ -229,7 +286,7 @@ export default function LocalhostModal({ project, isOpen, onClose }: LocalhostMo
                           color:
                             status === "running"
                               ? "#A3FF6F"
-                              : status === "starting"
+                              : status === "starting" || status === "cloud"
                               ? "#36D9F5"
                               : status === "error"
                               ? "#FCA5A5"
@@ -241,6 +298,8 @@ export default function LocalhostModal({ project, isOpen, onClose }: LocalhostMo
                           ? "● SERVER RUNNING"
                           : status === "starting"
                           ? "◌ STARTING SERVER..."
+                          : status === "cloud"
+                          ? "☁️ CLOUD DEPLOYMENT"
                           : status === "error"
                           ? "✕ SERVER ERROR"
                           : "○ SERVER STOPPED"}
@@ -263,6 +322,8 @@ export default function LocalhostModal({ project, isOpen, onClose }: LocalhostMo
                         >
                           {url} <ExternalLink size={16} className="ms-1" />
                         </a>
+                      ) : status === "cloud" ? (
+                        <span style={{ color: "#36D9F5", fontSize: "1.1rem" }}>Cloud Host — Run Locally Below</span>
                       ) : (
                         `Target Port: :${port}`
                       )}
@@ -316,6 +377,32 @@ export default function LocalhostModal({ project, isOpen, onClose }: LocalhostMo
                         title="Restart Server"
                       >
                         <RefreshCw size={14} className={isProcessing ? "spin" : ""} />
+                      </button>
+                    </>
+                  ) : status === "cloud" ? (
+                    <>
+                      <button
+                        type="button"
+                        className="btn rounded-pill px-3.5 py-2 fw-bold d-flex align-items-center gap-2"
+                        style={{
+                          backgroundColor: "#A3FF6F",
+                          color: "#0B0D12",
+                          boxShadow: "0 0 16px rgba(163, 255, 111, 0.25)",
+                        }}
+                        onClick={handleDownloadZip}
+                        disabled={isExporting}
+                      >
+                        {isExporting ? <RefreshCw size={15} className="spin" /> : <Download size={15} />}
+                        {isExporting ? "Exporting..." : "Download & Run Locally (.ZIP)"}
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-outline-secondary rounded-pill px-3 py-2 text-white small"
+                        style={{ borderColor: "#303947" }}
+                        onClick={() => handleCopyCommand(`npx -y serve -p ${port} .`)}
+                      >
+                        {copiedCmd === `npx -y serve -p ${port} .` ? <Check size={14} className="text-success me-1" /> : <Copy size={14} className="me-1" />}
+                        Copy CLI Command
                       </button>
                     </>
                   ) : (
@@ -422,14 +509,34 @@ export default function LocalhostModal({ project, isOpen, onClose }: LocalhostMo
                   style={{ backgroundColor: "#0B0D12", border: "1px solid #303947" }}
                 >
                   <span style={{ color: "#A3FF6F" }}>npx -y serve -p {port} .</span>
-                  <span className="badge" style={{ backgroundColor: "#202938", color: "#BFC7D2" }}>Node.js</span>
+                  <div className="d-flex align-items-center gap-2">
+                    <span className="badge" style={{ backgroundColor: "#202938", color: "#BFC7D2" }}>Node.js</span>
+                    <button
+                      type="button"
+                      className="btn btn-sm p-1 text-white"
+                      onClick={() => handleCopyCommand(`npx -y serve -p ${port} .`)}
+                      title="Copy command"
+                    >
+                      {copiedCmd === `npx -y serve -p ${port} .` ? <Check size={14} className="text-success" /> : <Copy size={14} />}
+                    </button>
+                  </div>
                 </div>
                 <div
                   className="p-2 rounded font-monospace small d-flex justify-content-between align-items-center"
                   style={{ backgroundColor: "#0B0D12", border: "1px solid #303947" }}
                 >
                   <span style={{ color: "#A3FF6F" }}>python -m http.server {port}</span>
-                  <span className="badge" style={{ backgroundColor: "#202938", color: "#BFC7D2" }}>Python 3</span>
+                  <div className="d-flex align-items-center gap-2">
+                    <span className="badge" style={{ backgroundColor: "#202938", color: "#BFC7D2" }}>Python 3</span>
+                    <button
+                      type="button"
+                      className="btn btn-sm p-1 text-white"
+                      onClick={() => handleCopyCommand(`python -m http.server ${port}`)}
+                      title="Copy command"
+                    >
+                      {copiedCmd === `python -m http.server ${port}` ? <Check size={14} className="text-success" /> : <Copy size={14} />}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

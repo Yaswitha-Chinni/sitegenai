@@ -46,7 +46,8 @@ next-env.d.ts
 *.zip
 w2 (1)
 scratch/
-.projects_cache/
+.projects_cache/*
+!.projects_cache/.gitkeep
 
 
 

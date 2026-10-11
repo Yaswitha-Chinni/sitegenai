@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import http from "http";
 import fs from "fs";
 import path from "path";
+import os from "os";
 import net from "net";
 import { WebsiteDocument } from "@/types/project";
 
@@ -175,18 +176,19 @@ function createStaticHttpServer(
 }
 
 function generateStandaloneProjectFiles(project: WebsiteDocument, targetDir: string) {
-  fs.mkdirSync(targetDir, { recursive: true });
+  try {
+    fs.mkdirSync(targetDir, { recursive: true });
 
-  const primary = project.theme?.primaryColor || "#356DFF";
-  const secondary = project.theme?.secondaryColor || "#172033";
-  const font = project.theme?.fontFamily || "Outfit, sans-serif";
+    const primary = project.theme?.primaryColor || "#356DFF";
+    const secondary = project.theme?.secondaryColor || "#172033";
+    const font = project.theme?.fontFamily || "Outfit, sans-serif";
 
-  // 1. index.html
-  const sectionsHtml = (project.sections || [])
-    .filter((s) => s.visible)
-    .map((s) => {
-      const c = s.content || {};
-      return `
+    // 1. index.html
+    const sectionsHtml = (project.sections || [])
+      .filter((s) => s.visible)
+      .map((s) => {
+        const c = s.content || {};
+        return `
     <!-- SECTION: ${s.name} (${s.type}) -->
     <section id="${s.id}" class="py-5" style="background-color: ${s.style?.backgroundColor || "#FFFFFF"}; color: ${s.style?.textColor || secondary};">
       <div class="container">
@@ -217,10 +219,10 @@ function generateStandaloneProjectFiles(project: WebsiteDocument, targetDir: str
         }
       </div>
     </section>`;
-    })
-    .join("\n");
+      })
+      .join("\n");
 
-  const html = `<!DOCTYPE html>
+    const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -240,10 +242,10 @@ function generateStandaloneProjectFiles(project: WebsiteDocument, targetDir: str
 </body>
 </html>`;
 
-  fs.writeFileSync(path.join(targetDir, "index.html"), html, "utf-8");
+    fs.writeFileSync(path.join(targetDir, "index.html"), html, "utf-8");
 
-  // 2. styles.css
-  const css = `:root {
+    // 2. styles.css
+    const css = `:root {
   --primary-color: ${primary};
   --secondary-color: ${secondary};
   --font-family: ${font};
@@ -262,11 +264,14 @@ body {
   color: var(--primary-color) !important;
 }
 `;
-  fs.writeFileSync(path.join(targetDir, "styles.css"), css, "utf-8");
+    fs.writeFileSync(path.join(targetDir, "styles.css"), css, "utf-8");
 
-  // 3. script.js
-  const js = `console.log("${project.name} is running locally on SiteGenAI Localhost Server.");`;
-  fs.writeFileSync(path.join(targetDir, "script.js"), js, "utf-8");
+    // 3. script.js
+    const js = `console.log("${project.name} is running locally on SiteGenAI Localhost Server.");`;
+    fs.writeFileSync(path.join(targetDir, "script.js"), js, "utf-8");
+  } catch (err) {
+    console.warn("Could not generate standalone files in target directory:", err);
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -305,6 +310,8 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+
     // Determine target directory
     let targetDir: string;
     let frameworkName = "HTML5 / CSS3 / JavaScript";
@@ -317,13 +324,68 @@ export async function POST(req: NextRequest) {
       frameworkName = "BRUVA Coffee (HTML5 + Lenis + GSAP)";
     } else {
       // Custom / AI project: synthesize into cache directory
-      targetDir = path.join(process.cwd(), ".projects_cache", projectId);
+      const baseCacheDir = isServerless ? path.join(os.tmpdir(), "sitegenai_cache") : path.join(process.cwd(), ".projects_cache");
+      targetDir = path.join(baseCacheDir, projectId);
       generateStandaloneProjectFiles(project, targetDir);
       frameworkName = `SiteGenAI Semantic HTML5 (${project.style || "Modern"})`;
     }
 
     // Determine port
-    const requestedPort = project.localPort && project.localPort >= 1024 ? project.localPort : 3001;
+    const requestedPort = project.localPort && project.localPort >= 1024 ? project.localPort : 3000;
+
+    if (isServerless) {
+      // In serverless cloud runtime (e.g. Vercel), sockets cannot bind to the user's laptop loopback.
+      // Return a graceful, fully-formed status informing the client and providing execution logs.
+      const cloudLogs: Array<{ timestamp: string; message: string; level: "info" | "success" | "warn" | "error" }> = [
+        {
+          timestamp: new Date().toLocaleTimeString(),
+          message: `Notice: SiteGenAI is running in Cloud Mode (Vercel Serverless).`,
+          level: "info",
+        },
+        {
+          timestamp: new Date().toLocaleTimeString(),
+          message: `Localhost servers bind to your personal computer's local loopback (127.0.0.1:${requestedPort}).`,
+          level: "info",
+        },
+        {
+          timestamp: new Date().toLocaleTimeString(),
+          message: `Architecture synthesized: ${frameworkName}`,
+          level: "info",
+        },
+        {
+          timestamp: new Date().toLocaleTimeString(),
+          message: `Terminal Command ready for your local CLI:`,
+          level: "info",
+        },
+        {
+          timestamp: new Date().toLocaleTimeString(),
+          message: `npx -y serve -p ${requestedPort} .`,
+          level: "success",
+        },
+        {
+          timestamp: new Date().toLocaleTimeString(),
+          message: `Alternatively, run SiteGenAI locally on your PC via 'npm run dev' to activate the integrated port daemon.`,
+          level: "info",
+        },
+      ];
+
+      return NextResponse.json({
+        success: true,
+        isCloud: true,
+        message: "Cloud deployment active. Ready for local machine execution.",
+        server: {
+          projectId,
+          projectName: project.name,
+          port: requestedPort,
+          url: `http://localhost:${requestedPort}`,
+          status: "cloud",
+          startTime: new Date().toISOString(),
+          logs: cloudLogs,
+          framework: frameworkName,
+        },
+      });
+    }
+
     const finalPort = await findAvailablePort(requestedPort);
 
     const logs: Array<{ timestamp: string; message: string; level: "info" | "success" | "warn" | "error" }> = [];
